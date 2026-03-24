@@ -1,0 +1,40 @@
+.shop__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.shop__header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.shop__count {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.shop__error {
+  text-align: center;
+  color: #f87171;
+  padding: 2rem;
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.shop__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.shop__page-info {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
