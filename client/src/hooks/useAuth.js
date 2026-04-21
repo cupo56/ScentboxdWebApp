@@ -1,19 +1,18 @@
 import useAuthStore from '../store/authStore';
 
 export function useAuth() {
-  const { user, token, loading, error, login, register, logout, clearError } =
+  const { user, profile, session, loading, error, login, register, logout, clearError } =
     useAuthStore();
 
-  const isAuthenticated = !!token;
-  const isAdmin = user?.role === 'admin';
+  const isAuthenticated = !!session;
 
   return {
     user,
-    token,
+    profile,
+    session,
     loading,
     error,
     isAuthenticated,
-    isAdmin,
     login,
     register,
     logout,

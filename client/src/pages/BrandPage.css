@@ -1,0 +1,33 @@
+.brand-page__header {
+  margin-bottom: 40px;
+}
+
+.brand-page__back {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.brand-page__back:hover {
+  color: var(--accent);
+}
+
+.brand-page__name {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 8px;
+}
+
+.brand-page__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.brand-page__count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}

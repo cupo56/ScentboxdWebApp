@@ -6,35 +6,26 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
-          <span className="footer__logo">✦ PARFUM</span>
-          <p className="footer__tagline">Exklusive Düfte für jeden Anlass</p>
+          <span className="footer__logo">◆ Scentboxd</span>
+          <p className="footer__tagline">Discover, rate, and collect fragrances.</p>
         </div>
 
         <div className="footer__links">
           <div className="footer__column">
-            <h4>Shop</h4>
-            <Link to="/shop">Alle Düfte</Link>
-            <Link to="/shop?category=Herren">Herren</Link>
-            <Link to="/shop?category=Damen">Damen</Link>
-            <Link to="/shop?category=Unisex">Unisex</Link>
+            <h4>Discover</h4>
+            <Link to="/explore">All Fragrances</Link>
+            <Link to="/brands">Brands</Link>
           </div>
           <div className="footer__column">
-            <h4>Service</h4>
-            <a href="#">Versand</a>
-            <a href="#">Retouren</a>
-            <a href="#">Kontakt</a>
-          </div>
-          <div className="footer__column">
-            <h4>Rechtliches</h4>
-            <a href="#">Impressum</a>
-            <a href="#">Datenschutz</a>
-            <a href="#">AGB</a>
+            <h4>Community</h4>
+            <Link to="/login">Sign In</Link>
+            <Link to="/register">Create Account</Link>
           </div>
         </div>
       </div>
 
       <div className="footer__bottom">
-        <p>&copy; {new Date().getFullYear()} PARFUM. Alle Rechte vorbehalten.</p>
+        <p>&copy; {new Date().getFullYear()} Scentboxd. The fragrance encyclopedia.</p>
       </div>
     </footer>
   );

@@ -1,0 +1,25 @@
+.star-rating {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star-rating__star {
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+
+.star-rating__star.filled {
+  color: var(--gold);
+}
+
+.star-rating--interactive .star-rating__star {
+  cursor: pointer;
+}
+
+.star-rating--interactive .star-rating__star:hover {
+  color: var(--gold);
+}
+
+.star-rating--sm { font-size: 0.8rem; }
+.star-rating--md { font-size: 1rem; }
+.star-rating--lg { font-size: 1.5rem; }

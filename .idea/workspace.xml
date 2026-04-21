@@ -5,87 +5,77 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8e845ced-329b-48df-b35d-f5e2e605024b" name="Changes" comment="admin panel gemacht und andere änderungen auch">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/eslint.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/postcss.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/favicon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/public/icons.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/App.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/hero.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/react.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/assets/vite.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/admin/ProtectedAdminRoute.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/cart/CartDrawer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/cart/CartDrawer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/cart/CartItem.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/cart/CartItem.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/cart/CartSummary.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/cart/CartSummary.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/layout/Footer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/layout/Footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/layout/Layout.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/layout/Layout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/layout/Navbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/layout/Navbar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/product/FilterBar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/product/FilterBar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/product/ProductCard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/product/ProductCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/product/ProductGrid.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/product/ProductGrid.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Badge.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Badge.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Button.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Button.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Modal.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Modal.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Spinner.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Spinner.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Toast.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/components/ui/Toast.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/hooks/useAuth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/hooks/useProducts.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/AuthPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/CartPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/CartPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/HomePage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/HomePage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/ProductDetailPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/ProductDetailPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/RegisterPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/ShopPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/ShopPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminDashboard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminLayout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminOrders.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminProductForm.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/pages/admin/AdminProducts.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/services/api.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/store/authStore.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/store/cartStore.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/tailwind.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/vite.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/middleware/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/middleware/isAdmin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/models/Order.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/models/Product.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/models/User.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/routes/admin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/routes/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/routes/products.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/seed.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/admin/ProtectedAdminRoute.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/cart/CartDrawer.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/cart/CartDrawer.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/cart/CartItem.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/cart/CartItem.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/cart/CartSummary.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/cart/CartSummary.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/layout/Footer.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/layout/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Layout.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/layout/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Navbar.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/layout/Navbar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/layout/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/product/FilterBar.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/product/FilterBar.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/product/ProductCard.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/product/ProductCard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/product/ProductGrid.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/product/ProductGrid.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Badge.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Badge.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Button.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Button.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Modal.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Modal.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Spinner.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Spinner.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Toast.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/Toast.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/useAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useAuth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/hooks/useProducts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/AuthPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/AuthPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/CartPage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/CartPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/HomePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/HomePage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ProductDetailPage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ProductDetailPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/RegisterPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/RegisterPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ShopPage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ShopPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminDashboard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminLayout.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminOrders.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminProductForm.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/admin/AdminProducts.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/services/api.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/authStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/authStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/cartStore.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/middleware/auth.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/middleware/isAdmin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/Order.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/Product.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/User.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/admin.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/auth.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/products.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/seed.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,28 +113,30 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;restructure-to-web-app&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/harun/Documents/Github/ScentboxdWebApp&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;/Users/cupo/Library/Application Support/JetBrains/WebStorm2025.3/node/versions/24.14.0/bin/node&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="npm.Client (dev)" />
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.32098.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-3bd3a6803838-JavaScript-WS-261.22158.274" />
       </set>
     </attachedChunks>
   </component>
@@ -159,6 +151,8 @@
       <workItem from="1774108637909" duration="3733000" />
       <workItem from="1774196037638" duration="852000" />
       <workItem from="1774282635148" duration="3428000" />
+      <workItem from="1776805349864" duration="56000" />
+      <workItem from="1776805487422" duration="348000" />
     </task>
     <task id="LOCAL-00001" summary="admin panel gemacht und andere änderungen auch">
       <option name="closed" value="true" />

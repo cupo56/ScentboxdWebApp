@@ -1,137 +1,215 @@
+/* ===== Hero ===== */
 .home__hero {
   position: relative;
-  min-height: 480px;
-  display: flex;
-  align-items: center;
-  border-radius: 24px;
+  padding: 100px 0 80px;
   overflow: hidden;
-  margin-bottom: 3rem;
 }
 
 .home__hero-bg {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 30% 50%, rgba(139, 92, 246, 0.2) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 80%, rgba(192, 132, 252, 0.1) 0%, transparent 50%),
-    linear-gradient(135deg, #1a1530 0%, #0f0c19 100%);
-  z-index: 0;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(167, 139, 250, 0.12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
 }
 
 .home__hero-content {
   position: relative;
-  z-index: 1;
-  padding: 3rem 2.5rem;
-  max-width: 600px;
-}
-
-.home__hero-label {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.12);
-  padding: 0.4rem 1rem;
-  border-radius: 9999px;
-  margin-bottom: 1.25rem;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .home__hero-title {
-  font-size: 2.8rem;
+  font-size: 3.2rem;
   font-weight: 800;
-  color: #f1f5f9;
+  letter-spacing: -0.03em;
   line-height: 1.15;
-  margin: 0 0 1rem;
+  margin-bottom: 16px;
 }
 
 .home__hero-accent {
-  background: linear-gradient(135deg, #8b5cf6, #c084fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--accent);
 }
 
 .home__hero-subtitle {
   font-size: 1.1rem;
-  color: #94a3b8;
-  line-height: 1.7;
-  margin-bottom: 2rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
 }
 
-.home__hero-actions a {
-  text-decoration: none;
+.home__hero-search {
+  display: flex;
+  gap: 8px;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-/* Features */
-.home__features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-
-.home__feature {
-  text-align: center;
-  padding: 1.75rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  transition: border-color 0.2s;
-}
-.home__feature:hover {
-  border-color: rgba(139, 92, 246, 0.25);
-}
-
-.home__feature-icon {
-  font-size: 1.8rem;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.home__feature h3 {
+.home__hero-search .input {
+  flex: 1;
+  padding: 14px 20px;
   font-size: 1rem;
-  color: #f1f5f9;
-  margin: 0 0 0.3rem;
+  background: var(--bg-card);
+  border-color: var(--border-hover);
+}
+
+/* ===== Stats ===== */
+.home__stats {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.home__stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 64px;
+}
+
+.home__stat {
+  text-align: center;
+}
+
+.home__stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.home__stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   font-weight: 600;
 }
 
-.home__feature p {
-  font-size: 0.85rem;
-  color: #64748b;
-  margin: 0;
-}
-
-/* Section */
+/* ===== Sections ===== */
 .home__section {
-  margin-bottom: 3rem;
+  padding: 48px 0;
 }
 
 .home__section-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-.home__section-header h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #f1f5f9;
-  margin: 0;
+/* ===== Brands Grid ===== */
+.home__brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
 }
 
-.home__section-link {
+.home__brand-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px;
+  text-align: center;
   text-decoration: none;
-  color: #8b5cf6;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: color 0.2s;
+  cursor: pointer;
+  gap: 8px;
 }
-.home__section-link:hover { color: #c4b5fd; }
+
+.home__brand-initial {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.home__brand-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home__brand-country {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ===== Reviews ===== */
+.home__reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home__review-perfume {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-decoration: none;
+}
+
+.home__review-perfume:hover {
+  color: var(--accent);
+}
+
+.home__review-perfume strong {
+  color: var(--text-secondary);
+}
+
+/* ===== CTA ===== */
+.home__cta {
+  padding: 48px 0;
+}
+
+.home__cta-card {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(167, 139, 250, 0.02));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  text-align: center;
+}
+
+.home__cta-card h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.home__cta-card p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.home__cta-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 @media (max-width: 768px) {
-  .home__hero { min-height: 360px; }
-  .home__hero-content { padding: 2rem 1.5rem; }
-  .home__hero-title { font-size: 2rem; }
+  .home__hero-title {
+    font-size: 2.2rem;
+  }
+
+  .home__hero-search {
+    flex-direction: column;
+  }
+
+  .home__stats-grid {
+    gap: 32px;
+  }
+
+  .home__stat-number {
+    font-size: 1.5rem;
+  }
 }

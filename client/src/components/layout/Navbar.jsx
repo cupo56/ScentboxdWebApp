@@ -1,60 +1,72 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import useCartStore from '../../store/cartStore';
-import Badge from '../ui/Badge';
 import './Navbar.css';
 
 export default function Navbar() {
-  const { isAuthenticated, user, logout } = useAuth();
-  const getTotalItems = useCartStore((s) => s.getTotalItems);
+  const { isAuthenticated, profile, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+    setMenuOpen(false);
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar__inner">
-        <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-icon">✦</span>
-          PARFUM
+        <Link to="/" className="navbar__logo" onClick={() => setMenuOpen(false)}>
+          <span className="navbar__logo-icon">◆</span>
+          <span className="navbar__logo-text">Scentboxd</span>
         </Link>
 
         <button
           className={`navbar__burger ${menuOpen ? 'active' : ''}`}
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menü"
+          aria-label="Menu"
         >
           <span /><span /><span />
         </button>
 
         <div className={`navbar__links ${menuOpen ? 'open' : ''}`}>
-          <NavLink to="/" className="navbar__link" onClick={() => setMenuOpen(false)}>
-            Home
+          <NavLink to="/explore" className="navbar__link" onClick={() => setMenuOpen(false)}>
+            Explore
           </NavLink>
-          <NavLink to="/shop" className="navbar__link" onClick={() => setMenuOpen(false)}>
-            Shop
-          </NavLink>
-          <NavLink to="/cart" className="navbar__link navbar__cart-link" onClick={() => setMenuOpen(false)}>
-            🛒
-            {getTotalItems() > 0 && (
-              <Badge variant="cart">{getTotalItems()}</Badge>
-            )}
+          <NavLink to="/brands" className="navbar__link" onClick={() => setMenuOpen(false)}>
+            Brands
           </NavLink>
 
           {isAuthenticated ? (
             <div className="navbar__user">
-              {user?.role === 'admin' && (
-                <NavLink to="/admin" className="navbar__link" onClick={() => setMenuOpen(false)}>
-                  Admin
-                </NavLink>
-              )}
-              <span className="navbar__user-name">{user?.name}</span>
-              <button className="navbar__logout" onClick={logout}>
-                Logout
+              <NavLink
+                to={`/profile/${profile?.username || 'me'}`}
+                className="navbar__link navbar__profile-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="navbar__avatar">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="" />
+                  ) : (
+                    <span className="navbar__avatar-fallback">
+                      {(profile?.username || 'U')[0].toUpperCase()}
+                    </span>
+                  )}
+                </span>
+                <span>{profile?.username || 'Profile'}</span>
+              </NavLink>
+              <button className="navbar__logout btn btn-ghost btn-sm" onClick={handleLogout}>
+                Sign Out
               </button>
             </div>
           ) : (
-            <NavLink to="/login" className="navbar__link navbar__link--cta" onClick={() => setMenuOpen(false)}>
-              Login
+            <NavLink
+              to="/login"
+              className="navbar__link navbar__link--cta"
+              onClick={() => setMenuOpen(false)}
+            >
+              Sign In
             </NavLink>
           )}
         </div>

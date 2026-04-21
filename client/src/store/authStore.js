@@ -1,50 +1,102 @@
 import { create } from 'zustand';
-import { loginUser, registerUser } from '../services/api';
+import { supabase } from '../lib/supabaseClient';
 
-const useAuthStore = create((set) => ({
-  user: JSON.parse(localStorage.getItem('user')) || null,
-  token: localStorage.getItem('token') || null,
-  loading: false,
+const useAuthStore = create((set, get) => ({
+  user: null,
+  profile: null,
+  session: null,
+  loading: true,
   error: null,
 
-  login: async (credentials) => {
-    set({ loading: true, error: null });
+  initialize: async () => {
     try {
-      const { data } = await loginUser(credentials);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      set({ user: data.user, token: data.token, loading: false });
-      return true;
-    } catch (err) {
-      set({
-        error: err.response?.data?.message || 'Login fehlgeschlagen',
-        loading: false,
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        set({ user: session.user, session, profile, loading: false });
+      } else {
+        set({ user: null, session: null, profile: null, loading: false });
+      }
+
+      // Listen for auth changes
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+
+          set({ user: session.user, session, profile });
+        } else {
+          set({ user: null, session: null, profile: null });
+        }
       });
-      return false;
+    } catch (err) {
+      set({ error: err.message, loading: false });
     }
   },
 
-  register: async (userData) => {
+  login: async (email, password) => {
     set({ loading: true, error: null });
-    try {
-      const { data } = await registerUser(userData);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      set({ user: data.user, token: data.token, loading: false });
-      return true;
-    } catch (err) {
-      set({
-        error: err.response?.data?.message || 'Registrierung fehlgeschlagen',
-        loading: false,
-      });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      set({ error: error.message, loading: false });
       return false;
     }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .single();
+
+    set({
+      user: data.user,
+      session: data.session,
+      profile,
+      loading: false,
+    });
+    return true;
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    set({ user: null, token: null });
+  register: async (email, password, username) => {
+    set({ loading: true, error: null });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      set({ error: error.message, loading: false });
+      return false;
+    }
+
+    // Create profile with username
+    if (data.user) {
+      await supabase.from('profiles').upsert({
+        id: data.user.id,
+        username,
+      });
+    }
+
+    set({ loading: false });
+    return true;
+  },
+
+  logout: async () => {
+    await supabase.auth.signOut();
+    set({ user: null, session: null, profile: null });
   },
 
   clearError: () => set({ error: null }),
