@@ -1,7 +1,7 @@
 import useAuthStore from '../store/authStore';
 
 export function useAuth() {
-  const { user, profile, session, loading, error, login, register, logout, clearError } =
+  const { user, profile, session, loading, error, login, register, logout, clearError, setProfile } =
     useAuthStore();
 
   const isAuthenticated = !!session;
@@ -17,5 +17,6 @@ export function useAuth() {
     register,
     logout,
     clearError,
+    setProfile,
   };
 }
