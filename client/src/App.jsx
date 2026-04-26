@@ -9,8 +9,11 @@ import BrandsOverviewPage from './pages/BrandsOverviewPage';
 import BrandPage from './pages/BrandPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage';
 import ListDetailPage from './pages/ListDetailPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
   const initialize = useAuthStore((s) => s.initialize);
@@ -30,8 +33,11 @@ export default function App() {
           <Route path="/brand/:id" element={<BrandPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/list/:id" element={<ListDetailPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

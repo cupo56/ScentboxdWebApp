@@ -1,10 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import StarRating from './StarRating';
 import ReviewForm from './ReviewForm';
+import { toggleReviewLike, getReviewLikeCount, hasUserLikedReview } from '../../services/reviewService';
+import { useAuth } from '../../hooks/useAuth';
 import './ReviewCard.css';
 
-export default function ReviewCard({ review, currentUserId, onLike, onDelete, onUpdate }) {
+export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [likeAnimating, setLikeAnimating] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const username = review.profiles?.username || review.author_name || 'Anonymous';
   const avatar = review.profiles?.avatar_url;
@@ -15,6 +24,46 @@ export default function ReviewCard({ review, currentUserId, onLike, onDelete, on
   });
 
   const isOwner = currentUserId && review.user_id === currentUserId;
+
+  // Fetch like state on mount
+  useEffect(() => {
+    getReviewLikeCount(review.id)
+      .then(setLikeCount)
+      .catch(() => {});
+
+    if (isAuthenticated) {
+      hasUserLikedReview(review.id)
+        .then(setLiked)
+        .catch(() => {});
+    }
+  }, [review.id, isAuthenticated]);
+
+  const handleLike = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    if (likeLoading) return;
+
+    setLikeLoading(true);
+    // Optimistic update
+    const wasLiked = liked;
+    setLiked(!wasLiked);
+    setLikeCount((prev) => prev + (wasLiked ? -1 : 1));
+    setLikeAnimating(true);
+    setTimeout(() => setLikeAnimating(false), 400);
+
+    try {
+      await toggleReviewLike(review.id);
+    } catch {
+      // Revert on error
+      setLiked(wasLiked);
+      setLikeCount((prev) => prev + (wasLiked ? 1 : -1));
+    } finally {
+      setLikeLoading(false);
+    }
+  };
 
   if (isEditing) {
     return (
@@ -83,19 +132,36 @@ export default function ReviewCard({ review, currentUserId, onLike, onDelete, on
         </div>
       )}
 
-      <div className="review-card__footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-        <div>
-          {onLike && (
-            <button className="review-card__like btn btn-ghost btn-sm" onClick={() => onLike(review.id)}>
-              ♡ Like
-            </button>
+      <div className="review-card__footer">
+        <button
+          className={`review-card__like-btn ${liked ? 'review-card__like-btn--liked' : ''} ${likeAnimating ? 'review-card__like-btn--pop' : ''}`}
+          onClick={handleLike}
+          disabled={likeLoading}
+          aria-label={liked ? 'Unlike this review' : 'Like this review'}
+          id={`like-btn-${review.id}`}
+        >
+          <svg
+            className="review-card__like-icon"
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill={liked ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+          {likeCount > 0 && (
+            <span className="review-card__like-count">{likeCount}</span>
           )}
-        </div>
-        
+        </button>
+
         {isOwner && (
-          <div className="review-card__actions" style={{ display: 'flex', gap: '8px' }}>
+          <div className="review-card__actions">
             <button className="btn btn-ghost btn-sm" onClick={() => setIsEditing(true)}>Edit</button>
-            <button className="btn btn-ghost btn-sm" style={{ color: '#ff4d4d' }} onClick={handleDelete}>Delete</button>
+            <button className="btn btn-ghost btn-sm review-card__delete-btn" onClick={handleDelete}>Delete</button>
           </div>
         )}
       </div>

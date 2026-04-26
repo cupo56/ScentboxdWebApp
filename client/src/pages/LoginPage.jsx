@@ -55,6 +55,10 @@ export default function LoginPage() {
             </button>
           </form>
 
+          <Link to="/forgot-password" className="auth-card__forgot-link" id="forgot-password-link">
+            Forgot your password?
+          </Link>
+
           <p className="auth-card__footer">
             Don't have an account? <Link to="/register">Create one</Link>
           </p>

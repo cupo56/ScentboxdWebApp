@@ -6,10 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="8e845ced-329b-48df-b35d-f5e2e605024b" name="Changes" comment="admin panel gemacht und andere änderungen auch">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/hooks/useAuth.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useAuth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/ProfilePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ProfilePage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ProfilePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/store/authStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/authStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/review/ReviewCard.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/review/ReviewCard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/review/ReviewCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/review/ReviewCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/AuthPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/AuthPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ExplorePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ExplorePage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ExplorePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ExplorePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/feature_roadmap.md" beforeDir="false" afterPath="$PROJECT_DIR$/feature_roadmap.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +95,10 @@
       <workItem from="1777039992104" duration="33000" />
       <workItem from="1777040034613" duration="35000" />
       <workItem from="1777040079334" duration="327000" />
-      <workItem from="1777040424782" duration="389000" />
+      <workItem from="1777040424782" duration="1020000" />
+      <workItem from="1777229600153" duration="610000" />
+      <workItem from="1777233393094" duration="629000" />
+      <workItem from="1777239773001" duration="190000" />
     </task>
     <task id="LOCAL-00001" summary="admin panel gemacht und andere änderungen auch">
       <option name="closed" value="true" />
