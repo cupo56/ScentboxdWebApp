@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8e845ced-329b-48df-b35d-f5e2e605024b" name="Changes" comment="admin panel gemacht und andere änderungen auch">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/review/ReviewCard.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/review/ReviewCard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/review/ReviewCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/review/ReviewCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/AuthPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/AuthPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/ExplorePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ExplorePage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/ExplorePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ExplorePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/LoginPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feature_roadmap.md" beforeDir="false" afterPath="$PROJECT_DIR$/feature_roadmap.md" afterDir="false" />
-    </list>
+    <list default="true" id="8e845ced-329b-48df-b35d-f5e2e605024b" name="Changes" comment="admin panel gemacht und andere änderungen auch" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,12 +19,12 @@
     &quot;assignee&quot;: &quot;cupo56&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/cupo56/PerfumeWebsite.git&quot;,
-    &quot;accountId&quot;: &quot;bb2cf4e8-3d81-49bf-9cd2-dd758aa2c491&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/cupo56/ScentboxdWebApp.git",
+    "accountId": "bb2cf4e8-3d81-49bf-9cd2-dd758aa2c491"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0,
   &quot;fromUser&quot;: false
@@ -74,7 +64,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3bd3a6803838-JavaScript-WS-261.22158.274" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.32098.39" />
       </set>
     </attachedChunks>
   </component>
@@ -99,6 +89,7 @@
       <workItem from="1777229600153" duration="610000" />
       <workItem from="1777233393094" duration="629000" />
       <workItem from="1777239773001" duration="190000" />
+      <workItem from="1777470626711" duration="470000" />
     </task>
     <task id="LOCAL-00001" summary="admin panel gemacht und andere änderungen auch">
       <option name="closed" value="true" />
