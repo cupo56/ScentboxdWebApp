@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
-import { getReviewsByPerfume } from '../services/reviewService';
+import { getReviewsByPerfume, deleteReview } from '../services/reviewService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
 import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
+import AddToListButton from '../components/perfume/AddToListButton';
 import ReviewCard from '../components/review/ReviewCard';
 import ReviewForm from '../components/review/ReviewForm';
 import PerfumeCard from '../components/perfume/PerfumeCard';
@@ -20,7 +21,7 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
 
 export default function PerfumeDetailPage() {
   const { id } = useParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [perfume, setPerfume] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [similar, setSimilar] = useState([]);
@@ -42,6 +43,19 @@ export default function PerfumeDetailPage() {
       .catch((err) => setError(err.message || 'Failed to load perfume'))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await deleteReview(reviewId);
+      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+    } catch (err) {
+      alert('Failed to delete review: ' + err.message);
+    }
+  };
+
+  const handleUpdateReview = (updatedReview) => {
+    setReviews((prev) => prev.map((r) => (r.id === updatedReview.id ? updatedReview : r)));
+  };
 
   if (loading) {
     return (
@@ -114,7 +128,10 @@ export default function PerfumeDetailPage() {
             )}
 
             {/* User Actions */}
-            <UserPerfumeActions perfumeId={perfume.id} />
+            <div className="detail__actions-row">
+              <UserPerfumeActions perfumeId={perfume.id} />
+              <AddToListButton perfumeId={perfume.id} />
+            </div>
 
             {/* Performance */}
             <div className="detail__performance">
@@ -162,7 +179,13 @@ export default function PerfumeDetailPage() {
 
           <div className="detail__reviews-list">
             {reviews.map((r) => (
-              <ReviewCard key={r.id} review={r} />
+              <ReviewCard
+                key={r.id}
+                review={r}
+                currentUserId={user?.id}
+                onDelete={handleDeleteReview}
+                onUpdate={handleUpdateReview}
+              />
             ))}
             {reviews.length === 0 && (
               <div className="empty-state">

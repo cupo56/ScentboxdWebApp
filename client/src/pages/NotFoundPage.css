@@ -1,0 +1,143 @@
+/* ===== 404 — Not Found Page ===== */
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height) - 200px);
+  position: relative;
+  overflow: hidden;
+  padding: 60px 24px;
+}
+
+/* ── Floating Particles ────────────────────────────── */
+
+.not-found__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.not-found__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  animation: particle-float ease-in-out infinite;
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  20% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.4;
+    transform: translateY(-40px) scale(1);
+  }
+  80% {
+    opacity: 0.15;
+  }
+}
+
+/* ── Content ───────────────────────────────────────── */
+
+.not-found__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 560px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* ── 404 Code ──────────────────────────────────────── */
+
+.not-found__code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 32px;
+  user-select: none;
+}
+
+.not-found__digit {
+  font-size: 7rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+  opacity: 0.12;
+  letter-spacing: -4px;
+}
+
+.not-found__digit--accent {
+  opacity: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found__bottle {
+  filter: drop-shadow(0 0 24px rgba(167, 139, 250, 0.3));
+  animation: bottle-bob 3s ease-in-out infinite;
+}
+
+@keyframes bottle-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ── Title & Subtitle ──────────────────────────────── */
+
+.not-found__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.not-found__subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+/* ── Actions ───────────────────────────────────────── */
+
+.not-found__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .not-found__digit {
+    font-size: 4.5rem;
+  }
+
+  .not-found__bottle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .not-found__title {
+    font-size: 1.35rem;
+  }
+
+  .not-found__subtitle {
+    font-size: 0.9rem;
+  }
+
+  .not-found__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

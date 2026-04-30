@@ -30,6 +30,13 @@
   color: var(--accent);
 }
 
+.profile-page__info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .profile-page__username {
   font-size: 1.5rem;
   font-weight: 800;
@@ -84,22 +91,39 @@
   gap: 16px;
 }
 
-.profile-page__list-card {
-  padding: 20px;
-  text-decoration: none;
-  cursor: pointer;
+.profile-page__list-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
 }
 
-.profile-page__list-card h3 {
+.profile-page__list-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-page__list-link {
+  text-decoration: none;
+  flex: 1;
+}
+
+.profile-page__list-link h3 {
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
-.profile-page__list-card p {
+.profile-page__list-link p {
   font-size: 0.85rem;
   color: var(--text-secondary);
-  margin-bottom: 8px;
+}
+
+.profile-page__list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .profile-page__list-meta {

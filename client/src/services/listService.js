@@ -25,7 +25,6 @@ export async function getListById(listId) {
     .from('lists')
     .select(`
       *,
-      profiles(username, avatar_url),
       list_items(
         id,
         added_at,
@@ -75,6 +74,21 @@ export async function removeFromList(listId, perfumeId) {
     .eq('perfume_id', perfumeId);
 
   if (error) throw error;
+}
+
+/**
+ * Update list metadata.
+ */
+export async function updateList(listId, { name, description, is_public }) {
+  const { data, error } = await supabase
+    .from('lists')
+    .update({ name, description, is_public })
+    .eq('id', listId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 }
 
 /**

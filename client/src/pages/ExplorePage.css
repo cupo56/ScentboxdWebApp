@@ -58,8 +58,91 @@
   color: var(--text-secondary);
 }
 
+/* ===== Active Filter Tags ===== */
+.explore__active-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  animation: filtersFadeIn 0.25s ease-out;
+}
+
+@keyframes filtersFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.explore__active-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.explore__filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  color: var(--accent-hover);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.explore__filter-tag:hover {
+  background: rgba(167, 139, 250, 0.25);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.explore__filter-tag-icon {
+  font-size: 0.72rem;
+}
+
+.explore__filter-tag-label {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.explore__filter-tag-close {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+  margin-left: 2px;
+}
+
+.explore__filter-tag:hover .explore__filter-tag-close {
+  opacity: 1;
+}
+
+.explore__clear-btn {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.explore__clear-btn:hover {
+  color: var(--danger);
+  background: rgba(248, 113, 113, 0.1);
+}
+
 @media (max-width: 640px) {
   .explore__filters {
     grid-template-columns: 1fr;
+  }
+
+  .explore__active-filters {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
