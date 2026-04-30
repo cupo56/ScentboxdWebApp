@@ -27,6 +27,10 @@ Dieses Dokument dient dazu, unseren Entwicklungsfortschritt zu tracken. Hier not
 - Memory-Leak im `authStore.js` (Zustand) behoben, indem der Supabase Auth-Listener nun korrekt beim Unmount aufgeräumt wird (Cleanup-Funktion in `App.jsx`).
 - Bugfix in `ProfilePage.jsx`: Das Anmeldedatum ("Joined") nutzt nun korrekterweise `created_at` statt `updated_at`.
 - Vorlage `.env.example` mit den nötigen Supabase-Variablen erstellt.
+- **Supabase Security Fixes (Advisor Warnings):**
+  - Alle Datenbankfunktionen (RPCs) auf `SECURITY INVOKER` umgestellt und expliziten `search_path` gesetzt, um "Search Path Injection"-Schwachstellen zu vermeiden.
+  - Supabase-Erweiterung `pg_trgm` ins `extensions`-Schema verschoben.
+  - Großzügige `SELECT`-Policy vom `avatars`-Bucket entfernt, um unerwünschtes Auflisten (Directory Listing) der Avatare zu unterbinden (Lesezugriff funktioniert weiterhin via Direct-URL).
 
 ---
 
