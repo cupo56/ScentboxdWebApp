@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
-import { getReviewsByPerfume } from '../services/reviewService';
+import { getReviewsByPerfume, toggleReviewLike } from '../services/reviewService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
 import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
@@ -162,7 +162,11 @@ export default function PerfumeDetailPage() {
 
           <div className="detail__reviews-list">
             {reviews.map((r) => (
-              <ReviewCard key={r.id} review={r} />
+              <ReviewCard
+                key={r.id}
+                review={r}
+                onLike={isAuthenticated ? (reviewId) => toggleReviewLike(reviewId).catch(console.error) : undefined}
+              />
             ))}
             {reviews.length === 0 && (
               <div className="empty-state">

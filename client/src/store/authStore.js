@@ -7,8 +7,15 @@ const useAuthStore = create((set, get) => ({
   session: null,
   loading: true,
   error: null,
+  _authSubscription: null,
 
   initialize: async () => {
+    // Prevent double-subscription
+    const existing = get()._authSubscription;
+    if (existing) {
+      existing.unsubscribe();
+    }
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
 
@@ -24,8 +31,8 @@ const useAuthStore = create((set, get) => ({
         set({ user: null, session: null, profile: null, loading: false });
       }
 
-      // Listen for auth changes
-      supabase.auth.onAuthStateChange(async (event, session) => {
+      // Listen for auth changes (with cleanup reference)
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (session?.user) {
           const { data: profile } = await supabase
             .from('profiles')
@@ -38,6 +45,8 @@ const useAuthStore = create((set, get) => ({
           set({ user: null, session: null, profile: null });
         }
       });
+
+      set({ _authSubscription: subscription });
     } catch (err) {
       set({ error: err.message, loading: false });
     }

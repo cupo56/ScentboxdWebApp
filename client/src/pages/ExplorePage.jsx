@@ -148,7 +148,7 @@ export default function ExplorePage() {
             <button
               className="btn btn-secondary btn-sm"
               disabled={page <= 1}
-              onClick={() => updateFilter('page', String(page - 1)) || setSearchParams((p) => { p.set('page', String(page - 1)); return p; })}
+              onClick={() => setSearchParams((p) => { p.set('page', String(page - 1)); return p; })}
             >
               ← Previous
             </button>
