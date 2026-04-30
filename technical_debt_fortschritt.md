@@ -9,14 +9,14 @@
 | # | Problem | Schwere | Status |
 |---|---|---|---|
 | 1 | Keine Error-Boundaries | 🟡 Mittel | ✅ Erledigt |
-| 2 | Kein globales Error-Handling | 🟡 Mittel | ⬜ Offen |
-| 3 | Tailwind + Vanilla CSS Redundanz | 🟠 Gering | ⬜ Offen |
+| 2 | Kein globales Error-Handling | 🟡 Mittel | ✅ Erledigt |
+| 3 | Tailwind + Vanilla CSS Redundanz | 🟠 Gering | ✅ Erledigt (Entscheidung: Vanilla CSS bleibt) |
 | 4 | Keine Protected Routes | 🔴 Hoch | ✅ Erledigt |
 | 5 | Client-seitige Filterung (Pagination) | 🟡 Mittel | ⬜ Offen (braucht Supabase DB-Funktion) |
 | 6 | Keine `.env.example` | 🟠 Gering | ✅ Erledigt |
 | 7 | Falsches "Joined"-Datum | 🟠 Gering | ✅ Erledigt |
 | 8 | Kein Auth-Listener Cleanup | 🟡 Mittel | ✅ Erledigt |
-| 9 | Root `package.json` leer | 🟠 Gering | ⬜ Offen |
+| 9 | Root `package.json` leer | 🟠 Gering | ✅ Erledigt |
 | 10 | Placeholder-Assets | 🟠 Gering | ✅ Erledigt |
 
 ### Zusätzlich behoben:
@@ -73,19 +73,24 @@
 
 ---
 
+### ✅ Fix 10: Globales Error-Handling (Toast-System)
+- **Problem:** Fehler (z.B. API-Fehlschläge) wurden nur stillschweigend mit `console.error` geloggt
+- **Lösung:** Globaler Zustand für Toasts (`toastStore.js`) erstellt, UI-Komponente (`ToastContainer`) in die App eingebunden und alle `console.error` in den Seiten (`ExplorePage`, `HomePage`, etc.) durch sichtbare `toast.error` Meldungen ersetzt.
+- **Dateien:** `src/store/toastStore.js`, `src/components/layout/ToastContainer.jsx/.css`, div. Pages
+
+### ✅ Fix 11: Root Dev-Script
+- **Problem:** `npm run dev` im Root-Verzeichnis tat nichts.
+- **Lösung:** `"dev": "cd client && npm run dev"` zum Root `package.json` hinzugefügt.
+- **Dateien:** `/package.json`
+
+---
+
 ## Noch offen
 
-### ⬜ Globales Error-Handling
-- Services sollten einen zentralen Error-Handler bekommen statt `console.error`
-- Toast-Notification-System nutzen, das in `index.css` bereits vorbereitet ist
-
 ### ⬜ Tailwind aufräumen
-- Entscheidung: Tailwind komplett entfernen oder aktiv nutzen?
-- Aktuell: Nur `@import "tailwindcss"` in `index.css`, alle Styles sind Vanilla CSS
+- **Entscheidung:** Wir bleiben bei Vanilla CSS, da das komplette Design-System dort bereits aufgebaut ist.
+- **To-Do:** Später Tailwind-Pakete deinstallieren, um Bundle-Size zu reduzieren.
 
 ### ⬜ Client-seitige Filterung (noteFamily)
 - Braucht Supabase DB-Funktion/View — **Aufgabe für Entwickler B (Backend)**
 - `perfumeService.js:81-85` filtert client-seitig → Pagination-Count stimmt nicht
-
-### ⬜ Root `package.json` Dev-Script
-- Convenience-Script hinzufügen: `"dev": "cd client && npm run dev"`

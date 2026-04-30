@@ -2,5 +2,8 @@
   "name": "ScentboxdWebApp",
   "version": "1.0.0",
   "description": "Scentboxd — The fragrance encyclopedia",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev": "cd client && npm run dev"
+  }
 }
