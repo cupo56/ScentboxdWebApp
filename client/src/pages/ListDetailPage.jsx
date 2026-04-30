@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getListById } from '../services/listService';
-import PerfumeCard from '../components/perfume/PerfumeCard';
+import { getListById, getListItems } from '../services/listService';
+import { toast } from '../store/toastStore';
+import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import './ListDetailPage.css';
 
 export default function ListDetailPage() {
@@ -12,7 +13,7 @@ export default function ListDetailPage() {
   useEffect(() => {
     getListById(id)
       .then(setList)
-      .catch(console.error)
+      .catch((err) => toast.error('Failed to load list details: ' + err.message))
       .finally(() => setLoading(false));
   }, [id]);
 

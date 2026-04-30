@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getPerfumes, getConcentrations, getNoteFamilies } from '../services/perfumeService';
 import { getBrands } from '../services/brandService';
+import { toast } from '../store/toastStore';
 import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import './ExplorePage.css';
 
@@ -31,7 +32,7 @@ export default function ExplorePage() {
         setConcentrations(c);
         setNoteFamilies(nf);
       })
-      .catch(console.error);
+      .catch((err) => toast.error('Failed to load filters: ' + err.message));
   }, []);
 
   // Load perfumes when filters change
@@ -44,7 +45,7 @@ export default function ExplorePage() {
       setPerfumes(result.perfumes);
       setTotal(result.total);
     } catch (err) {
-      console.error('Failed to load perfumes:', err);
+      toast.error('Failed to load perfumes: ' + err.message);
     }
     setLoading(false);
   }, [search, brand, concentration, noteFamily, sortBy, page]);

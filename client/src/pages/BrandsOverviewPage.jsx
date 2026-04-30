@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getBrands } from '../services/brandService';
+import { toast } from '../store/toastStore';
 import './BrandsOverviewPage.css';
 
 export default function BrandsOverviewPage() {
@@ -11,7 +12,7 @@ export default function BrandsOverviewPage() {
   useEffect(() => {
     getBrands()
       .then(setBrands)
-      .catch(console.error)
+      .catch((err) => toast.error('Failed to load brands: ' + err.message))
       .finally(() => setLoading(false));
   }, []);
 

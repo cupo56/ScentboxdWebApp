@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { getUserPerfumeStatus, togglePerfumeStatus } from '../../services/userPerfumeService';
+import { toast } from '../../store/toastStore';
 import './UserPerfumeActions.css';
 
 export default function UserPerfumeActions({ perfumeId }) {
@@ -22,7 +23,7 @@ export default function UserPerfumeActions({ perfumeId }) {
       const updated = await togglePerfumeStatus(perfumeId, field);
       setStatus(updated);
     } catch (err) {
-      console.error('Toggle failed:', err);
+      toast.error('Failed to update status: ' + err.message);
     }
     setLoading(false);
   };

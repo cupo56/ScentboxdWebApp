@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists } from '../services/listService';
+import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
@@ -24,7 +25,7 @@ export default function ProfilePage() {
         return p;
       })
       .then((p) => loadTab('favorites', p.id))
-      .catch(console.error)
+      .catch((err) => toast.error('Failed to load profile: ' + err.message))
       .finally(() => setLoading(false));
   }, [username]);
 

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import useAuthStore from './store/authStore';
 import Layout from './components/layout/Layout';
 import RequireAuth from './components/layout/RequireAuth';
+import ToastContainer from './components/layout/ToastContainer';
 import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import PerfumeDetailPage from './pages/PerfumeDetailPage';
@@ -23,6 +24,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />

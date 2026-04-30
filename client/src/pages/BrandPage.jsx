@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getBrandById, getPerfumesByBrand } from '../services/brandService';
+import { toast } from '../store/toastStore';
 import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import './BrandPage.css';
 
@@ -17,7 +18,7 @@ export default function BrandPage() {
         setBrand(b);
         setPerfumes(p);
       })
-      .catch(console.error)
+      .catch((err) => toast.error('Failed to load brand data: ' + err.message))
       .finally(() => setLoading(false));
   }, [id]);
 

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getPerfumes, getPerfumeCount } from '../services/perfumeService';
 import { getBrands, getBrandCount } from '../services/brandService';
 import { getReviewCount, getLatestReviews } from '../services/reviewService';
+import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
 import ReviewCard from '../components/review/ReviewCard';
 import './HomePage.css';
@@ -36,7 +37,7 @@ export default function HomePage() {
           reviews: rCount.status === 'fulfilled' ? rCount.value : 0,
         });
       })
-      .catch(console.error)
+      .catch((err) => toast.error('Failed to load homepage data: ' + err.message))
       .finally(() => setLoading(false));
   }, []);
 
