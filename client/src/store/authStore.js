@@ -25,7 +25,7 @@ const useAuthStore = create((set, get) => ({
       }
 
       // Listen for auth changes
-      supabase.auth.onAuthStateChange(async (event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (session?.user) {
           const { data: profile } = await supabase
             .from('profiles')
@@ -38,6 +38,10 @@ const useAuthStore = create((set, get) => ({
           set({ user: null, session: null, profile: null });
         }
       });
+
+      return () => {
+        subscription.unsubscribe();
+      };
     } catch (err) {
       set({ error: err.message, loading: false });
     }

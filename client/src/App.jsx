@@ -19,7 +19,11 @@ export default function App() {
   const initialize = useAuthStore((s) => s.initialize);
 
   useEffect(() => {
-    initialize();
+    let cleanup;
+    initialize().then(fn => { cleanup = fn; });
+    return () => {
+      if (cleanup) cleanup();
+    };
   }, [initialize]);
 
   return (

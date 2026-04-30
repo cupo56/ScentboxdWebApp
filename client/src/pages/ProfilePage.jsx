@@ -133,7 +133,7 @@ export default function ProfilePage() {
             </div>
             {profile.bio && <p className="profile-page__bio">{profile.bio}</p>}
             <p className="profile-page__joined">
-              Joined {new Date(profile.updated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+              Joined {new Date(profile.created_at || profile.updated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
             </p>
           </div>
         </div>

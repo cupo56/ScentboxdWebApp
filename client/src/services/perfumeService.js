@@ -52,6 +52,18 @@ export async function getPerfumes({
     query = query.eq('concentration', concentration);
   }
 
+  if (noteFamily) {
+    const { data: notePerfumes, error: rpcError } = await supabase.rpc('get_perfumes_by_note_family', { family_name: noteFamily });
+    if (rpcError) throw rpcError;
+    
+    const perfumeIds = notePerfumes?.map(p => p.perfume_id) || [];
+    if (perfumeIds.length > 0) {
+      query = query.in('id', perfumeIds);
+    } else {
+      return { perfumes: [], total: 0 };
+    }
+  }
+
   // Sort
   switch (sortBy) {
     case 'name':
@@ -76,15 +88,7 @@ export async function getPerfumes({
 
   if (error) throw error;
 
-  // Filter by note family client-side if needed (Supabase doesn't support deep nested filters easily)
-  let filtered = data;
-  if (noteFamily) {
-    filtered = data.filter((p) =>
-      p.perfume_notes?.some((pn) => pn.notes?.family === noteFamily)
-    );
-  }
-
-  return { perfumes: filtered, total: count };
+  return { perfumes: data, total: count };
 }
 
 /**
