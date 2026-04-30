@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8e845ced-329b-48df-b35d-f5e2e605024b" name="Changes" comment="admin panel gemacht und andere änderungen auch" />
+    <list default="true" id="8e845ced-329b-48df-b35d-f5e2e605024b" name="Changes" comment="admin panel gemacht und andere änderungen auch">
+      <change beforePath="$PROJECT_DIR$/feature_roadmap.md" beforeDir="false" afterPath="$PROJECT_DIR$/feature_roadmap.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,12 +21,12 @@
     &quot;assignee&quot;: &quot;cupo56&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/cupo56/ScentboxdWebApp.git",
-    "accountId": "bb2cf4e8-3d81-49bf-9cd2-dd758aa2c491"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cupo56/ScentboxdWebApp.git&quot;,
+    &quot;accountId&quot;: &quot;bb2cf4e8-3d81-49bf-9cd2-dd758aa2c491&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0,
   &quot;fromUser&quot;: false
@@ -90,6 +92,7 @@
       <workItem from="1777233393094" duration="629000" />
       <workItem from="1777239773001" duration="190000" />
       <workItem from="1777470626711" duration="470000" />
+      <workItem from="1777576859194" duration="76000" />
     </task>
     <task id="LOCAL-00001" summary="admin panel gemacht und andere änderungen auch">
       <option name="closed" value="true" />
