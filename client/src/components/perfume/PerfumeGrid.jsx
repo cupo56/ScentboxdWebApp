@@ -1,7 +1,7 @@
 import PerfumeCard from './PerfumeCard';
 import './PerfumeGrid.css';
 
-export default function PerfumeGrid({ perfumes, loading }) {
+export default function PerfumeGrid({ perfumes, loading, ratingsMap }) {
   if (loading) {
     return (
       <div className="perfume-grid">
@@ -30,9 +30,17 @@ export default function PerfumeGrid({ perfumes, loading }) {
 
   return (
     <div className="perfume-grid">
-      {perfumes.map((perfume) => (
-        <PerfumeCard key={perfume.id} perfume={perfume} />
-      ))}
+      {perfumes.map((perfume) => {
+        const rating = ratingsMap?.get(perfume.id);
+        return (
+          <PerfumeCard
+            key={perfume.id}
+            perfume={perfume}
+            avgRating={rating?.avg_rating}
+            reviewCount={rating?.review_count}
+          />
+        );
+      })}
     </div>
   );
 }

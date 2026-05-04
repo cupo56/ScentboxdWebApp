@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getPerfumes, getPerfumeCount } from '../services/perfumeService';
+import { getPerfumes, getPerfumeCount, getPerfumeRatings } from '../services/perfumeService';
 import { getBrands, getBrandCount } from '../services/brandService';
 import { getReviewCount, getLatestReviews } from '../services/reviewService';
 import PerfumeCard from '../components/perfume/PerfumeCard';
@@ -14,6 +14,7 @@ export default function HomePage() {
   const [brands, setBrands] = useState([]);
   const [latestReviews, setLatestReviews] = useState([]);
   const [stats, setStats] = useState({ perfumes: 0, brands: 0, reviews: 0 });
+  const [ratingsMap, setRatingsMap] = useState(new Map());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +27,15 @@ export default function HomePage() {
       getReviewCount(),
     ])
       .then(([perfumeResult, brandList, reviews, pCount, bCount, rCount]) => {
-        if (perfumeResult.status === 'fulfilled') setFeatured(perfumeResult.value.perfumes);
+        if (perfumeResult.status === 'fulfilled') {
+          const perfumes = perfumeResult.value.perfumes;
+          setFeatured(perfumes);
+          // Batch-fetch ratings for featured perfumes
+          const ids = perfumes.map((p) => p.id);
+          getPerfumeRatings(ids)
+            .then(setRatingsMap)
+            .catch(console.error);
+        }
         if (brandList.status === 'fulfilled') setBrands(brandList.value.slice(0, 12));
         if (reviews.status === 'fulfilled') setLatestReviews(reviews.value);
         
@@ -108,9 +117,17 @@ export default function HomePage() {
             <div className="spinner-container"><div className="spinner spinner-md" /></div>
           ) : (
             <div className="perfume-grid">
-              {featured.map((p) => (
-                <PerfumeCard key={p.id} perfume={p} />
-              ))}
+              {featured.map((p) => {
+                const rating = ratingsMap.get(p.id);
+                return (
+                  <PerfumeCard
+                    key={p.id}
+                    perfume={p}
+                    avgRating={rating?.avg_rating}
+                    reviewCount={rating?.review_count}
+                  />
+                );
+              })}
             </div>
           )}
         </div>

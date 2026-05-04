@@ -290,7 +290,7 @@ Review-Likes UI → Add-to-List → Kommentare (optional für MVP)
 | 4 | 🐛 Bug | `ExplorePage.jsx:151` | Doppelte Pagination-Logik |
 | 5 | ⚠️ Platzhalter | `assets/` | `react.svg`, `vite.svg` — ungenutzte Template-Dateien |
 | 6 | ⚠️ Lücke | `ReviewCard.jsx` | `onLike` Prop wird nie übergeben |
-| 7 | ⚠️ Lücke | `listService.js:45` | `createList` setzt keine `user_id` explizit |
+| 7 | ✅ Fix | `listService.js:45` | `createList` setzt `user_id` aus Session |
 | 8 | ⚠️ Config | `tailwind.config.js` | Konfiguriert aber ungenutzt → aufräumen |
 
 ---

@@ -15,33 +15,27 @@ export async function getPerfumes({
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  let query = supabase
-    .from('perfumes')
-    .select(`
-      *,
-      brands(name, country),
-      perfume_notes(
-        note_type,
-        notes(name, family)
-      )
-    `, { count: 'exact' });
+  // Use !inner join ONLY if filtering by noteFamily, to avoid excluding perfumes without notes
+  const notesSelect = noteFamily 
+    ? 'perfume_notes!inner(note_type, notes!inner(name, family))'
+    : 'perfume_notes(note_type, notes(name, family))';
 
+  const selectString = `
+    *,
+    brands(name, country),
+    ${notesSelect}
+  `;
+
+  let query;
   if (search) {
-    // 1. Zuerst schauen wir, ob Marken zu diesem Suchbegriff passen
-    const { data: matchedBrands } = await supabase
-      .from('brands')
-      .select('id')
-      .ilike('name', `%${search}%`);
-
-    const brandIds = matchedBrands?.map(b => b.id) || [];
-
-    // 2. Dann filtern wir Parfums: Entweder passt der Parfüm-Name ODER die Marke
-    if (brandIds.length > 0) {
-      const idList = brandIds.map(id => `"${id}"`).join(',');
-      query = query.or(`name.ilike.%${search}%,brand_id.in.(${idList})`);
-    } else {
-      query = query.ilike('name', `%${search}%`);
-    }
+    // RPC returns SETOF perfumes, allowing us to chain .select() and relations just like a table
+    query = supabase
+      .rpc('search_perfumes_table', { search_term: search })
+      .select(selectString, { count: 'exact' });
+  } else {
+    query = supabase
+      .from('perfumes')
+      .select(selectString, { count: 'exact' });
   }
 
   if (brand) {
@@ -53,15 +47,7 @@ export async function getPerfumes({
   }
 
   if (noteFamily) {
-    const { data: notePerfumes, error: rpcError } = await supabase.rpc('get_perfumes_by_note_family', { family_name: noteFamily });
-    if (rpcError) throw rpcError;
-    
-    const perfumeIds = notePerfumes?.map(p => p.perfume_id) || [];
-    if (perfumeIds.length > 0) {
-      query = query.in('id', perfumeIds);
-    } else {
-      return { perfumes: [], total: 0 };
-    }
+    query = query.eq('perfume_notes.notes.family', noteFamily);
   }
 
   // Sort
@@ -155,6 +141,52 @@ export async function getSimilarPerfumes(brandId, currentPerfumeId, limit = 6) {
 
   if (error) throw error;
   return data;
+}
+
+/**
+ * Fetch average ratings for multiple perfumes (batch).
+ * Returns a Map: perfumeId → { avg_rating, review_count, avg_longevity, avg_sillage }
+ */
+export async function getPerfumeRatings(perfumeIds) {
+  if (!perfumeIds || perfumeIds.length === 0) return new Map();
+
+  const { data, error } = await supabase
+    .from('perfume_avg_ratings')
+    .select('*')
+    .in('perfume_id', perfumeIds);
+
+  if (error) throw error;
+
+  const map = new Map();
+  (data || []).forEach((row) => {
+    map.set(row.perfume_id, {
+      avg_rating: parseFloat(row.avg_rating),
+      review_count: row.review_count,
+      avg_longevity: row.avg_longevity ? parseFloat(row.avg_longevity) : null,
+      avg_sillage: row.avg_sillage ? parseFloat(row.avg_sillage) : null,
+    });
+  });
+  return map;
+}
+
+/**
+ * Fetch average rating for a single perfume via RPC.
+ */
+export async function getPerfumeRating(perfumeId) {
+  const { data, error } = await supabase
+    .rpc('get_perfume_rating', { p_perfume_id: perfumeId });
+
+  if (error) throw error;
+
+  const row = data?.[0];
+  if (!row || row.review_count === 0) return null;
+
+  return {
+    avg_rating: parseFloat(row.avg_rating),
+    review_count: row.review_count,
+    avg_longevity: row.avg_longevity ? parseFloat(row.avg_longevity) : null,
+    avg_sillage: row.avg_sillage ? parseFloat(row.avg_sillage) : null,
+  };
 }
 
 /**

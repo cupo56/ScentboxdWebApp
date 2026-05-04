@@ -9,9 +9,13 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
   </svg>
 `);
 
-export default function PerfumeCard({ perfume }) {
+export default function PerfumeCard({ perfume, avgRating, reviewCount }) {
   const brandName = perfume.brands?.name || 'Unknown';
   const imgSrc = perfume.image_url || PLACEHOLDER_IMG;
+
+  // Use community avg rating if available, otherwise fall back to static performance
+  const displayRating = avgRating != null ? avgRating : (perfume.performance > 0 ? perfume.performance : null);
+  const displayCount = reviewCount != null ? reviewCount : null;
 
   return (
     <Link to={`/perfume/${perfume.id}`} className="perfume-card card" id={`perfume-card-${perfume.id}`}>
@@ -32,9 +36,15 @@ export default function PerfumeCard({ perfume }) {
       <div className="perfume-card__info">
         <p className="perfume-card__brand">{brandName}</p>
         <h3 className="perfume-card__name">{perfume.name}</h3>
-        {perfume.performance > 0 && (
+        {displayRating != null && (
           <div className="perfume-card__rating">
-            <StarRating rating={Math.round(perfume.performance)} size="sm" />
+            <StarRating rating={Math.round(displayRating)} size="sm" />
+            <span className="perfume-card__rating-text">
+              {Number(displayRating).toFixed(1)}
+              {displayCount != null && (
+                <span className="perfume-card__review-count"> ({displayCount})</span>
+              )}
+            </span>
           </div>
         )}
       </div>

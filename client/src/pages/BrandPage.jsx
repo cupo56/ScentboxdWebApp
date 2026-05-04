@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getBrandById, getPerfumesByBrand } from '../services/brandService';
+import { getPerfumeRatings } from '../services/perfumeService';
 import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import './BrandPage.css';
 
@@ -8,6 +9,7 @@ export default function BrandPage() {
   const { id } = useParams();
   const [brand, setBrand] = useState(null);
   const [perfumes, setPerfumes] = useState([]);
+  const [ratingsMap, setRatingsMap] = useState(new Map());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,6 +18,11 @@ export default function BrandPage() {
       .then(([b, p]) => {
         setBrand(b);
         setPerfumes(p);
+        // Batch-fetch ratings for brand perfumes
+        const ids = p.map((perf) => perf.id);
+        getPerfumeRatings(ids)
+          .then(setRatingsMap)
+          .catch(console.error);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -56,7 +63,7 @@ export default function BrandPage() {
           </div>
         </header>
 
-        <PerfumeGrid perfumes={perfumes} loading={false} />
+        <PerfumeGrid perfumes={perfumes} loading={false} ratingsMap={ratingsMap} />
       </div>
     </div>
   );

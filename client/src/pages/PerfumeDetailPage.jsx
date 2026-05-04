@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
+import { getPerfumeById, getSimilarPerfumes, getPerfumeRating } from '../services/perfumeService';
 import { getReviewsByPerfume, deleteReview } from '../services/reviewService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
@@ -24,6 +24,7 @@ export default function PerfumeDetailPage() {
   const { isAuthenticated, user } = useAuth();
   const [perfume, setPerfume] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [ratingStats, setRatingStats] = useState(null);
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -34,8 +35,9 @@ export default function PerfumeDetailPage() {
     getPerfumeById(id)
       .then((data) => {
         setPerfume(data);
-        // Load reviews + similar
+        // Load reviews + rating stats + similar
         getReviewsByPerfume(id).then(setReviews).catch(() => {});
+        getPerfumeRating(id).then(setRatingStats).catch(() => {});
         if (data.brand_id) {
           getSimilarPerfumes(data.brand_id, id).then(setSimilar).catch(() => {});
         }
@@ -48,6 +50,8 @@ export default function PerfumeDetailPage() {
     try {
       await deleteReview(reviewId);
       setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+      // Refresh rating stats from DB
+      getPerfumeRating(id).then(setRatingStats).catch(() => {});
     } catch (err) {
       alert('Failed to delete review: ' + err.message);
     }
@@ -55,6 +59,8 @@ export default function PerfumeDetailPage() {
 
   const handleUpdateReview = (updatedReview) => {
     setReviews((prev) => prev.map((r) => (r.id === updatedReview.id ? updatedReview : r)));
+    // Refresh rating stats from DB
+    getPerfumeRating(id).then(setRatingStats).catch(() => {});
   };
 
   if (loading) {
@@ -83,10 +89,9 @@ export default function PerfumeDetailPage() {
   const imgSrc = perfume.image_url || PLACEHOLDER_IMG;
   const brandName = perfume.brands?.name || 'Unknown';
 
-  // Calc average rating from reviews
-  const avgRating = reviews.length > 0
-    ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
-    : null;
+  // Use DB-based average rating
+  const avgRating = ratingStats?.avg_rating ?? null;
+  const reviewCount = ratingStats?.review_count ?? reviews.length;
 
   return (
     <div className="detail page">
@@ -116,10 +121,10 @@ export default function PerfumeDetailPage() {
                 <span className="badge badge-accent">{perfume.concentration}</span>
               )}
               {avgRating && (
-                <span className="badge badge-gold">★ {avgRating}</span>
+                <span className="badge badge-gold">★ {Number(avgRating).toFixed(1)}</span>
               )}
-              {reviews.length > 0 && (
-                <span className="detail__review-count">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</span>
+              {reviewCount > 0 && (
+                <span className="detail__review-count">{reviewCount} review{reviewCount !== 1 ? 's' : ''}</span>
               )}
             </div>
 
@@ -167,7 +172,11 @@ export default function PerfumeDetailPage() {
           {isAuthenticated && (
             <ReviewForm
               perfumeId={perfume.id}
-              onReviewAdded={(r) => setReviews((prev) => [r, ...prev])}
+              onReviewAdded={(r) => {
+                setReviews((prev) => [r, ...prev]);
+                // Refresh rating stats from DB
+                getPerfumeRating(id).then(setRatingStats).catch(() => {});
+              }}
             />
           )}
 

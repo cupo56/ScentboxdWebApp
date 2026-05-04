@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getPerfumes, getConcentrations, getNoteFamilies } from '../services/perfumeService';
+import { getPerfumes, getConcentrations, getNoteFamilies, getPerfumeRatings } from '../services/perfumeService';
 import { getBrands } from '../services/brandService';
 import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import './ExplorePage.css';
@@ -9,6 +9,7 @@ export default function ExplorePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [perfumes, setPerfumes] = useState([]);
   const [total, setTotal] = useState(0);
+  const [ratingsMap, setRatingsMap] = useState(new Map());
   const [loading, setLoading] = useState(true);
   const [brands, setBrands] = useState([]);
   const [concentrations, setConcentrations] = useState([]);
@@ -43,6 +44,11 @@ export default function ExplorePage() {
       });
       setPerfumes(result.perfumes);
       setTotal(result.total);
+
+      // Batch-fetch average ratings for all visible perfumes
+      const ids = result.perfumes.map((p) => p.id);
+      const ratings = await getPerfumeRatings(ids);
+      setRatingsMap(ratings);
     } catch (err) {
       console.error('Failed to load perfumes:', err);
     }
@@ -188,7 +194,7 @@ export default function ExplorePage() {
         </div>
 
         {/* Grid */}
-        <PerfumeGrid perfumes={perfumes} loading={loading} />
+        <PerfumeGrid perfumes={perfumes} loading={loading} ratingsMap={ratingsMap} />
 
         {/* Pagination */}
         {totalPages > 1 && (

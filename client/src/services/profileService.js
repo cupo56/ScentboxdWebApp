@@ -52,3 +52,34 @@ export async function updateProfile({ username, bio, avatar_url }) {
   if (error) throw error;
   return data;
 }
+
+/**
+ * Upload an avatar image to Supabase Storage and update the user's profile.
+ */
+export async function uploadAvatar(file) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+  if (!user) throw new Error('Not authenticated');
+
+  if (!file.type.startsWith('image/')) {
+    throw new Error('File must be an image');
+  }
+
+  // Generate a unique filename using timestamp to avoid browser caching issues on update
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+  const filePath = `${user.id}/${fileName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(filePath, file, { upsert: true });
+
+  if (uploadError) throw uploadError;
+
+  const { data: { publicUrl } } = supabase.storage
+    .from('avatars')
+    .getPublicUrl(filePath);
+
+  // Update the profile with the new URL
+  return updateProfile({ avatar_url: publicUrl });
+}

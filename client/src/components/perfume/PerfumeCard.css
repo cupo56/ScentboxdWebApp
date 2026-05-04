@@ -56,4 +56,19 @@
 
 .perfume-card__rating {
   margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.perfume-card__rating-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.perfume-card__review-count {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.75rem;
 }

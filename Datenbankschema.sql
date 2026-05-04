@@ -102,3 +102,55 @@ CREATE TABLE public.user_perfumes (
   CONSTRAINT user_perfumes_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
   CONSTRAINT user_perfumes_perfume_id_fkey FOREIGN KEY (perfume_id) REFERENCES public.perfumes(id)
 );
+
+-- View: Aggregated average ratings per perfume
+CREATE OR REPLACE VIEW public.perfume_avg_ratings AS
+SELECT
+  r.perfume_id,
+  ROUND(AVG(r.rating)::numeric, 1)    AS avg_rating,
+  COUNT(*)::int                        AS review_count,
+  ROUND(AVG(r.longevity)::numeric, 0)  AS avg_longevity,
+  ROUND(AVG(r.sillage)::numeric, 0)    AS avg_sillage
+FROM public.reviews r
+WHERE r.rating IS NOT NULL
+GROUP BY r.perfume_id;
+
+-- Function: Get aggregated rating for a single perfume
+CREATE OR REPLACE FUNCTION public.get_perfume_rating(p_perfume_id uuid)
+RETURNS TABLE(avg_rating numeric, review_count int, avg_longevity numeric, avg_sillage numeric)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+  SELECT
+    ROUND(AVG(r.rating)::numeric, 1)     AS avg_rating,
+    COUNT(*)::int                          AS review_count,
+    ROUND(AVG(r.longevity)::numeric, 0)   AS avg_longevity,
+    ROUND(AVG(r.sillage)::numeric, 0)     AS avg_sillage
+  FROM public.reviews r
+  WHERE r.perfume_id = p_perfume_id
+    AND r.rating IS NOT NULL;
+$$;
+
+-- Indexes for pg_trgm fuzzy search
+CREATE INDEX IF NOT EXISTS perfumes_name_trgm_idx ON public.perfumes USING gin (name extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS brands_name_trgm_idx ON public.brands USING gin (name extensions.gin_trgm_ops);
+
+-- Function: Fuzzy search for perfumes by perfume name or brand name (returns SETOF perfumes for chaining)
+CREATE OR REPLACE FUNCTION public.search_perfumes_table(search_term text)
+RETURNS SETOF public.perfumes
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+  SELECT p.*
+  FROM public.perfumes p
+  LEFT JOIN public.brands b ON p.brand_id = b.id
+  WHERE 
+    p.name ILIKE '%' || search_term || '%' OR
+    b.name ILIKE '%' || search_term || '%' OR
+    extensions.word_similarity(search_term, p.name) > 0.3 OR
+    extensions.word_similarity(search_term, b.name) > 0.3
+$$;

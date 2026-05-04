@@ -42,9 +42,13 @@ export async function getListById(listId) {
  * Create a new list.
  */
 export async function createList({ name, description = '', is_public = false }) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+  if (!user) throw new Error('Not authenticated');
+
   const { data, error } = await supabase
     .from('lists')
-    .insert({ name, description, is_public })
+    .insert({ user_id: user.id, name, description, is_public })
     .select()
     .single();
 
