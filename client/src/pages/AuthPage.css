@@ -67,3 +67,49 @@
 .auth-card__footer a:hover {
   color: var(--accent-hover);
 }
+
+/* ===== Forgot Password Link ===== */
+.auth-card__forgot-link {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.auth-card__forgot-link:hover {
+  color: var(--accent);
+}
+
+/* ===== Success Icon ===== */
+.auth-card__success-icon {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 12px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* ===== Hint Text ===== */
+.auth-card__hint {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+/* ===== Password Match Indicator ===== */
+.auth-card__match {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: -4px;
+}
+
+.auth-card__match--ok {
+  color: var(--success);
+}
+
+.auth-card__match--mismatch {
+  color: var(--danger);
+}

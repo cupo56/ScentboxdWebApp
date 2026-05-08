@@ -65,6 +65,26 @@ export default function ExplorePage() {
     setSearchParams(params);
   };
 
+  // Check if any filter is active (search, brand, concentration, family)
+  const hasActiveFilters = !!(search || brand || concentration || noteFamily);
+
+  const clearAllFilters = () => {
+    // Keep only the sort param, remove everything else
+    const params = new URLSearchParams();
+    if (sortBy && sortBy !== 'name') params.set('sort', sortBy);
+    setSearchParams(params);
+  };
+
+  // Build active filter labels for the tag chips
+  const activeFilterTags = [];
+  if (search) activeFilterTags.push({ key: 'q', label: `"${search}"`, icon: '🔍' });
+  if (brand) {
+    const brandName = brands.find((b) => String(b.id) === String(brand))?.name || brand;
+    activeFilterTags.push({ key: 'brand', label: brandName, icon: '🏷️' });
+  }
+  if (concentration) activeFilterTags.push({ key: 'concentration', label: concentration, icon: '💧' });
+  if (noteFamily) activeFilterTags.push({ key: 'family', label: noteFamily, icon: '🌸' });
+
   const totalPages = Math.ceil(total / pageSize);
 
   return (
@@ -138,6 +158,34 @@ export default function ExplorePage() {
               <option value="newest">Newest First</option>
             </select>
           </div>
+
+          {/* Active Filter Tags */}
+          {hasActiveFilters && (
+            <div className="explore__active-filters">
+              <div className="explore__active-tags">
+                {activeFilterTags.map((tag) => (
+                  <button
+                    key={tag.key}
+                    className="explore__filter-tag"
+                    onClick={() => updateFilter(tag.key, '')}
+                    title={`Remove filter: ${tag.label}`}
+                    id={`remove-filter-${tag.key}`}
+                  >
+                    <span className="explore__filter-tag-icon">{tag.icon}</span>
+                    <span className="explore__filter-tag-label">{tag.label}</span>
+                    <span className="explore__filter-tag-close">✕</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                className="btn btn-ghost btn-sm explore__clear-btn"
+                onClick={clearAllFilters}
+                id="clear-all-filters"
+              >
+                ✕ Clear all filters
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Grid */}

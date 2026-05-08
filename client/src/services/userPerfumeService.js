@@ -4,7 +4,8 @@ import { supabase } from '../lib/supabaseClient';
  * Get user's perfume statuses (favorites, owned, want to try).
  */
 export async function getUserPerfumeStatus(perfumeId) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) return null;
 
   const { data, error } = await supabase
@@ -22,7 +23,8 @@ export async function getUserPerfumeStatus(perfumeId) {
  * Toggle a perfume status (favorite, owned, want_to_try).
  */
 export async function togglePerfumeStatus(perfumeId, field) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) throw new Error('Not authenticated');
 
   // Get current status

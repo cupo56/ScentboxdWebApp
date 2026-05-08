@@ -6,10 +6,7 @@ import { supabase } from '../lib/supabaseClient';
 export async function getReviewsByPerfume(perfumeId) {
   const { data, error } = await supabase
     .from('reviews')
-    .select(`
-      *,
-      profiles(username, avatar_url)
-    `)
+    .select(`*, profiles(username, avatar_url)`)
     .eq('perfume_id', perfumeId)
     .order('created_at', { ascending: false });
 
@@ -29,7 +26,8 @@ export async function createReview({
   sillage = null,
   occasions = [],
 }) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) throw new Error('Not authenticated');
 
   const { data, error } = await supabase
@@ -67,7 +65,8 @@ export async function deleteReview(reviewId) {
  * Toggle like on a review.
  */
 export async function toggleReviewLike(reviewId) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) throw new Error('Not authenticated');
 
   // Check if already liked
@@ -107,7 +106,8 @@ export async function getReviewLikeCount(reviewId) {
  * Check if current user liked a review.
  */
 export async function hasUserLikedReview(reviewId) {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) return false;
 
   const { data } = await supabase
@@ -145,6 +145,33 @@ export async function getLatestReviews(limit = 5) {
     `)
     .order('created_at', { ascending: false })
     .limit(limit);
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Update an existing review.
+ */
+export async function updateReview(reviewId, updates) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+  if (!user) throw new Error('Not authenticated');
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .update({
+      title: updates.title,
+      text: updates.text,
+      rating: updates.rating,
+      longevity: updates.longevity,
+      sillage: updates.sillage,
+      occasions: updates.occasions,
+    })
+    .eq('id', reviewId)
+    .eq('user_id', user.id)
+    .select(`*, profiles(username, avatar_url)`)
+    .single();
 
   if (error) throw error;
   return data;

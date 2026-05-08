@@ -109,6 +109,8 @@ const useAuthStore = create((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+
+  setProfile: (profile) => set({ profile }),
 }));
 
 export default useAuthStore;

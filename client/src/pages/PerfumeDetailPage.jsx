@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
-import { getReviewsByPerfume, toggleReviewLike } from '../services/reviewService';
+import { getReviewsByPerfume, toggleReviewLike, deleteReview } from '../services/reviewService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
 import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
+import AddToListButton from '../components/perfume/AddToListButton';
 import ReviewCard from '../components/review/ReviewCard';
 import ReviewForm from '../components/review/ReviewForm';
 import PerfumeCard from '../components/perfume/PerfumeCard';
-import AddToListModal from '../components/perfume/AddToListModal';
 import { useAuth } from '../hooks/useAuth';
 import './PerfumeDetailPage.css';
 
@@ -21,13 +21,12 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
 
 export default function PerfumeDetailPage() {
   const { id } = useParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [perfume, setPerfume] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showListModal, setShowListModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -44,6 +43,19 @@ export default function PerfumeDetailPage() {
       .catch((err) => setError(err.message || 'Failed to load perfume'))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await deleteReview(reviewId);
+      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+    } catch (err) {
+      alert('Failed to delete review: ' + err.message);
+    }
+  };
+
+  const handleUpdateReview = (updatedReview) => {
+    setReviews((prev) => prev.map((r) => (r.id === updatedReview.id ? updatedReview : r)));
+  };
 
   if (loading) {
     return (
@@ -115,17 +127,11 @@ export default function PerfumeDetailPage() {
               <p className="detail__description">{perfume.desc}</p>
             )}
 
-            <div className="detail__actions">
+            {/* User Actions */}
+            <div className="detail__actions-row">
               <UserPerfumeActions perfumeId={perfume.id} />
-              {isAuthenticated && (
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setShowListModal(true)}
-                  style={{ marginTop: '16px', width: '100%' }}
-                >
-                  <span className="icon">📋</span> Add to List
-                </button>
-              )}
+              <AddToListButton perfumeId={perfume.id} />
+            </div>
             </div>
 
             {/* Performance */}
@@ -177,7 +183,13 @@ export default function PerfumeDetailPage() {
               <ReviewCard
                 key={r.id}
                 review={r}
+<<<<<<< HEAD
                 onLike={isAuthenticated ? (reviewId) => toggleReviewLike(reviewId).catch(console.error) : undefined}
+=======
+                currentUserId={user?.id}
+                onDelete={handleDeleteReview}
+                onUpdate={handleUpdateReview}
+>>>>>>> origin/main
               />
             ))}
             {reviews.length === 0 && (
@@ -205,14 +217,6 @@ export default function PerfumeDetailPage() {
           </section>
         )}
       </div>
-
-      {showListModal && (
-        <AddToListModal
-          perfumeId={perfume.id}
-          perfumeName={perfume.name}
-          onClose={() => setShowListModal(false)}
-        />
-      )}
     </div>
   );
 }

@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import StarRating from './StarRating';
-import { createReview } from '../../services/reviewService';
+import { createReview, updateReview } from '../../services/reviewService';
 import './ReviewForm.css';
 
 const OCCASION_OPTIONS = ['Daily', 'Office', 'Date Night', 'Evening Out', 'Summer', 'Winter', 'Special Occasion'];
 
-export default function ReviewForm({ perfumeId, onReviewAdded }) {
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-  const [rating, setRating] = useState(0);
-  const [longevity, setLongevity] = useState('');
-  const [sillage, setSillage] = useState('');
-  const [occasions, setOccasions] = useState([]);
+export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCancel }) {
+  const [title, setTitle] = useState(initialData?.title || '');
+  const [text, setText] = useState(initialData?.text || '');
+  const [rating, setRating] = useState(initialData?.rating || 0);
+  const [longevity, setLongevity] = useState(initialData?.longevity ?? '');
+  const [sillage, setSillage] = useState(initialData?.sillage ?? '');
+  const [occasions, setOccasions] = useState(initialData?.occasions || []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -31,22 +31,29 @@ export default function ReviewForm({ perfumeId, onReviewAdded }) {
     setSubmitting(true);
     setError('');
     try {
-      const review = await createReview({
+      const payload = {
         perfume_id: perfumeId,
         title: title.trim(),
         text: text.trim(),
         rating,
-        longevity: longevity ? parseInt(longevity) : null,
-        sillage: sillage ? parseInt(sillage) : null,
+        longevity: longevity !== '' ? parseInt(longevity) : null,
+        sillage: sillage !== '' ? parseInt(sillage) : null,
         occasions,
-      });
-      onReviewAdded?.(review);
-      setTitle('');
-      setText('');
-      setRating(0);
-      setLongevity('');
-      setSillage('');
-      setOccasions([]);
+      };
+
+      if (initialData) {
+        const updated = await updateReview(initialData.id, payload);
+        onReviewAdded?.(updated);
+      } else {
+        const review = await createReview(payload);
+        onReviewAdded?.(review);
+        setTitle('');
+        setText('');
+        setRating(0);
+        setLongevity('');
+        setSillage('');
+        setOccasions([]);
+      }
     } catch (err) {
       setError(err.message || 'Failed to submit review');
     }
@@ -55,7 +62,7 @@ export default function ReviewForm({ perfumeId, onReviewAdded }) {
 
   return (
     <form className="review-form" onSubmit={handleSubmit} id="review-form">
-      <h3 className="review-form__title">Write a Review</h3>
+      <h3 className="review-form__title">{initialData ? 'Edit Review' : 'Write a Review'}</h3>
 
       {error && <p className="review-form__error">{error}</p>}
 
@@ -131,9 +138,16 @@ export default function ReviewForm({ perfumeId, onReviewAdded }) {
         </div>
       </div>
 
-      <button className="btn btn-primary btn-lg" type="submit" disabled={submitting}>
-        {submitting ? 'Submitting…' : 'Submit Review'}
-      </button>
+      <div className="review-form__actions" style={{ display: 'flex', gap: '12px' }}>
+        <button className="btn btn-primary btn-lg" type="submit" disabled={submitting}>
+          {submitting ? 'Submitting…' : (initialData ? 'Save Changes' : 'Submit Review')}
+        </button>
+        {onCancel && (
+          <button type="button" className="btn btn-ghost btn-lg" onClick={onCancel} disabled={submitting}>
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }

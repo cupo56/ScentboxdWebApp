@@ -24,6 +24,13 @@
   object-fit: cover;
 }
 
+.detail__actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+}
+
 .detail__brand-link {
   font-size: 0.8rem;
   font-weight: 700;
