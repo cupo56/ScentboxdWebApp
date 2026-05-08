@@ -12,6 +12,7 @@ import BrandPage from './pages/BrandPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
+import EditProfilePage from './pages/EditProfilePage';
 import ListDetailPage from './pages/ListDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile/:username" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+          <Route path="/profile/edit" element={<RequireAuth><EditProfilePage /></RequireAuth>} />
           <Route path="/list/:id" element={<ListDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

@@ -181,3 +181,117 @@
     padding: 14px 16px;
   }
 }
+
+/* ===== Search Autocomplete ===== */
+.navbar__search-container {
+  position: relative;
+  margin-right: 16px;
+}
+
+.navbar__search-input {
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  width: 240px;
+  background: var(--bg-primary);
+  border-color: var(--border);
+  transition: all 0.2s;
+}
+
+.navbar__search-input:focus {
+  width: 280px;
+}
+
+.navbar__search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__search-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.navbar__search-item:last-child {
+  border-bottom: none;
+}
+
+.navbar__search-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.navbar__search-item-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.navbar__search-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.navbar__search-item-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.navbar__search-item-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar__search-item-brand {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.navbar__search-item--all {
+  color: var(--accent);
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 12px;
+}
+
+.navbar__search-item--all:hover {
+  background: var(--accent-dim);
+}
+
+@media (max-width: 768px) {
+  .navbar__search-container {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  
+  .navbar__search-input,
+  .navbar__search-input:focus {
+    width: 100%;
+  }
+}

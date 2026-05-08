@@ -1,6 +1,8 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import useDebounce from '../../hooks/useDebounce';
+import { getPerfumes } from '../../services/perfumeService';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -11,6 +13,56 @@ export default function Navbar() {
   const handleLogout = async () => {
     await logout();
     navigate('/');
+    setMenuOpen(false);
+  };
+
+  // Autocomplete state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef(null);
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  useEffect(() => {
+    if (!debouncedSearch.trim()) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    getPerfumes({ search: debouncedSearch, limit: 5 })
+      .then((res) => {
+        setSearchResults(res.perfumes || []);
+      })
+      .catch(() => {})
+      .finally(() => setIsSearching(false));
+  }, [debouncedSearch]);
+
+  // Click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/explore?search=${encodeURIComponent(searchQuery.trim())}`);
+      setShowResults(false);
+      setMenuOpen(false);
+    }
+  };
+
+  const handleSelectResult = () => {
+    setSearchQuery('');
+    setShowResults(false);
     setMenuOpen(false);
   };
 
@@ -31,6 +83,57 @@ export default function Navbar() {
         </button>
 
         <div className={`navbar__links ${menuOpen ? 'open' : ''}`}>
+          <div className="navbar__search-container" ref={searchRef}>
+            <form onSubmit={handleSearchSubmit} className="navbar__search-form">
+              <input
+                type="text"
+                placeholder="Search fragrances..."
+                className="input navbar__search-input"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowResults(true);
+                }}
+                onFocus={() => setShowResults(true)}
+              />
+            </form>
+            {showResults && searchQuery.trim() && (
+              <div className="navbar__search-dropdown">
+                {isSearching ? (
+                  <div className="navbar__search-item">Searching...</div>
+                ) : searchResults.length > 0 ? (
+                  <>
+                    {searchResults.map((p) => (
+                      <Link
+                        key={p.id}
+                        to={`/perfume/${p.id}`}
+                        className="navbar__search-item"
+                        onClick={handleSelectResult}
+                      >
+                        <div className="navbar__search-item-img">
+                          {p.image_url ? <img src={p.image_url} alt="" /> : '◆'}
+                        </div>
+                        <div className="navbar__search-item-info">
+                          <span className="navbar__search-item-name">{p.name}</span>
+                          <span className="navbar__search-item-brand">{p.brands?.name}</span>
+                        </div>
+                      </Link>
+                    ))}
+                    <Link
+                      to={`/explore?search=${encodeURIComponent(searchQuery)}`}
+                      className="navbar__search-item navbar__search-item--all"
+                      onClick={handleSelectResult}
+                    >
+                      See all results
+                    </Link>
+                  </>
+                ) : (
+                  <div className="navbar__search-item">No results found</div>
+                )}
+              </div>
+            )}
+          </div>
+
           <NavLink to="/explore" className="navbar__link" onClick={() => setMenuOpen(false)}>
             Explore
           </NavLink>

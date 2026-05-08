@@ -5,6 +5,7 @@ import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists } from '../services/listService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
+import CreateListModal from '../components/profile/CreateListModal';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
 
@@ -16,6 +17,7 @@ export default function ProfilePage() {
   const [perfumes, setPerfumes] = useState([]);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCreateList, setShowCreateList] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -88,12 +90,21 @@ export default function ProfilePage() {
               <span>{(profile.username || 'U')[0].toUpperCase()}</span>
             )}
           </div>
-          <div className="profile-page__info">
-            <h1 className="profile-page__username">@{profile.username}</h1>
-            {profile.bio && <p className="profile-page__bio">{profile.bio}</p>}
-            <p className="profile-page__joined">
-              Joined {new Date(profile.created_at || profile.updated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-            </p>
+          <div className="profile-page__info" style={{ flex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h1 className="profile-page__username">@{profile.username}</h1>
+                {profile.bio && <p className="profile-page__bio">{profile.bio}</p>}
+                <p className="profile-page__joined">
+                  Joined {new Date(profile.created_at || profile.updated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+                </p>
+              </div>
+              {isOwn && (
+                <Link to="/profile/edit" className="btn btn-secondary btn-sm">
+                  Edit Profile
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
@@ -127,28 +138,47 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {activeTab === 'lists' && lists.length > 0 && (
-            <div className="profile-page__lists">
-              {lists.map((list) => (
-                <Link key={list.id} to={`/list/${list.id}`} className="profile-page__list-card card">
-                  <h3>{list.name}</h3>
-                  {list.description && <p>{list.description}</p>}
-                  <span className="profile-page__list-meta">
-                    {list.is_public ? '🌐 Public' : '🔒 Private'}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'lists' && lists.length === 0 && (
-            <div className="empty-state">
-              <div className="icon">📋</div>
-              <h3>No lists yet</h3>
+          {activeTab === 'lists' && (
+            <div className="profile-page__lists-container">
+              {isOwn && (
+                <div className="profile-page__lists-actions" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end' }}>
+                  <button className="btn btn-primary" onClick={() => setShowCreateList(true)}>
+                    <span className="icon">+</span> Create List
+                  </button>
+                </div>
+              )}
+              
+              {lists.length > 0 ? (
+                <div className="profile-page__lists">
+                  {lists.map((list) => (
+                    <Link key={list.id} to={`/list/${list.id}`} className="profile-page__list-card card">
+                      <h3>{list.name}</h3>
+                      {list.description && <p>{list.description}</p>}
+                      <span className="profile-page__list-meta">
+                        {list.is_public ? '🌐 Public' : '🔒 Private'}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state">
+                  <div className="icon">📋</div>
+                  <h3>No lists created yet</h3>
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
+
+      {showCreateList && (
+        <CreateListModal
+          onClose={() => setShowCreateList(false)}
+          onCreated={(newList) => {
+            setLists([newList, ...lists]);
+          }}
+        />
+      )}
     </div>
   );
 }

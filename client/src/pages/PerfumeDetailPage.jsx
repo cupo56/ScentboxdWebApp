@@ -8,6 +8,7 @@ import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
 import ReviewCard from '../components/review/ReviewCard';
 import ReviewForm from '../components/review/ReviewForm';
 import PerfumeCard from '../components/perfume/PerfumeCard';
+import AddToListModal from '../components/perfume/AddToListModal';
 import { useAuth } from '../hooks/useAuth';
 import './PerfumeDetailPage.css';
 
@@ -26,6 +27,7 @@ export default function PerfumeDetailPage() {
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showListModal, setShowListModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -113,8 +115,18 @@ export default function PerfumeDetailPage() {
               <p className="detail__description">{perfume.desc}</p>
             )}
 
-            {/* User Actions */}
-            <UserPerfumeActions perfumeId={perfume.id} />
+            <div className="detail__actions">
+              <UserPerfumeActions perfumeId={perfume.id} />
+              {isAuthenticated && (
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowListModal(true)}
+                  style={{ marginTop: '16px', width: '100%' }}
+                >
+                  <span className="icon">📋</span> Add to List
+                </button>
+              )}
+            </div>
 
             {/* Performance */}
             <div className="detail__performance">
@@ -193,6 +205,14 @@ export default function PerfumeDetailPage() {
           </section>
         )}
       </div>
+
+      {showListModal && (
+        <AddToListModal
+          perfumeId={perfume.id}
+          perfumeName={perfume.name}
+          onClose={() => setShowListModal(false)}
+        />
+      )}
     </div>
   );
 }

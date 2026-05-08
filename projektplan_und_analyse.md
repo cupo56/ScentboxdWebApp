@@ -128,13 +128,13 @@ ScentboxdWebApp/
 | Accessibility | ARIA-Labels, Keyboard-Navigation |
 
 **Nächste To-Dos:**
-1. ☐ Protected-Route-Komponente (`<RequireAuth>`)
-2. ☐ Error-Boundary-Komponente
-3. ☐ 404-Seite
-4. ☐ Profil-Bearbeitungsseite (Avatar-Upload, Bio)
-5. ☐ Suchleiste mit Autocomplete/Debounce
-6. ☐ Review-Likes im UI verdrahten
-7. ☐ "Add to List"-Modal auf PerfumeDetailPage
+1. [x] Protected-Route-Komponente (`<RequireAuth>`)
+2. [x] Error-Boundary-Komponente
+3. [x] 404-Seite
+4. [x] Profil-Bearbeitungsseite (Avatar-Upload, Bio)
+5. [x] Suchleiste mit Autocomplete/Debounce
+6. [x] Review-Likes im UI verdrahten
+7. [x] "Add to List"-Modal auf PerfumeDetailPage
 
 ---
 
