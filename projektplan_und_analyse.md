@@ -16,7 +16,6 @@ ScentboxdWebApp/
     ├── index.html
     ├── package.json
     ├── vite.config.js
-    ├── tailwind.config.js
     ├── postcss.config.js
     ├── .env                        # Supabase-Credentials
     ├── public/
