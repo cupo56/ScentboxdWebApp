@@ -133,6 +133,15 @@ ScentboxdWebApp/
 | Micro-Animations | Hover-Effekte, Skeleton-Loading, Transitions |
 | Accessibility | ARIA-Labels, Keyboard-Navigation |
 
+**Erledigte To-Dos (Phase 1):**
+1. [x] Protected-Route-Komponente (`<RequireAuth>`)
+2. [x] Error-Boundary-Komponente
+3. [x] 404-Seite
+4. [x] Profil-Bearbeitungsseite (Avatar-Upload, Bio)
+5. [x] Suchleiste mit Autocomplete/Debounce
+6. [x] Review-Likes im UI verdrahten
+7. [x] "Add to List"-Modal auf PerfumeDetailPage
+
 **Nächste To-Dos (Phase 2):**
 1. [ ] Kommentar-System UI (Review-Kommentare anzeigen und schreiben)
 2. [ ] Follow-System UI (Follow-Button auf Profilen, Follower-Liste)
@@ -152,6 +161,12 @@ ScentboxdWebApp/
 | Auth-Flow | Password-Reset, Email-Verifizierung, OAuth |
 | Daten-Import | Parfüm-Datenbank befüllen/erweitern |
 | Supabase Storage | Avatar-Upload, Parfüm-Bilder |
+
+**Erledigte To-Dos (Phase 1):**
+1. [x] RLS-Policies prüfen und absichern (Grundgerüst)
+2. [x] Password-Reset & Email-Flow eingerichtet
+3. [x] CRUD-Funktionen für Custom Lists (Listen erstellen, hinzufügen, löschen)
+4. [x] Profile & User relation in Supabase
 
 **Nächste To-Dos (Phase 2):**
 1. [ ] Supabase Storage Bucket für Avatare anlegen & Policies konfigurieren
