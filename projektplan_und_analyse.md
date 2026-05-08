@@ -1,6 +1,13 @@
 # Scentboxd — Projektplan & Codebase-Analyse
 
-> **Stand:** 30.04.2026 | **Team:** 2 Entwickler | **Typ:** Parfüm-Enzyklopädie & Community-Plattform
+> **Stand:** 08.05.2026 | **Team:** 2 Entwickler | **Typ:** Parfüm-Enzyklopädie & Community-Plattform
+
+---
+
+## 0. Aktueller Status (Phase 1 abgeschlossen)
+Alle Aufgaben der Phase 1 (Technical Debt, grundlegende Frontend UI-Erweiterungen und Backend CRUD-Funktionen) wurden erfolgreich im `main`-Branch zusammengeführt (Stand: 08.05.2026).
+- **Abgeschlossen:** Globale Error-Handling (ErrorBoundary, Toasts), Protected Routes, vollständiges CRUD für Listen (Erstellen, Hinzufügen, Löschen), Suchleiste mit Autocomplete, Password Reset Funktionalität und Profil-Bearbeitungs-UI.
+- **Nächster Fokus (Phase 2):** Community-Features (Kommentare, Follow-System), Avatar-Storage und Notification-System.
 
 ---
 
@@ -126,14 +133,13 @@ ScentboxdWebApp/
 | Micro-Animations | Hover-Effekte, Skeleton-Loading, Transitions |
 | Accessibility | ARIA-Labels, Keyboard-Navigation |
 
-**Nächste To-Dos:**
-1. [x] Protected-Route-Komponente (`<RequireAuth>`)
-2. [x] Error-Boundary-Komponente
-3. [x] 404-Seite
-4. [x] Profil-Bearbeitungsseite (Avatar-Upload, Bio)
-5. [x] Suchleiste mit Autocomplete/Debounce
-6. [x] Review-Likes im UI verdrahten
-7. [x] "Add to List"-Modal auf PerfumeDetailPage
+**Nächste To-Dos (Phase 2):**
+1. [ ] Kommentar-System UI (Review-Kommentare anzeigen und schreiben)
+2. [ ] Follow-System UI (Follow-Button auf Profilen, Follower-Liste)
+3. [ ] Community-Feed (Entdecken-Seite für Reviews von gefolgten Nutzern)
+4. [ ] Notification-Dropdown in der Navbar
+5. [ ] Avatar-Upload Logik anbinden (sobald Storage bereit ist)
+6. [ ] Mobile-Optimierung der Detailseite verfeinern
 
 ---
 
@@ -147,15 +153,13 @@ ScentboxdWebApp/
 | Daten-Import | Parfüm-Datenbank befüllen/erweitern |
 | Supabase Storage | Avatar-Upload, Parfüm-Bilder |
 
-**Nächste To-Dos:**
-1. ☐ RLS-Policies prüfen und absichern
-2. ☐ `follows`-Tabelle + Service
-3. ☐ `comments`-Tabelle für Review-Kommentare
-4. ☐ Supabase Storage Bucket für Avatare
-5. ☐ Server-seitiger `noteFamily`-Filter (DB-Funktion)
-6. ☐ `created_at`-Feld für Profiles sicherstellen
-7. ☐ `.env.example` erstellen
-
+**Nächste To-Dos (Phase 2):**
+1. [ ] Supabase Storage Bucket für Avatare anlegen & Policies konfigurieren
+2. [ ] `follows`-Tabelle erstellen inkl. API/Services
+3. [ ] `comments`-Tabelle für Review-Kommentare erstellen inkl. API/Services
+4. [ ] Server-seitiger `noteFamily`-Filter (DB-Funktion für Pagination)
+5. [ ] Notification-System (Realtime Subscriptions) konzipieren
+6. [ ] RLS-Policies für alle neuen Tabellen absichern
 ---
 
 ### Schnittstellen (enge Zusammenarbeit nötig)
