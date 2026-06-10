@@ -6,7 +6,66 @@ import { getReviewCount, getLatestReviews } from '../services/reviewService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
 import ReviewCard from '../components/review/ReviewCard';
+import useTilt from '../hooks/useTilt';
+import useCountUp from '../hooks/useCountUp';
 import './HomePage.css';
+
+/** Decorative animated SVG scattered across the hero. */
+function HeroDecor() {
+  return (
+    <div className="home__hero-decor" aria-hidden="true">
+      {/* aurora blobs */}
+      <span className="home__aurora home__aurora--1" />
+      <span className="home__aurora home__aurora--2" />
+      <span className="home__aurora home__aurora--3" />
+
+      {/* floating molecule rings */}
+      <svg className="float-deco home__deco home__deco--1" width="120" height="120" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="46" stroke="#a78bfa" strokeWidth="1.5" strokeDasharray="6 8" />
+        <circle cx="60" cy="14" r="6" fill="#a78bfa" />
+        <circle cx="106" cy="60" r="4" fill="#f5c842" />
+        <circle cx="60" cy="60" r="10" stroke="#c4b5fd" strokeWidth="1.5" />
+      </svg>
+      <svg className="float-deco home__deco home__deco--2" width="90" height="90" viewBox="0 0 90 90" fill="none">
+        <polygon points="45,6 84,67 6,67" stroke="#f5c842" strokeWidth="1.5" fill="none" />
+        <circle cx="45" cy="45" r="5" fill="#f5c842" />
+      </svg>
+      <svg className="float-deco home__deco home__deco--3" width="70" height="70" viewBox="0 0 70 70" fill="none">
+        <path d="M35 4 L66 35 L35 66 L4 35 Z" stroke="#a78bfa" strokeWidth="1.5" fill="none" />
+      </svg>
+      <svg className="float-deco home__deco home__deco--4" width="140" height="140" viewBox="0 0 140 140" fill="none">
+        <circle cx="70" cy="70" r="60" stroke="#7c5cff" strokeWidth="1" strokeDasharray="2 10" />
+      </svg>
+    </div>
+  );
+}
+
+/** A single animated stat with count-up. */
+function Stat({ value, label }) {
+  const n = useCountUp(value);
+  return (
+    <div className="home__stat">
+      <span className="home__stat-number">{n.toLocaleString()}</span>
+      <span className="home__stat-label">{label}</span>
+    </div>
+  );
+}
+
+/** Brand card with interactive 3D tilt. */
+function BrandCard({ brand }) {
+  const tiltRef = useTilt(10);
+  return (
+    <Link
+      to={`/brand/${brand.id}`}
+      className="home__brand-card card tilt-3d"
+      ref={tiltRef}
+    >
+      <span className="home__brand-initial tilt-layer">{brand.name[0]}</span>
+      <span className="home__brand-name">{brand.name}</span>
+      {brand.country && <span className="home__brand-country">{brand.country}</span>}
+    </Link>
+  );
+}
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -53,16 +112,17 @@ export default function HomePage() {
       {/* Hero */}
       <section className="home__hero">
         <div className="home__hero-bg" />
-        <div className="container home__hero-content">
+        <HeroDecor />
+        <div className="container home__hero-content reveal">
           <h1 className="home__hero-title">
             Discover the world
             <br />
-            of <span className="home__hero-accent">fragrances</span>
+            of <span className="home__hero-accent gradient-text">fragrances</span>
           </h1>
           <p className="home__hero-subtitle">
             Explore {stats.perfumes}+ perfumes, read reviews, and build your collection.
           </p>
-          <form className="home__hero-search" onSubmit={handleSearch}>
+          <form className="home__hero-search glass" onSubmit={handleSearch}>
             <input
               className="input"
               placeholder="Search for a fragrance..."
@@ -79,18 +139,9 @@ export default function HomePage() {
       <section className="home__stats">
         <div className="container">
           <div className="home__stats-grid">
-            <div className="home__stat">
-              <span className="home__stat-number">{stats.perfumes}</span>
-              <span className="home__stat-label">Fragrances</span>
-            </div>
-            <div className="home__stat">
-              <span className="home__stat-number">{stats.brands}</span>
-              <span className="home__stat-label">Brands</span>
-            </div>
-            <div className="home__stat">
-              <span className="home__stat-number">{stats.reviews}</span>
-              <span className="home__stat-label">Reviews</span>
-            </div>
+            <Stat value={stats.perfumes} label="Fragrances" />
+            <Stat value={stats.brands} label="Brands" />
+            <Stat value={stats.reviews} label="Reviews" />
           </div>
         </div>
       </section>
@@ -129,11 +180,7 @@ export default function HomePage() {
           </div>
           <div className="home__brands-grid">
             {brands.map((b) => (
-              <Link key={b.id} to={`/brand/${b.id}`} className="home__brand-card card">
-                <span className="home__brand-initial">{b.name[0]}</span>
-                <span className="home__brand-name">{b.name}</span>
-                {b.country && <span className="home__brand-country">{b.country}</span>}
-              </Link>
+              <BrandCard key={b.id} brand={b} />
             ))}
           </div>
         </div>
@@ -166,7 +213,11 @@ export default function HomePage() {
       {/* CTA */}
       <section className="home__cta">
         <div className="container">
-          <div className="home__cta-card">
+          <div className="home__cta-card glass">
+            <svg className="float-deco home__cta-deco" width="160" height="160" viewBox="0 0 160 160" fill="none" aria-hidden="true">
+              <circle cx="80" cy="80" r="70" stroke="#a78bfa" strokeWidth="1" strokeDasharray="4 10" />
+              <circle cx="80" cy="80" r="48" stroke="#f5c842" strokeWidth="1" strokeDasharray="2 12" />
+            </svg>
             <h2>Start your fragrance journey</h2>
             <p>Create an account to rate, review, and build your personal collection.</p>
             <div className="home__cta-buttons">

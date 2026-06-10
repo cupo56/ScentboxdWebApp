@@ -1,7 +1,7 @@
 /* ===== Hero ===== */
 .home__hero {
   position: relative;
-  padding: 100px 0 80px;
+  padding: 120px 0 90px;
   overflow: hidden;
 }
 
@@ -15,6 +15,54 @@
   );
   pointer-events: none;
 }
+
+/* ===== Animated hero decor (SVG + aurora) ===== */
+.home__hero-decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.home__aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.home__aurora--1 {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  left: 8%;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.55), transparent 70%);
+  animation: aurora 16s ease-in-out infinite;
+}
+
+.home__aurora--2 {
+  width: 360px;
+  height: 360px;
+  top: -60px;
+  right: 6%;
+  background: radial-gradient(circle, rgba(245, 200, 66, 0.28), transparent 70%);
+  animation: aurora 20s ease-in-out infinite reverse;
+}
+
+.home__aurora--3 {
+  width: 300px;
+  height: 300px;
+  bottom: -120px;
+  left: 42%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.4), transparent 70%);
+  animation: aurora 24s ease-in-out infinite;
+}
+
+.home__deco--1 { top: 14%;  left: 6%;  animation-delay: 0s;   animation-duration: 15s; }
+.home__deco--2 { top: 22%;  right: 9%; animation-delay: -3s;  animation-duration: 18s; }
+.home__deco--3 { bottom: 18%; left: 14%; animation-delay: -6s; animation-duration: 13s; }
+.home__deco--4 { bottom: 6%; right: 14%; animation-delay: -2s; animation-duration: 22s; opacity: 0.35; }
 
 .home__hero-content {
   position: relative;
@@ -44,16 +92,34 @@
 .home__hero-search {
   display: flex;
   gap: 8px;
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 auto;
+  padding: 8px;
+  border-radius: 99px;
+  transition: box-shadow 0.3s ease, transform 0.3s var(--ease-spring);
+}
+
+.home__hero-search:focus-within {
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
 }
 
 .home__hero-search .input {
   flex: 1;
   padding: 14px 20px;
   font-size: 1rem;
-  background: var(--bg-card);
-  border-color: var(--border-hover);
+  background: transparent;
+  border: none;
+  border-radius: 99px;
+}
+
+.home__hero-search .input:focus {
+  box-shadow: none;
+}
+
+.home__hero-search .btn {
+  border-radius: 99px;
+  padding-inline: 26px;
 }
 
 /* ===== Stats ===== */
@@ -74,10 +140,15 @@
 
 .home__stat-number {
   display: block;
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 800;
-  color: var(--accent);
   letter-spacing: -0.02em;
+  background: var(--grad-accent);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
 }
 
 .home__stat-label {
@@ -111,7 +182,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 16px;
+  padding: 24px 16px;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -119,16 +190,23 @@
 }
 
 .home__brand-initial {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--accent-dim);
-  color: var(--accent);
-  font-size: 1.25rem;
+  background: var(--grad-accent);
+  background-size: 180% 180%;
+  color: #0a0a0f;
+  font-size: 1.3rem;
   font-weight: 800;
+  box-shadow: 0 6px 18px -6px rgba(124, 92, 255, 0.7);
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.home__brand-card:hover .home__brand-initial {
+  transform: translateZ(40px) scale(1.08);
 }
 
 .home__brand-name {
@@ -171,11 +249,25 @@
 }
 
 .home__cta-card {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(167, 139, 250, 0.02));
-  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
   border-radius: var(--radius-xl);
-  padding: 48px;
+  padding: 56px 48px;
   text-align: center;
+}
+
+.home__cta-deco {
+  top: -30px;
+  right: -30px;
+  opacity: 0.4;
+  animation-duration: 26s;
+}
+
+.home__cta-card h2,
+.home__cta-card p,
+.home__cta-buttons {
+  position: relative;
+  z-index: 1;
 }
 
 .home__cta-card h2 {
@@ -203,6 +295,12 @@
 
   .home__hero-search {
     flex-direction: column;
+    border-radius: var(--radius-lg);
+  }
+
+  .home__hero-search .input,
+  .home__hero-search .btn {
+    border-radius: var(--radius-sm);
   }
 
   .home__stats-grid {
@@ -210,6 +308,17 @@
   }
 
   .home__stat-number {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+  }
+
+  /* Trim heavy decoration on small screens */
+  .home__deco--2,
+  .home__deco--4 {
+    display: none;
+  }
+
+  .home__aurora {
+    filter: blur(50px);
+    opacity: 0.35;
   }
 }

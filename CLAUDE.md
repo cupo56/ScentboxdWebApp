@@ -60,7 +60,17 @@ TailwindCSS v4 with a custom theme. Custom colors extend the default palette:
 - **Primary:** `primary-{400..800}` — purple scale
 - **Dark backgrounds:** `dark-{600..900}` — near-black purples
 
-Tailwind classes and component-scoped CSS files coexist. The overall look is a dark-theme app.
+Tailwind classes and component-scoped CSS files coexist. The overall look is a dark-theme app. The full visual language (colors, type, motion, effects) is documented in **`DESIGN.md`** — treat that as the source of truth when touching UI.
+
+**Motion layer (`src/index.css`):** a shared set of modern utilities sits below the base styles and is reused across pages:
+- `.tilt-3d` / `.tilt-layer` — interactive 3D pointer tilt with a tracking glare highlight, driven by the `useTilt` hook (writes `--tilt-rx/ry` and `--glare-x/y` CSS vars).
+- `.glass` — frosted glassmorphism surface (`backdrop-filter` blur + saturate).
+- `.gradient-text` — animated lavender→violet→gold gradient clipped to text; the `--grad-accent` gradient is the shared accent treatment.
+- `.reveal` / `.float-deco` and the `float-slow`, `aurora`, `gradient-pan`, `rise-in` keyframes power the hero's drifting aurora blobs and floating SVG decorations.
+- `--ease-spring` and `--shadow-glow` are the standard springy easing and 3D glow shadow.
+- All decorative motion is gated behind `prefers-reduced-motion: reduce`.
+
+**UI hooks (`src/hooks/`):** `useTilt(max)` returns a ref that wires pointer tilt (mouse/fine-pointer only); `useCountUp(target)` animates a number from 0 with an ease-out curve. Both no-op under reduced motion.
 
 ## Environment
 

@@ -30,8 +30,29 @@
 }
 
 .navbar__logo-icon {
-  color: var(--accent);
-  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.4));
+  transition: transform 0.6s var(--ease-spring);
+}
+
+.navbar__logo:hover .navbar__logo-icon {
+  transform: rotate(180deg) scale(1.1);
+}
+
+.navbar__logo-gem {
+  transform-origin: center;
+}
+
+.navbar__logo:hover .navbar__logo-gem {
+  animation: pulse-glow 1.6s ease-in-out infinite;
+}
+
+.navbar__logo-text {
+  background: linear-gradient(120deg, var(--text-primary), var(--accent-hover));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .navbar__links {

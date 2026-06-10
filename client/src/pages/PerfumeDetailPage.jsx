@@ -132,7 +132,6 @@ export default function PerfumeDetailPage() {
               <UserPerfumeActions perfumeId={perfume.id} />
               <AddToListButton perfumeId={perfume.id} />
             </div>
-            </div>
 
             {/* Performance */}
             <div className="detail__performance">
@@ -183,13 +182,9 @@ export default function PerfumeDetailPage() {
               <ReviewCard
                 key={r.id}
                 review={r}
-<<<<<<< HEAD
-                onLike={isAuthenticated ? (reviewId) => toggleReviewLike(reviewId).catch(console.error) : undefined}
-=======
                 currentUserId={user?.id}
                 onDelete={handleDeleteReview}
                 onUpdate={handleUpdateReview}
->>>>>>> origin/main
               />
             ))}
             {reviews.length === 0 && (

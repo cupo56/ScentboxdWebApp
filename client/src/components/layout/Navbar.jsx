@@ -70,7 +70,25 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo" onClick={() => setMenuOpen(false)}>
-          <span className="navbar__logo-icon">◆</span>
+          <span className="navbar__logo-icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <defs>
+                <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#c4b5fd" />
+                  <stop offset="0.5" stopColor="#a78bfa" />
+                  <stop offset="1" stopColor="#f5c842" />
+                </linearGradient>
+              </defs>
+              <path
+                className="navbar__logo-gem"
+                d="M13 1.5 L24.5 13 L13 24.5 L1.5 13 Z"
+                stroke="url(#logoGrad)"
+                strokeWidth="1.6"
+                fill="rgba(167,139,250,0.12)"
+              />
+              <path d="M13 1.5 L13 24.5 M1.5 13 L24.5 13" stroke="url(#logoGrad)" strokeWidth="0.8" opacity="0.5" />
+            </svg>
+          </span>
           <span className="navbar__logo-text">Scentboxd</span>
         </Link>
 

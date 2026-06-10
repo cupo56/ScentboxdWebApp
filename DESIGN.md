@@ -1,5 +1,5 @@
 ---
-version: 1.0.0
+version: 1.1.0
 theme:
   mode: "dark"
 colors:
@@ -54,6 +54,9 @@ shadows:
   card: "0 2px 12px rgba(0, 0, 0, 0.3)"
   elevated: "0 8px 32px rgba(0, 0, 0, 0.5)"
   glow: "0 0 20px rgba(167, 139, 250, 0.4)"
+  glow3d: "0 0 0 1px rgba(167, 139, 250, 0.18), 0 18px 48px -12px rgba(124, 92, 255, 0.55)"
+gradients:
+  accent: "linear-gradient(135deg, #a78bfa 0%, #7c5cff 45%, #f5c842 120%)"
 motion:
   durations:
     fast: "0.2s"
@@ -61,9 +64,22 @@ motion:
     slow: "0.4s"
     spin: "0.6s"
     shimmer: "1.5s"
+    float: "14s"
+    aurora: "16s–24s"
   easings:
     default: "ease"
     out: "ease-out"
+    spring: "cubic-bezier(0.34, 1.56, 0.64, 1)"
+  reducedMotion: "honoured — all decorative motion is disabled under prefers-reduced-motion"
+effects:
+  tilt3d:
+    hook: "src/hooks/useTilt.js"
+    cssVars: ["--tilt-rx", "--tilt-ry", "--glare-x", "--glare-y"]
+    maxRotation: "7°–10°"
+  countUp:
+    hook: "src/hooks/useCountUp.js"
+    easing: "easeOutCubic"
+    duration: "1200ms"
 ---
 
 # Scentboxd Design System
@@ -87,14 +103,36 @@ The primary accent is a soft, elegant lavender/purple (`#a78bfa`), reflecting cr
 ## Borders & Glassmorphism
 Hard, solid borders are avoided. Instead, boundaries are defined by ultra-sheer white strokes (`rgba(255, 255, 255, 0.06)`). On interactive elements (cards, buttons), hovering increases the border opacity slightly (`0.12`), simulating a light catching the edge of a glass pane.
 
+True frosted-glass surfaces are available via the `.glass` utility: a faint diagonal white gradient layered over a `backdrop-filter: blur(14px) saturate(140%)`. It is used for elevated, "floating" containers — the hero search bar and the call-to-action card — so they read as panes of tinted glass resting above the content behind them.
+
 ## Typography
 The UI relies entirely on the **Inter** typeface. It is utilized across a wide range of weights (300 to 800) to establish strong hierarchy:
 - Primary text is a crisp, cool off-white (`#f0f0f5`).
 - Secondary details, meta-information, and captions use muted grays (`#8888a0` and `#55556a`) to recede into the background.
 - Section titles are bold (`700`) and slightly larger, often paired with an accent-colored icon to anchor the content.
 
+## Animated Gradients & Accent Treatment
+The brand accent is increasingly expressed as a living gradient rather than a flat color. The signature `gradients.accent` (lavender → violet → gold) is reused across the identity:
+- **Gradient text** (`.gradient-text`) slowly pans its background position, giving headline accents and the navbar wordmark a gentle shimmer.
+- **Stat counters** render their numbers in the same clipped gradient and animate from `0` to their target with an ease-out curve (`useCountUp`), so the homepage figures count up on load.
+- **Primary buttons** carry the gradient with a light sheen that wipes across on hover.
+- **Brand initials** sit in gradient-filled circles that lift toward the viewer on hover.
+
+## Decorative SVG & Aurora Layer
+Hero and CTA areas are no longer flat. A non-interactive decorative layer adds atmosphere without competing with content:
+- **Aurora blobs** — large, heavily-blurred radial gradients (purple + gold) that drift and scale slowly behind the hero, creating a soft, moving light field.
+- **Floating SVG geometry** — thin-stroked molecule rings, diamonds, and dashed orbits scattered across the hero/CTA, gently bobbing and rotating (`float-slow`). They evoke the "notes & molecules" theme of fragrance.
+- All decoration is `pointer-events: none`, trimmed back on small screens, and fully disabled under reduced-motion.
+
+## 3D Depth & Tilt
+Beyond the flat `-2px` hover lift, key cards now respond physically to the pointer:
+- **Interactive tilt** (`.tilt-3d` + `useTilt`) — cards rotate on the X/Y axes following the cursor within a `perspective(900px)` space (max 7°–10°), settling back on a spring easing. A radial **glare highlight** tracks the pointer across the surface, and inner `.tilt-layer` elements translate forward on the Z-axis to "pop" out of the card.
+- Tilt is restricted to fine pointers (mouse) and disabled for touch and reduced-motion users.
+
 ## Motion & Interaction
 Animations are subtle but crucial for a high-end feel:
 - **Loading:** Instead of jarring spinners for main content areas, a continuous, smoothly sweeping shimmer gradient travels across skeleton loaders.
-- **Hover States:** Cards translate upward slightly (`-2px`) with a fast, smooth transition (`0.25s ease`), while borders brighten and shadows deepen. Primary buttons depress slightly (`-1px`) and emit a soft glow.
-- **Entrance:** Toast notifications and new list items slide up and fade in (`fadeIn` keyframe, `0.4s ease-out`), ensuring the UI feels responsive and fluid rather than instantaneous and harsh.
+- **Hover States:** Cards translate upward (`-4px`) and gain the deeper `glow3d` shadow; product imagery zooms with a spring easing while a diagonal sheen sweeps across it. Primary buttons lift and emit a soft glow with a sheen wipe.
+- **Entrance:** Toast notifications and new list items slide up and fade in (`fadeIn`), and hero content rises in on a spring curve (`rise-in` / `.reveal`), so the UI feels responsive and fluid rather than instantaneous and harsh.
+- **Easing:** Expressive interactions use the springy `motion.easings.spring` curve for a tactile, slightly overshooting settle; functional transitions stay on plain `ease`.
+- **Accessibility:** Every decorative animation, gradient pan, tilt, and float respects `prefers-reduced-motion: reduce` and is switched off when requested.
