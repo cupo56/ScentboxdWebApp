@@ -26,7 +26,7 @@
 
 .footer__tagline {
   margin-top: 8px;
-  color: var(--text-muted);
+  color: var(--text-dim);
   font-size: 0.875rem;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .footer__column a {
-  color: var(--text-muted);
+  color: var(--text-dim);
   font-size: 0.875rem;
   transition: color 0.2s;
 }
@@ -67,7 +67,7 @@
 }
 
 .footer__bottom p {
-  color: var(--text-muted);
+  color: var(--text-dim);
   font-size: 0.8rem;
 }
 
