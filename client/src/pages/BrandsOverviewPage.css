@@ -1,90 +1,26 @@
-.brands-page__header {
-  margin-bottom: 24px;
-}
+.houses { max-width: var(--max-width); margin: 0 auto; padding: var(--space-10) var(--space-14) var(--space-14); }
+.houses__title { font: var(--weight-heading) 30px var(--font); color: var(--text); letter-spacing: -0.02em; }
+.houses__meta { font: var(--weight-body) 13px var(--font); color: var(--text-dim); margin: var(--space-2) 0 var(--space-8); }
+.houses__search { max-width: 340px; margin-bottom: var(--space-8); }
 
-.brands-page__title {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
+.houses__letters { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: var(--space-8); }
+.houses__letters a { min-width: 24px; text-align: center; padding: 4px 6px; border-radius: var(--radius-sm); font: var(--weight-body) 12.5px ui-monospace, Menlo, monospace; color: var(--text-muted); text-decoration: none; }
+.houses__letters a:hover { color: var(--accent-text); }
 
-.brands-page__subtitle {
-  color: var(--text-secondary);
-  margin-top: 4px;
-  font-size: 0.9rem;
-}
-
-.brands-page__search {
-  margin-bottom: 24px;
-  max-width: 400px;
-}
-
-.brands-page__letters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 32px;
-}
-
-.brands-page__letter {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.brands-page__letter:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-dim);
-}
-
-.brands-page__list {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.brands-page__group-letter {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--accent);
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.brands-page__group-items {
+.houses__row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 8px;
-}
-
-.brands-page__item {
-  display: flex;
-  justify-content: space-between;
+  grid-template-columns: 1fr 140px 88px;
+  gap: var(--space-6);
   align-items: center;
-  padding: 14px 20px;
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--hairline);
   text-decoration: none;
-  cursor: pointer;
 }
+.houses__row-name { font: var(--weight-label) 16px var(--font); color: var(--text); }
+.houses__row-country { font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
+.houses__row-count { text-align: right; font: var(--weight-body) 13px var(--font); color: var(--text-body); font-variant-numeric: tabular-nums; }
 
-.brands-page__item-name {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--text-primary);
-}
-
-.brands-page__item-country {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+@media (max-width: 900px) {
+  .houses__row { grid-template-columns: 1fr 88px; }
+  .houses__row-country { display: none; }
 }

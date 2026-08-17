@@ -1,115 +1,19 @@
-.auth-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - var(--nav-height) - 200px);
-}
+.auth { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - var(--nav-height)); padding: var(--space-10); }
 
-.auth-card {
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 40px;
-}
+.auth__card { max-width: 420px; width: 100%; }
+.auth__headline { font: var(--weight-heading) 30px/1.15 var(--font); letter-spacing: -0.02em; color: var(--text); margin-bottom: var(--space-4); }
+.auth__sub { font: var(--weight-body) 14.5px/1.6 var(--font); color: var(--text-muted); margin-bottom: var(--space-8); }
 
-.auth-card__title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 4px;
-}
+.auth__segment { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--hairline); border-radius: var(--radius-md); margin-bottom: var(--space-8); }
+.auth__segment button { flex: 1; min-height: 40px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font: var(--weight-body) 13.5px var(--font); cursor: pointer; }
+.auth__segment button.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
 
-.auth-card__subtitle {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 24px;
-}
+.auth__error { color: var(--accent-text); font-size: 13px; margin-bottom: var(--space-4); }
 
-.auth-card__error {
-  background: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.3);
-  color: var(--danger);
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  margin-bottom: 16px;
-}
+.auth__form { display: flex; flex-direction: column; gap: var(--space-6); }
+.auth__field label { display: block; font: var(--weight-body) 11.5px var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: var(--space-2); }
 
-.auth-card__form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+.auth__links { display: flex; justify-content: space-between; font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
+.auth__links a { color: var(--text-dim); }
 
-.auth-card__field label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-
-.auth-card__footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.auth-card__footer a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.auth-card__footer a:hover {
-  color: var(--accent-hover);
-}
-
-/* ===== Forgot Password Link ===== */
-.auth-card__forgot-link {
-  display: block;
-  text-align: center;
-  margin-top: 12px;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  transition: color 0.2s ease;
-}
-
-.auth-card__forgot-link:hover {
-  color: var(--accent);
-}
-
-/* ===== Success Icon ===== */
-.auth-card__success-icon {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 12px;
-  animation: fadeIn 0.4s ease-out;
-}
-
-/* ===== Hint Text ===== */
-.auth-card__hint {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  text-align: center;
-  margin-top: 8px;
-  margin-bottom: 12px;
-}
-
-/* ===== Password Match Indicator ===== */
-.auth-card__match {
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-top: -4px;
-}
-
-.auth-card__match--ok {
-  color: var(--success);
-}
-
-.auth-card__match--mismatch {
-  color: var(--danger);
-}
+.auth__footnote { margin-top: var(--space-8); padding-top: var(--space-8); border-top: 1px solid var(--hairline); font: var(--weight-body) 12px/1.6 var(--font); color: var(--text-dim); }

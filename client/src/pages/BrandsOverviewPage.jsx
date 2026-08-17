@@ -16,85 +16,35 @@ export default function BrandsOverviewPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = brands.filter((b) =>
-    b.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = brands.filter((b) => b.name.toLowerCase().includes(search.toLowerCase()));
+  const letters = [...new Set(filtered.map((b) => b.name[0].toUpperCase()))].sort();
 
-  // Group by first letter
-  const grouped = filtered.reduce((acc, brand) => {
-    const letter = brand.name[0].toUpperCase();
-    if (!acc[letter]) acc[letter] = [];
-    acc[letter].push(brand);
-    return acc;
-  }, {});
-
-  const letters = Object.keys(grouped).sort();
-
-  if (loading) {
-    return (
-      <div className="spinner-container">
-        <div className="spinner spinner-lg" />
-      </div>
-    );
-  }
+  if (loading) return <div className="spinner-container"><div className="spinner spinner-lg" /></div>;
 
   return (
-    <div className="brands-page page">
-      <div className="container">
-        <header className="brands-page__header">
-          <h1 className="brands-page__title">Brands</h1>
-          <p className="brands-page__subtitle">{brands.length} fragrance houses</p>
-        </header>
+    <div className="houses">
+      <h1 className="houses__title">Houses</h1>
+      <div className="houses__meta">{brands.length} houses · {brands.reduce((s, b) => s + b.perfume_count, 0)} entries</div>
 
-        <div className="brands-page__search">
-          <input
-            className="input"
-            placeholder="Search brands..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            id="brand-search"
-          />
-        </div>
+      <input className="input houses__search" placeholder="Search houses…" value={search} onChange={(e) => setSearch(e.target.value)} />
 
-        {/* Letter navigation */}
-        <div className="brands-page__letters">
-          {letters.map((letter) => (
-            <a key={letter} href={`#letter-${letter}`} className="brands-page__letter">
-              {letter}
-            </a>
-          ))}
-        </div>
-
-        {/* Brand list */}
-        <div className="brands-page__list">
-          {letters.map((letter) => (
-            <div key={letter} className="brands-page__group" id={`letter-${letter}`}>
-              <h2 className="brands-page__group-letter">{letter}</h2>
-              <div className="brands-page__group-items">
-                {grouped[letter].map((brand) => (
-                  <Link
-                    key={brand.id}
-                    to={`/brand/${brand.id}`}
-                    className="brands-page__item card"
-                  >
-                    <span className="brands-page__item-name">{brand.name}</span>
-                    {brand.country && (
-                      <span className="brands-page__item-country">{brand.country}</span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="empty-state">
-            <div className="icon">🔍</div>
-            <h3>No brands found</h3>
-          </div>
-        )}
+      <div className="houses__letters">
+        {letters.map((l) => <a key={l} href={`#letter-${l}`}>{l}</a>)}
       </div>
+
+      {letters.map((letter) => (
+        <div key={letter} id={`letter-${letter}`}>
+          {filtered.filter((b) => b.name[0].toUpperCase() === letter).map((brand) => (
+            <Link key={brand.id} to={`/brand/${brand.id}`} className="houses__row">
+              <span className="houses__row-name">{brand.name}</span>
+              <span className="houses__row-country">{brand.country}</span>
+              <span className="houses__row-count">{brand.perfume_count} entries</span>
+            </Link>
+          ))}
+        </div>
+      ))}
+
+      {filtered.length === 0 && <div className="empty-state"><h3>No houses found</h3></div>}
     </div>
   );
 }

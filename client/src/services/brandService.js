@@ -6,11 +6,11 @@ import { supabase } from '../lib/supabaseClient';
 export async function getBrands() {
   const { data, error } = await supabase
     .from('brands')
-    .select('*')
+    .select('*, perfumes(count)')
     .order('name', { ascending: true });
 
   if (error) throw error;
-  return data;
+  return (data || []).map((b) => ({ ...b, perfume_count: b.perfumes?.[0]?.count ?? 0 }));
 }
 
 /**

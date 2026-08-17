@@ -28,9 +28,9 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="auth-page page">
+    <div className="auth">
       <div className="container">
-        <div className="auth-card">
+        <div className="auth__card">
           {sent ? (
             <>
               <div className="auth-card__success-icon">✉️</div>

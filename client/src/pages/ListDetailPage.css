@@ -1,74 +1,22 @@
-.list-detail__header {
-  margin-bottom: 40px;
-}
+.list-detail { max-width: var(--max-width); margin: 0 auto; padding: var(--space-10) var(--space-14) var(--space-14); }
+.list-detail__crumb { font: var(--weight-body) 13px var(--font); color: var(--text-dim); margin-bottom: var(--space-6); }
 
-.list-detail__name {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
+.list-detail__header { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-8); padding-bottom: var(--space-8); border-bottom: 1px solid var(--hairline); }
+.list-detail__header h1 { font: var(--weight-heading) 36px var(--font); letter-spacing: -0.025em; color: var(--text); }
+.list-detail__header p { font: var(--weight-body) 15px/1.6 var(--font); color: var(--text-muted); margin-top: var(--space-4); max-width: 64ch; }
+.list-detail__meta { display: flex; gap: var(--space-6); margin-top: var(--space-4); font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
+.list-detail__meta a { color: var(--accent-text); }
+.list-detail__actions { display: flex; gap: var(--space-3); flex: none; }
 
-.list-detail__desc {
-  color: var(--text-secondary);
-  margin-top: 8px;
-  font-size: 0.95rem;
-}
+.list-detail__rows { margin-top: var(--space-4); }
+.list-detail__row { display: grid; grid-template-columns: 44px 1fr 88px 28px; gap: var(--space-6); align-items: center; padding: var(--space-6) 0; border-bottom: 1px solid var(--hairline); }
+.list-detail__rank { font: var(--weight-body) 15px ui-monospace, Menlo, monospace; color: var(--accent-bright); }
+.list-detail__info a { display: block; font: var(--weight-heading) 16px var(--font); color: var(--text); }
+.list-detail__info span { font: var(--weight-body) 12.5px var(--font); color: var(--text-dim); }
+.list-detail__score { text-align: right; font: var(--weight-heading) 16px var(--font); color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.list-detail__remove { border: none; background: none; color: var(--text-muted); cursor: pointer; }
 
-.list-detail__meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.list-detail__author {
-  font-size: 0.85rem;
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.list-detail__author:hover {
-  color: var(--accent-hover);
-}
-
-.list-detail__title-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}
-
-.list-detail__owner-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.list-detail__perfume-wrapper {
-  position: relative;
-}
-
-.list-detail__remove-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  border: none;
-  color: #fff;
-  font-size: 0.75rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s;
-  z-index: 1;
-}
-
-.list-detail__perfume-wrapper:hover .list-detail__remove-btn {
-  opacity: 1;
+@media (max-width: 900px) {
+  .list-detail__header { flex-direction: column; align-items: flex-start; }
+  .list-detail__row { grid-template-columns: 40px 1fr 60px 24px; }
 }

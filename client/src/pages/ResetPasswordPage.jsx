@@ -64,9 +64,9 @@ export default function ResetPasswordPage() {
   // Still checking the session
   if (validSession === null) {
     return (
-      <div className="auth-page page">
+      <div className="auth">
         <div className="container">
-          <div className="auth-card" style={{ textAlign: 'center' }}>
+          <div className="auth__card" style={{ textAlign: 'center' }}>
             <div className="spinner spinner-md" style={{ margin: '0 auto 16px' }}></div>
             <p className="auth-card__subtitle">Verifying reset link…</p>
           </div>
@@ -78,9 +78,9 @@ export default function ResetPasswordPage() {
   // No valid session — invalid or expired link
   if (!validSession) {
     return (
-      <div className="auth-page page">
+      <div className="auth">
         <div className="container">
-          <div className="auth-card">
+          <div className="auth__card">
             <div className="auth-card__success-icon">⚠️</div>
             <h1 className="auth-card__title">Invalid or expired link</h1>
             <p className="auth-card__subtitle">
@@ -104,9 +104,9 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="auth-page page">
+    <div className="auth">
       <div className="container">
-        <div className="auth-card">
+        <div className="auth__card">
           {success ? (
             <>
               <div className="auth-card__success-icon">✅</div>
