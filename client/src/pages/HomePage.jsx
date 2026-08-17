@@ -46,6 +46,8 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isAuthenticated || !user) {
+      // Clear shelf state on sign-out — otherwise stale values from the last
+      // authenticated render (including the nudge banner) linger in this tab.
       setOwnedCount(0);
       setWantCount(0);
       setReviewCount(0);
@@ -56,8 +58,8 @@ export default function HomePage() {
       .then((rows) => {
         setOwnedCount(rows.length);
         if (rows.length > 0) {
-          const pick = rows[Math.floor(Math.random() * rows.length)].perfumes;
-          if (pick) setNudgePerfume(pick);
+          const nudgeCandidate = rows[Math.floor(Math.random() * rows.length)].perfumes;
+          if (nudgeCandidate) setNudgePerfume(nudgeCandidate);
         }
       })
       .catch(() => {});
