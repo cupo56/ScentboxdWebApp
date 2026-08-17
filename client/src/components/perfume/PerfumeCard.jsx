@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import StarRating from '../review/StarRating';
-import useTilt from '../../hooks/useTilt';
 import './PerfumeCard.css';
 
 const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
@@ -19,14 +18,12 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
 export default function PerfumeCard({ perfume }) {
   const brandName = perfume.brands?.name || 'Unknown';
   const imgSrc = perfume.image_url || PLACEHOLDER_IMG;
-  const tiltRef = useTilt(7);
 
   return (
     <Link
       to={`/perfume/${perfume.id}`}
-      className="perfume-card card tilt-3d"
+      className="perfume-card card"
       id={`perfume-card-${perfume.id}`}
-      ref={tiltRef}
     >
       <div className="perfume-card__image-wrap">
         <img
@@ -43,7 +40,7 @@ export default function PerfumeCard({ perfume }) {
           </span>
         )}
       </div>
-      <div className="perfume-card__info tilt-layer">
+      <div className="perfume-card__info">
         <p className="perfume-card__brand">{brandName}</p>
         <h3 className="perfume-card__name">{perfume.name}</h3>
         {perfume.performance > 0 && (
