@@ -1,0 +1,80 @@
+.account-menu { position: relative; }
+
+.account-menu__trigger {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-line);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--weight-label) 13px var(--font);
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+}
+.account-menu__trigger.active { border-color: var(--accent); }
+.account-menu__trigger img { width: 100%; height: 100%; object-fit: cover; }
+
+.account-menu__panel {
+  position: absolute;
+  top: calc(100% + var(--space-6));
+  right: 0;
+  width: 272px;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 200;
+}
+
+.account-menu__head {
+  padding: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--hairline);
+}
+.account-menu__head-avatar {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-line);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--weight-label) 15px var(--font);
+  overflow: hidden;
+}
+.account-menu__head-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.account-menu__handle { font: var(--weight-label) 14.5px var(--font); color: var(--text); }
+.account-menu__meta { font: var(--weight-body) 12px var(--font); color: var(--text-dim); margin-top: 3px; }
+
+.account-menu__group { padding: var(--space-2); display: flex; flex-direction: column; }
+.account-menu__group + .account-menu__group { border-top: 1px solid var(--hairline); }
+
+.account-menu__item {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  font: var(--weight-body) 13.5px var(--font);
+  color: var(--text-body);
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+.account-menu__item span { margin-left: auto; font-size: 12px; color: var(--text-dim); }
+.account-menu__item.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
+.account-menu__item--static { cursor: default; color: var(--text-body); }
+.account-menu__item--danger { color: var(--text-muted); }

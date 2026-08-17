@@ -138,24 +138,6 @@
 .navbar__search-item-brand { font-size: 11.5px; color: var(--text-dim); }
 .navbar__search-item--all { justify-content: center; color: var(--accent-text); font-weight: 500; }
 
-.navbar__user { display: flex; align-items: center; gap: var(--space-4); }
-
-.navbar__avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-tint);
-  border: 1px solid var(--accent-line);
-  color: var(--accent-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: var(--weight-label) 13px var(--font);
-  overflow: hidden;
-  text-decoration: none;
-}
-.navbar__avatar img { width: 100%; height: 100%; object-fit: cover; }
-
 @media (max-width: 900px) {
   .navbar__segment { display: none; }
   .navbar__inner { padding: 0 var(--space-6); gap: var(--space-4); }

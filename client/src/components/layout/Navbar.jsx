@@ -4,6 +4,7 @@ import { MagnifyingGlass } from '@phosphor-icons/react';
 import { useAuth } from '../../hooks/useAuth';
 import useDebounce from '../../hooks/useDebounce';
 import { getPerfumes } from '../../services/perfumeService';
+import AccountMenu from './AccountMenu';
 import './Navbar.css';
 
 function Logo() {
@@ -18,7 +19,7 @@ function Logo() {
 }
 
 export default function Navbar() {
-  const { isAuthenticated, profile, logout, shelfPath } = useAuth();
+  const { isAuthenticated, shelfPath } = useAuth();
   const navigate = useNavigate();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -79,11 +80,6 @@ export default function Navbar() {
   const handleSelectResult = () => {
     setSearchQuery('');
     setSearchOpen(false);
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
   };
 
   return (
@@ -162,21 +158,7 @@ export default function Navbar() {
           </div>
 
           {isAuthenticated ? (
-            <div className="navbar__user">
-              <Link
-                to={shelfPath}
-                className="navbar__avatar"
-                title={profile?.username || 'Profile'}
-                aria-label={profile?.username || 'Profile'}
-              >
-                {profile?.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" />
-                ) : (
-                  (profile?.username || 'U')[0].toUpperCase()
-                )}
-              </Link>
-              <button className="btn btn-ghost btn-sm" onClick={handleLogout}>Sign out</button>
-            </div>
+            <AccountMenu />
           ) : (
             <NavLink to="/login" className="btn btn-primary btn-sm">Sign in</NavLink>
           )}
