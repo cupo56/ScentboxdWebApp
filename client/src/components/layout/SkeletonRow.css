@@ -1,6 +1,6 @@
 .skeleton-row {
   display: grid;
-  grid-template-columns: 52px 1fr 88px;
+  grid-template-columns: 52px 1fr 200px 220px 88px;
   gap: var(--space-6);
   align-items: center;
   padding: var(--space-4) 0;
@@ -8,3 +8,8 @@
 }
 .skeleton-row__thumb { aspect-ratio: 3/4; border-radius: var(--radius-sm); }
 .skeleton-row__lines { display: flex; flex-direction: column; }
+
+@media (max-width: 900px) {
+  .skeleton-row { grid-template-columns: 44px 1fr 52px; gap: var(--space-4); }
+  .skeleton-row__house, .skeleton-row__accords { display: none; }
+}

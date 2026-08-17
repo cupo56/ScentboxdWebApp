@@ -64,10 +64,17 @@ export default function ProfilePage() {
             <div className="skeleton" style={{ height: 22, width: 140 }} />
           </div>
         </div>
-        <div className="shelf__main" style={{ borderRight: 'none' }}>
-          <div className="shelf__grid">
-            {Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton" style={{ aspectRatio: '3/4', borderRadius: 'var(--radius-md)' }} />)}
+        <div className="shelf__body">
+          <div className="shelf__main">
+            <div className="shelf__grid">
+              {Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton" style={{ aspectRatio: '3/4', borderRadius: 'var(--radius-md)' }} />)}
+            </div>
           </div>
+          <aside className="shelf__lists">
+            <div className="skeleton" style={{ height: 14, width: '50%', marginBottom: 16 }} />
+            <div className="skeleton" style={{ height: 40, marginBottom: 8 }} />
+            <div className="skeleton" style={{ height: 40 }} />
+          </aside>
         </div>
       </div>
     );

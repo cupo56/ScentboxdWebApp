@@ -10,7 +10,9 @@ export default function SkeletonRow({ count = 6 }) {
             <div className="skeleton" style={{ height: 14, width: '60%' }} />
             <div className="skeleton" style={{ height: 11, width: '38%', marginTop: 8 }} />
           </div>
-          <div className="skeleton" style={{ height: 14, width: 40 }} />
+          <div className="skeleton skeleton-row__house" style={{ height: 13 }} />
+          <div className="skeleton skeleton-row__accords" style={{ height: 13 }} />
+          <div className="skeleton" style={{ height: 14, width: 40, justifySelf: 'end' }} />
         </div>
       ))}
     </>
