@@ -36,7 +36,7 @@ export default function Navbar() {
       return;
     }
     setIsSearching(true);
-    getPerfumes({ search: debouncedSearch, limit: 5 })
+    getPerfumes({ search: debouncedSearch, pageSize: 5 })
       .then((res) => setSearchResults(res.perfumes || []))
       .catch(() => {})
       .finally(() => setIsSearching(false));

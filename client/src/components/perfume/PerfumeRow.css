@@ -22,7 +22,6 @@
 
 .perfume-row__score { text-align: right; }
 .perfume-row__score-value { font: var(--weight-label) 16px var(--font); color: var(--accent-text); font-variant-numeric: tabular-nums; }
-.perfume-row__score-count { font: var(--weight-body) 11.5px var(--font); color: var(--text-dim); }
 
 @media (max-width: 900px) {
   .perfume-row { grid-template-columns: 44px 1fr 52px; gap: var(--space-4); }

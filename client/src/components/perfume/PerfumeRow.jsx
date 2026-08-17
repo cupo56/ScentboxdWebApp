@@ -28,9 +28,6 @@ export default function PerfumeRow({ perfume }) {
         <div className="perfume-row__score-value">
           {perfume.performance != null ? Number(perfume.performance).toFixed(1) : '—'}
         </div>
-        {perfume.review_count != null && (
-          <div className="perfume-row__score-count">{perfume.review_count}</div>
-        )}
       </div>
     </Link>
   );
