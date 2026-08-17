@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
-import EditProfileModal from '../components/profile/EditProfileModal';
 import ListFormModal from '../components/list/ListFormModal';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
@@ -18,15 +17,13 @@ const TABS = [
 
 export default function ProfilePage() {
   const { username } = useParams();
-  const { user, setProfile: setAuthProfile } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [counts, setCounts] = useState({ owned: 0, want_to_try: 0, favorites: 0 });
   const [activeTab, setActiveTab] = useState('owned');
   const [perfumes, setPerfumes] = useState([]);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
 
   useEffect(() => {
@@ -94,13 +91,6 @@ export default function ProfilePage() {
     setLists((prev) => prev.filter((l) => l.id !== listId));
   };
 
-  const handleProfileSave = (updated) => {
-    setProfile(updated);
-    setAuthProfile(updated);
-    setShowEditModal(false);
-    if (updated.username !== username) navigate(`/profile/${updated.username}`, { replace: true });
-  };
-
   return (
     <>
       <div className="shelf">
@@ -116,7 +106,7 @@ export default function ProfilePage() {
             <div><span>{counts.owned}</span><label>Owned</label></div>
             <div><span>{counts.want_to_try}</span><label>Wishlist</label></div>
           </div>
-          {isOwn && <button className="btn btn-secondary" onClick={() => setShowEditModal(true)}>Edit profile</button>}
+          {isOwn && <Link to="/settings" className="btn btn-secondary">Edit profile</Link>}
         </div>
 
         <div className="shelf__body">
@@ -163,7 +153,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {showEditModal && <EditProfileModal profile={profile} onSave={handleProfileSave} onClose={() => setShowEditModal(false)} />}
       {showCreateListModal && <ListFormModal onSave={handleListCreated} onClose={() => setShowCreateListModal(false)} />}
     </>
   );
