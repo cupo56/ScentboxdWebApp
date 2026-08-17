@@ -20,6 +20,8 @@
 
 None of these are introduced by this plan, and fixing the `set-state-in-effect` pattern repo-wide is a separate refactor, not part of the Sillage redesign — every data-fetching effect in this codebase uses it. **When a task's "lint" verify step runs, compare against this baseline**: passing means "no *new* errors beyond this list," not zero errors. Two exceptions where a task's own rewrite naturally clears an entry: Task 7's `ProfilePage.jsx` rewrite doesn't call `loadTab` from inside the effect, so that error and its warning disappear as a side effect — don't treat their disappearance as a regression to investigate. `PerfumeDetailPage.jsx:4`'s unused `toggleReviewLike` import also disappears once Task 6 rewrites that file's imports.
 
+**Baseline update after Task 5:** Task 5's logout-state-reset fix added a legitimate 5th instance of the same `set-state-in-effect` pattern at `src/pages/HomePage.jsx` (resetting Feed state synchronously when a user signs out — deliberately kept synchronous rather than deferred through a microtask workaround, to stay consistent with how every other instance of this pattern is handled in this codebase). **The baseline from Task 6 onward is 8 problems (7 errors, 1 warning)**, not 6/7 — `Navbar.jsx`, `BrandPage.jsx`, `ExplorePage.jsx`, `HomePage.jsx`, `PerfumeDetailPage.jsx` ×2, `ProfilePage.jsx` ×1+warning.
+
 ---
 
 ## Scope & Data Decisions
