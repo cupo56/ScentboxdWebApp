@@ -38,6 +38,7 @@ The design handoff shows a few data points the current schema/services can't pro
 10. **Longevity filter is added** (`minLongevity` param + `.gte('longevity', …)` in `getPerfumes`) since the slider is a first-class part of both the desktop filter column and the mobile filter sheet — small, additive, no schema change.
 11. **Explore pagination becomes "Load more"** (accumulate pages client-side) instead of Prev/Next, per the 2b mockup.
 12. **Home "Verdicts written" count is real**, not a stub — Task 5 adds `getReviewCountByUser` to `reviewService.js` and wires it into the Feed's "Your shelf" column (see Task 5 Step 1a).
+13. **`perfumes.longevity`/`perfumes.sillage` are sparse German-text categories, not 0–100 numbers** (discovered live during Task 4: verified against production data — `longevity` is 99% `"Moderat"` with `"Langhaltend"`/`"Sehr langhaltend"`/`"Lang"` making up the rest; `sillage` is similarly dominated by `"Moderat"`). This was already a latent bug in the pre-redesign app (the old `PerfumeDetailPage` fed these text values straight into a percentage bar). Two consequences, both already reflected in the tasks below: Task 4's Explore longevity filter is a categorical single-select over the real text values (`getLongevityLevels()`), not an hours slider; Task 6's Entry-page "Performance · community median" bars are computed by averaging the numeric, per-review `reviews.longevity`/`reviews.sillage` columns (0–100, already fetched alongside every review) instead of reading the broken catalog-level text fields.
 
 ---
 
@@ -2212,6 +2213,15 @@ export default function PerfumeDetailPage() {
     ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
     : null;
 
+  const longevityValues = reviews.map((r) => r.longevity).filter((v) => v != null);
+  const sillageValues = reviews.map((r) => r.sillage).filter((v) => v != null);
+  const avgLongevity = longevityValues.length
+    ? Math.round(longevityValues.reduce((a, b) => a + b, 0) / longevityValues.length)
+    : null;
+  const avgSillage = sillageValues.length
+    ? Math.round(sillageValues.reduce((a, b) => a + b, 0) / sillageValues.length)
+    : null;
+
   return (
     <div className="entry">
       <div className="entry__layout">
@@ -2244,9 +2254,12 @@ export default function PerfumeDetailPage() {
               {/* Accords data isn't in the current schema — omitted; Performance below covers the numeric metrics that do exist. */}
             </div>
             <div>
-              <div className="pyramid__label-row">Performance</div>
-              {perfume.longevity != null && <PerformanceBar label="Longevity" value={perfume.longevity} maxValue={100} suffix="%" />}
-              {perfume.sillage != null && <PerformanceBar label="Sillage" value={perfume.sillage} maxValue={100} suffix="%" />}
+              <div className="pyramid__label-row">Performance · community median</div>
+              {avgLongevity != null && <PerformanceBar label="Longevity" value={avgLongevity} maxValue={100} suffix="%" />}
+              {avgSillage != null && <PerformanceBar label="Sillage" value={avgSillage} maxValue={100} suffix="%" />}
+              {avgLongevity == null && avgSillage == null && (
+                <p className="entry__no-performance">No verdicts yet — performance data appears once someone rates this one.</p>
+              )}
             </div>
           </div>
 
@@ -2328,6 +2341,7 @@ export default function PerfumeDetailPage() {
 
 .entry__perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10); margin-bottom: var(--space-8); }
 .entry__perf-grid .perf-bar { margin-bottom: var(--space-4); }
+.entry__no-performance { font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
 
 .entry__verdicts-head { margin: var(--space-8) 0 var(--space-6); }
 .entry__verdicts-head h2 { font: var(--weight-heading) 20px var(--font); color: var(--text); }
