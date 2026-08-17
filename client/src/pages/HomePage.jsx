@@ -46,12 +46,10 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isAuthenticated || !user) {
-      Promise.resolve().then(() => {
-        setOwnedCount(0);
-        setWantCount(0);
-        setReviewCount(0);
-        setNudgePerfume(null);
-      });
+      setOwnedCount(0);
+      setWantCount(0);
+      setReviewCount(0);
+      setNudgePerfume(null);
       return;
     }
     getUserPerfumesByStatus(user.id, 'is_owned')
