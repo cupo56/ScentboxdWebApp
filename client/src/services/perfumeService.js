@@ -8,6 +8,7 @@ export async function getPerfumes({
   brand = '',
   concentration = '',
   noteFamily = '',
+  minLongevity = 0,
   sortBy = 'name',
   page = 1,
   pageSize = 24,
@@ -50,6 +51,10 @@ export async function getPerfumes({
 
   if (concentration) {
     query = query.eq('concentration', concentration);
+  }
+
+  if (minLongevity) {
+    query = query.gte('longevity', minLongevity);
   }
 
   // Sort

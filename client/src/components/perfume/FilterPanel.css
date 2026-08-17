@@ -1,0 +1,63 @@
+.filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.filter-panel__label {
+  font: var(--weight-label) 11.5px var(--font);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: var(--space-4);
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-panel__sort-list { display: flex; flex-direction: column; gap: 2px; }
+.filter-panel__sort-item {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  font: var(--weight-body) 13px var(--font);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.filter-panel__sort-item.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
+
+.filter-panel__check-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.filter-panel__check-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  font: var(--weight-body) 14px var(--font);
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+}
+.filter-panel__check-item.active { color: var(--text); }
+.filter-panel__check-box { color: var(--hairline-strong); }
+.filter-panel__check-item.active .filter-panel__check-box { color: var(--accent); }
+
+.filter-panel__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.filter-panel__slider {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.filter-panel__reset {
+  margin-top: auto;
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font: var(--weight-body) 12.5px var(--font);
+  cursor: pointer;
+}
+.filter-panel__reset:hover { color: var(--text-body); }

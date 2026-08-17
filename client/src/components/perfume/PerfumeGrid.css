@@ -1,16 +1,19 @@
 .perfume-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-6);
 }
 
 .perfume-card-skeleton {
   overflow: hidden;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--surface);
 }
 
 @media (max-width: 640px) {
   .perfume-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: var(--space-4);
   }
 }
