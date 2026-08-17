@@ -1,0 +1,49 @@
+.tabbar {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .tabbar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-top: 1px solid var(--hairline);
+    padding: var(--space-3) var(--space-6) calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
+    height: var(--tabbar-height);
+    box-sizing: border-box;
+  }
+
+  .tabbar__item {
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font: var(--weight-body) 10.5px var(--font);
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+  .tabbar__item.active { color: var(--accent-text); font-weight: var(--weight-label); }
+
+  .tabbar__compose {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tabbar__compose::before {
+    content: '';
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    position: absolute;
+  }
+  .tabbar__compose { position: relative; color: var(--accent-text); }
+  .tabbar__compose svg { position: relative; z-index: 1; }
+}
