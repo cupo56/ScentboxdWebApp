@@ -45,7 +45,15 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (!isAuthenticated || !user) return;
+    if (!isAuthenticated || !user) {
+      Promise.resolve().then(() => {
+        setOwnedCount(0);
+        setWantCount(0);
+        setReviewCount(0);
+        setNudgePerfume(null);
+      });
+      return;
+    }
     getUserPerfumesByStatus(user.id, 'is_owned')
       .then((rows) => {
         setOwnedCount(rows.length);
@@ -64,14 +72,15 @@ export default function HomePage() {
       <div className="feed__columns">
         <div className="feed__col feed__col--shelf">
           <span className="feed__label">Your shelf</span>
-          <div className="feed__stats">
-            <div className="feed__stat-row"><span>Owned</span><span>{ownedCount}</span></div>
-            <div className="feed__hr" />
-            <div className="feed__stat-row"><span>Want to try</span><span>{wantCount}</span></div>
-            <div className="feed__hr" />
-            <div className="feed__stat-row"><span>Verdicts written</span><span>{reviewCount}</span></div>
-          </div>
-          {!isAuthenticated && (
+          {isAuthenticated ? (
+            <div className="feed__stats">
+              <div className="feed__stat-row"><span>Owned</span><span>{ownedCount}</span></div>
+              <div className="feed__hr" />
+              <div className="feed__stat-row"><span>Want to try</span><span>{wantCount}</span></div>
+              <div className="feed__hr" />
+              <div className="feed__stat-row"><span>Verdicts written</span><span>{reviewCount}</span></div>
+            </div>
+          ) : (
             <Link to="/login" className="btn btn-secondary">Sign in to track your shelf</Link>
           )}
         </div>
