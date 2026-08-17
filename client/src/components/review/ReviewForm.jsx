@@ -61,17 +61,17 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
   };
 
   return (
-    <form className="review-form" onSubmit={handleSubmit} id="review-form">
-      <h3 className="review-form__title">{initialData ? 'Edit Review' : 'Write a Review'}</h3>
+    <form className="composer" onSubmit={handleSubmit} id="review-form">
+      <h3 className="composer__title">{initialData ? 'Edit Review' : 'Write a Review'}</h3>
 
-      {error && <p className="review-form__error">{error}</p>}
+      {error && <p className="composer__error">{error}</p>}
 
-      <div className="review-form__rating">
+      <div className="composer__rating">
         <label>Rating</label>
         <StarRating rating={rating} size="lg" interactive onChange={setRating} />
       </div>
 
-      <div className="review-form__field">
+      <div className="composer__field">
         <label>Title</label>
         <input
           className="input"
@@ -82,7 +82,7 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         />
       </div>
 
-      <div className="review-form__field">
+      <div className="composer__field">
         <label>Review</label>
         <textarea
           className="input"
@@ -92,11 +92,11 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
           minLength={10}
           maxLength={500}
         />
-        <span className="review-form__charcount">{text.length}/500</span>
+        <span className="composer__charcount">{text.length}/500</span>
       </div>
 
-      <div className="review-form__row">
-        <div className="review-form__field">
+      <div className="composer__row">
+        <div className="composer__field">
           <label>Longevity (0-100%)</label>
           <input
             className="input"
@@ -108,7 +108,7 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
             placeholder="0-100"
           />
         </div>
-        <div className="review-form__field">
+        <div className="composer__field">
           <label>Sillage (0-100%)</label>
           <input
             className="input"
@@ -122,14 +122,14 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         </div>
       </div>
 
-      <div className="review-form__field">
+      <div className="composer__field">
         <label>Best for</label>
-        <div className="review-form__occasions">
+        <div className="composer__occasions">
           {OCCASION_OPTIONS.map((occ) => (
             <button
               key={occ}
               type="button"
-              className={`review-form__occ-btn ${occasions.includes(occ) ? 'active' : ''}`}
+              className={`composer__occ-btn ${occasions.includes(occ) ? 'active' : ''}`}
               onClick={() => toggleOccasion(occ)}
             >
               {occ}
@@ -138,9 +138,9 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         </div>
       </div>
 
-      <div className="review-form__actions" style={{ display: 'flex', gap: '12px' }}>
+      <div className="composer__actions" style={{ display: 'flex', gap: '12px' }}>
         <button className="btn btn-primary btn-lg" type="submit" disabled={submitting}>
-          {submitting ? 'Submitting…' : (initialData ? 'Save Changes' : 'Submit Review')}
+          {submitting ? 'Submitting…' : (initialData ? 'Save changes' : 'Post verdict')}
         </button>
         {onCancel && (
           <button type="button" className="btn btn-ghost btn-lg" onClick={onCancel} disabled={submitting}>

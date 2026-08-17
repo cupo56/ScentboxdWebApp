@@ -67,7 +67,7 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
 
   if (isEditing) {
     return (
-      <div className="review-card" id={`review-${review.id}`}>
+      <div className="verdict-row" id={`review-${review.id}`}>
         <ReviewForm
           perfumeId={review.perfume_id}
           initialData={review}
@@ -88,10 +88,10 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
   };
 
   return (
-    <div className="review-card" id={`review-${review.id}`}>
-      <div className="review-card__header">
-        <div className="review-card__author">
-          <div className="review-card__avatar">
+    <div className="verdict-row" id={`review-${review.id}`}>
+      <div className="verdict-row__header">
+        <div className="verdict-row__author">
+          <div className="verdict-row__avatar">
             {avatar ? (
               <img src={avatar} alt={username} />
             ) : (
@@ -99,25 +99,25 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
             )}
           </div>
           <div>
-            <p className="review-card__username">{username}</p>
-            <p className="review-card__date">{date}</p>
+            <p className="verdict-row__username">{username}</p>
+            <p className="verdict-row__date">{date}</p>
           </div>
         </div>
         <StarRating rating={review.rating} size="sm" />
       </div>
 
-      <h4 className="review-card__title">{review.title}</h4>
-      <p className="review-card__text">{review.text}</p>
+      <h4 className="verdict-row__title">{review.title}</h4>
+      <p className="verdict-row__text">{review.text}</p>
 
       {(review.longevity || review.sillage) && (
-        <div className="review-card__metrics">
+        <div className="verdict-row__metrics">
           {review.longevity !== null && (
-            <span className="review-card__metric">
+            <span className="verdict-row__metric">
               ⏱ Longevity: {review.longevity}%
             </span>
           )}
           {review.sillage !== null && (
-            <span className="review-card__metric">
+            <span className="verdict-row__metric">
               💨 Sillage: {review.sillage}%
             </span>
           )}
@@ -125,23 +125,23 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
       )}
 
       {review.occasions?.length > 0 && (
-        <div className="review-card__occasions">
+        <div className="verdict-row__occasions">
           {review.occasions.map((occ, i) => (
             <span key={i} className="badge badge-accent">{occ}</span>
           ))}
         </div>
       )}
 
-      <div className="review-card__footer">
+      <div className="verdict-row__footer">
         <button
-          className={`review-card__like-btn ${liked ? 'review-card__like-btn--liked' : ''} ${likeAnimating ? 'review-card__like-btn--pop' : ''}`}
+          className={`verdict-row__like-btn ${liked ? 'verdict-row__like-btn--liked' : ''} ${likeAnimating ? 'verdict-row__like-btn--pop' : ''}`}
           onClick={handleLike}
           disabled={likeLoading}
           aria-label={liked ? 'Unlike this review' : 'Like this review'}
           id={`like-btn-${review.id}`}
         >
           <svg
-            className="review-card__like-icon"
+            className="verdict-row__like-icon"
             viewBox="0 0 24 24"
             width="18"
             height="18"
@@ -154,14 +154,14 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
           {likeCount > 0 && (
-            <span className="review-card__like-count">{likeCount}</span>
+            <span className="verdict-row__like-count">{likeCount}</span>
           )}
         </button>
 
         {isOwner && (
-          <div className="review-card__actions">
+          <div className="verdict-row__actions">
             <button className="btn btn-ghost btn-sm" onClick={() => setIsEditing(true)}>Edit</button>
-            <button className="btn btn-ghost btn-sm review-card__delete-btn" onClick={handleDelete}>Delete</button>
+            <button className="btn btn-ghost btn-sm verdict-row__delete-btn" onClick={handleDelete}>Delete</button>
           </div>
         )}
       </div>

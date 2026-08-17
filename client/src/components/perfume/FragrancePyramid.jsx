@@ -3,37 +3,27 @@ import './FragrancePyramid.css';
 export default function FragrancePyramid({ notes }) {
   if (!notes || notes.length === 0) return null;
 
-  const topNotes = notes.filter((n) => n.note_type === 'top');
-  const midNotes = notes.filter((n) => n.note_type === 'mid');
-  const baseNotes = notes.filter((n) => n.note_type === 'base');
+  const rows = [
+    { key: 'top', label: 'Top', list: notes.filter((n) => n.note_type === 'top') },
+    { key: 'mid', label: 'Heart', list: notes.filter((n) => n.note_type === 'mid') },
+    { key: 'base', label: 'Base', list: notes.filter((n) => n.note_type === 'base') },
+  ].filter((row) => row.list.length > 0);
 
-  const renderNotes = (noteList, label, emoji) => {
-    if (noteList.length === 0) return null;
-    return (
-      <div className="pyramid__layer">
-        <div className="pyramid__label">
-          <span className="pyramid__emoji">{emoji}</span>
-          <span className="pyramid__label-text">{label}</span>
-        </div>
-        <div className="pyramid__notes">
-          {noteList.map((pn, i) => (
-            <span key={i} className="pyramid__note">
-              {pn.notes?.name || 'Unknown'}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  if (rows.length === 0) return null;
 
   return (
-    <div className="pyramid" id="fragrance-pyramid">
-      <h3 className="pyramid__title">Fragrance Notes</h3>
-      <div className="pyramid__layers">
-        {renderNotes(topNotes, 'Top', '🍋')}
-        {renderNotes(midNotes, 'Heart', '🌹')}
-        {renderNotes(baseNotes, 'Base', '🪵')}
-      </div>
+    <div className="pyramid">
+      <div className="pyramid__label-row">Notes</div>
+      {rows.map((row) => (
+        <div key={row.key} className="pyramid__row">
+          <span className="pyramid__row-label">{row.label}</span>
+          <div className="pyramid__row-notes">
+            {row.list.map((pn, i) => (
+              <span key={i} className="chip">{pn.notes?.name || 'Unknown'}</span>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

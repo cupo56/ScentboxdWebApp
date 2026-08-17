@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
-import { getReviewsByPerfume, toggleReviewLike, deleteReview } from '../services/reviewService';
+import { getReviewsByPerfume, deleteReview } from '../services/reviewService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
 import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
@@ -11,13 +11,6 @@ import ReviewForm from '../components/review/ReviewForm';
 import PerfumeCard from '../components/perfume/PerfumeCard';
 import { useAuth } from '../hooks/useAuth';
 import './PerfumeDetailPage.css';
-
-const PLACEHOLDER_IMG = 'data:image/svg+xml,' + encodeURIComponent(`
-  <svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
-    <rect fill="#16161f" width="600" height="800"/>
-    <text x="300" y="400" fill="#55556a" font-family="sans-serif" font-size="60" text-anchor="middle" dominant-baseline="middle">◆</text>
-  </svg>
-`);
 
 export default function PerfumeDetailPage() {
   const { id } = useParams();
@@ -34,11 +27,8 @@ export default function PerfumeDetailPage() {
     getPerfumeById(id)
       .then((data) => {
         setPerfume(data);
-        // Load reviews + similar
         getReviewsByPerfume(id).then(setReviews).catch(() => {});
-        if (data.brand_id) {
-          getSimilarPerfumes(data.brand_id, id).then(setSimilar).catch(() => {});
-        }
+        if (data.brand_id) getSimilarPerfumes(data.brand_id, id).then(setSimilar).catch(() => {});
       })
       .catch((err) => setError(err.message || 'Failed to load perfume'))
       .finally(() => setLoading(false));
@@ -53,165 +43,124 @@ export default function PerfumeDetailPage() {
     }
   };
 
-  const handleUpdateReview = (updatedReview) => {
-    setReviews((prev) => prev.map((r) => (r.id === updatedReview.id ? updatedReview : r)));
+  const handleUpdateReview = (updated) => {
+    setReviews((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
   };
 
   if (loading) {
     return (
-      <div className="spinner-container">
-        <div className="spinner spinner-lg" />
+      <div className="detail-loading">
+        <div className="skeleton detail-loading__image" />
+        <div className="detail-loading__lines">
+          <div className="skeleton" style={{ height: 11, width: '30%' }} />
+          <div className="skeleton" style={{ height: 28, width: '70%', marginTop: 11 }} />
+          <div className="skeleton" style={{ height: 12, width: '100%', marginTop: 17 }} />
+        </div>
       </div>
     );
   }
 
   if (error || !perfume) {
     return (
-      <div className="page container">
-        <div className="empty-state">
-          <div className="icon">😔</div>
-          <h3>Fragrance not found</h3>
-          <p>{error}</p>
-          <Link to="/explore" className="btn btn-primary" style={{ marginTop: '16px' }}>
-            Back to Explore
-          </Link>
-        </div>
+      <div className="entry__error">
+        <div className="entry__error-title">Couldn't reach the database</div>
+        <p>{error || 'Fragrance not found.'}</p>
+        <Link to="/explore" className="btn btn-primary">Back to Index</Link>
       </div>
     );
   }
 
-  const imgSrc = perfume.image_url || PLACEHOLDER_IMG;
   const brandName = perfume.brands?.name || 'Unknown';
-
-  // Calc average rating from reviews
   const avgRating = reviews.length > 0
     ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
     : null;
 
+  const longevityValues = reviews.map((r) => r.longevity).filter((v) => v != null);
+  const sillageValues = reviews.map((r) => r.sillage).filter((v) => v != null);
+  const avgLongevity = longevityValues.length
+    ? Math.round(longevityValues.reduce((a, b) => a + b, 0) / longevityValues.length)
+    : null;
+  const avgSillage = sillageValues.length
+    ? Math.round(sillageValues.reduce((a, b) => a + b, 0) / sillageValues.length)
+    : null;
+
   return (
-    <div className="detail page">
-      <div className="container">
-        <div className="detail__layout">
-          {/* Left: Image */}
-          <div className="detail__image-section">
-            <div className="detail__image-wrap">
-              <img
-                src={imgSrc}
-                alt={perfume.name}
-                className="detail__image"
-                onError={(e) => { e.target.src = PLACEHOLDER_IMG; }}
-              />
+    <div className="entry">
+      <div className="entry__layout">
+        <aside className="entry__side">
+          <div className="bottle entry__image">
+            {perfume.image_url ? <img src={perfume.image_url} alt={perfume.name} /> : <span>◆</span>}
+          </div>
+          <UserPerfumeActions perfumeId={perfume.id} />
+          <AddToListButton perfumeId={perfume.id} />
+          <div className="entry__fade" />
+          <div className="entry__facts">
+            {perfume.release_year && <div><span>Released</span><span>{perfume.release_year}</span></div>}
+            {perfume.concentration && <div><span>Concentration</span><span>{perfume.concentration}</span></div>}
+            {perfume.ean && <div><span>EAN</span><span className="entry__facts-mono">{perfume.ean}</span></div>}
+          </div>
+        </aside>
+
+        <div className="entry__main">
+          <div className="entry__house">{brandName}</div>
+          <h1 className="entry__name">{perfume.name}</h1>
+          <div className="entry__meta">
+            {avgRating && <span className="entry__score">{avgRating}</span>}
+            <span>{reviews.length} verdict{reviews.length !== 1 ? 's' : ''}</span>
+          </div>
+          {perfume.desc && <p className="entry__desc">{perfume.desc}</p>}
+
+          <div className="entry__perf-grid">
+            <div>
+              <div className="pyramid__label-row">Accords</div>
+              {/* Accords data isn't in the current schema — omitted; Performance below covers the numeric metrics that do exist. */}
+            </div>
+            <div>
+              <div className="pyramid__label-row">Performance · community median</div>
+              {avgLongevity != null && <PerformanceBar label="Longevity" value={avgLongevity} maxValue={100} suffix="%" />}
+              {avgSillage != null && <PerformanceBar label="Sillage" value={avgSillage} maxValue={100} suffix="%" />}
+              {avgLongevity == null && avgSillage == null && (
+                <p className="entry__no-performance">No verdicts yet — performance data appears once someone rates this one.</p>
+              )}
             </div>
           </div>
 
-          {/* Right: Info */}
-          <div className="detail__info">
-            <Link to={`/brand/${perfume.brands?.id}`} className="detail__brand-link">
-              {brandName}
-            </Link>
-            <h1 className="detail__name">{perfume.name}</h1>
+          <FragrancePyramid notes={perfume.perfume_notes} />
 
-            <div className="detail__meta">
-              {perfume.concentration && (
-                <span className="badge badge-accent">{perfume.concentration}</span>
-              )}
-              {avgRating && (
-                <span className="badge badge-gold">★ {avgRating}</span>
-              )}
-              {reviews.length > 0 && (
-                <span className="detail__review-count">{reviews.length} review{reviews.length !== 1 ? 's' : ''}</span>
-              )}
-            </div>
-
-            {perfume.desc && (
-              <p className="detail__description">{perfume.desc}</p>
-            )}
-
-            {/* User Actions */}
-            <div className="detail__actions-row">
-              <UserPerfumeActions perfumeId={perfume.id} />
-              <AddToListButton perfumeId={perfume.id} />
-            </div>
-
-            {/* Performance */}
-            <div className="detail__performance">
-              <h3 className="detail__section-title">Performance</h3>
-              {perfume.longevity && (
-                <PerformanceBar label="Longevity" value={perfume.longevity} icon="⏱" maxValue={100} />
-              )}
-              {perfume.sillage && (
-                <PerformanceBar label="Sillage" value={perfume.sillage} icon="💨" maxValue={100} />
-              )}
-              {perfume.performance && (
-                <PerformanceBar label="Overall" value={perfume.performance} icon="⭐" maxValue={5} />
-              )}
-            </div>
-
-            {/* Fragrance Pyramid */}
-            <FragrancePyramid notes={perfume.perfume_notes} />
-
-            {/* EAN */}
-            {perfume.ean && (
-              <p className="detail__ean">EAN: {perfume.ean}</p>
-            )}
+          <div className="entry__verdicts-head">
+            <h2>{reviews.length} verdicts</h2>
           </div>
-        </div>
 
-        {/* Reviews Section */}
-        <section className="detail__reviews" id="reviews-section">
-          <h2 className="section-title">
-            <span className="icon">💬</span>
-            Reviews ({reviews.length})
-          </h2>
-
-          {isAuthenticated && (
-            <ReviewForm
-              perfumeId={perfume.id}
-              onReviewAdded={(r) => setReviews((prev) => [r, ...prev])}
-            />
-          )}
-
-          {!isAuthenticated && (
-            <div className="detail__login-prompt">
-              <Link to="/login" className="btn btn-secondary">Sign in to write a review</Link>
+          {isAuthenticated ? (
+            <ReviewForm perfumeId={perfume.id} onReviewAdded={(r) => setReviews((prev) => [r, ...prev])} />
+          ) : (
+            <div className="entry__login-prompt">
+              <Link to="/login" className="btn btn-secondary">Sign in to write a verdict</Link>
             </div>
           )}
 
-          <div className="detail__reviews-list">
+          <div className="entry__verdicts-list">
             {reviews.map((r) => (
-              <ReviewCard
-                key={r.id}
-                review={r}
-                currentUserId={user?.id}
-                onDelete={handleDeleteReview}
-                onUpdate={handleUpdateReview}
-              />
+              <ReviewCard key={r.id} review={r} currentUserId={user?.id} onDelete={handleDeleteReview} onUpdate={handleUpdateReview} />
             ))}
             {reviews.length === 0 && (
-              <div className="empty-state">
-                <div className="icon">✍️</div>
-                <h3>No reviews yet</h3>
-                <p>Be the first to review this fragrance</p>
+              <div className="entry__empty-verdicts">
+                <div>No verdicts on this one yet</div>
+                <p>Be the first to say something.</p>
               </div>
             )}
           </div>
-        </section>
-
-        {/* Similar Perfumes */}
-        {similar.length > 0 && (
-          <section className="detail__similar">
-            <h2 className="section-title">
-              <span className="icon">✨</span>
-              More from {brandName}
-            </h2>
-            <div className="perfume-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
-              {similar.map((p) => (
-                <PerfumeCard key={p.id} perfume={p} />
-              ))}
-            </div>
-          </section>
-        )}
+        </div>
       </div>
+
+      {similar.length > 0 && (
+        <section className="entry__similar">
+          <h2>More from {brandName}</h2>
+          <div className="perfume-grid">
+            {similar.map((p) => <PerfumeCard key={p.id} perfume={p} />)}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

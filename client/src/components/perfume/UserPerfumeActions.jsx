@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Check, Heart } from '@phosphor-icons/react';
 import { useAuth } from '../../hooks/useAuth';
 import { getUserPerfumeStatus, togglePerfumeStatus } from '../../services/userPerfumeService';
 import { toast } from '../../store/toastStore';
@@ -20,37 +21,44 @@ export default function UserPerfumeActions({ perfumeId }) {
     if (loading) return;
     setLoading(true);
     try {
-      const updated = await togglePerfumeStatus(perfumeId, field);
-      setStatus(updated);
+      setStatus(await togglePerfumeStatus(perfumeId, field));
     } catch (err) {
       toast.error('Failed to update status: ' + err.message);
     }
     setLoading(false);
   };
 
-  const actions = [
-    { field: 'is_favorite', icon: '❤️', inactiveIcon: '🤍', label: 'Favorite' },
-    { field: 'is_owned', icon: '📦', inactiveIcon: '📦', label: 'Owned' },
-    { field: 'is_want_to_try', icon: '🧪', inactiveIcon: '🧪', label: 'Want to Try' },
-  ];
+  const owned = status?.is_owned || false;
+  const wantToTry = status?.is_want_to_try || false;
+  const favorite = status?.is_favorite || false;
 
   return (
-    <div className="user-actions" id="user-perfume-actions">
-      {actions.map(({ field, icon, inactiveIcon, label }) => {
-        const active = status?.[field] || false;
-        return (
-          <button
-            key={field}
-            className={`user-actions__btn ${active ? 'active' : ''}`}
-            onClick={() => handleToggle(field)}
-            disabled={loading}
-            title={label}
-          >
-            <span className="user-actions__icon">{active ? icon : inactiveIcon}</span>
-            <span className="user-actions__label">{label}</span>
-          </button>
-        );
-      })}
+    <div className="user-actions">
+      <div className="user-actions__top">
+        <button
+          className={`btn user-actions__primary ${owned ? 'user-actions__primary--active' : ''}`}
+          onClick={() => handleToggle('is_owned')}
+          disabled={loading}
+        >
+          On my shelf {owned && <Check size={14} weight="bold" aria-hidden="true" />}
+        </button>
+        <button
+          className={`user-actions__favorite ${favorite ? 'user-actions__favorite--active' : ''}`}
+          onClick={() => handleToggle('is_favorite')}
+          disabled={loading}
+          aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+          aria-pressed={favorite}
+        >
+          <Heart size={16} weight={favorite ? 'fill' : 'regular'} aria-hidden="true" />
+        </button>
+      </div>
+      <button
+        className={`btn btn-secondary ${wantToTry ? 'user-actions__secondary--active' : ''}`}
+        onClick={() => handleToggle('is_want_to_try')}
+        disabled={loading}
+      >
+        Want to try
+      </button>
     </div>
   );
 }

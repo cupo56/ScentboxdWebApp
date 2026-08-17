@@ -1,43 +1,10 @@
-.perf-bar {
-  margin-bottom: 16px;
-}
-
 .perf-bar__header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+  font: var(--weight-body) 12.5px var(--font);
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
 }
 
-.perf-bar__label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.perf-bar__icon {
-  font-size: 0.9rem;
-}
-
-.perf-bar__value {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.perf-bar__track {
-  height: 6px;
-  background: var(--bg-elevated);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.perf-bar__fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), #c4b5fd);
-  border-radius: 3px;
-  transition: width 0.8s ease;
-}
+.perf-bar__track { height: 2px; background: var(--hairline); }
+.perf-bar__fill { height: 2px; background: var(--accent); }

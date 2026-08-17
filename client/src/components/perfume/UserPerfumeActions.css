@@ -1,41 +1,47 @@
-.user-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.user-actions { display: flex; flex-direction: column; gap: var(--space-3); }
 
+.user-actions__top { display: flex; gap: var(--space-3); }
+
+.user-actions__primary {
+  flex: 1;
+  border: 1px solid var(--hairline-strong);
+  color: var(--text-body);
+}
+.user-actions__primary--active { border-color: var(--accent); color: var(--accent-text); }
+
+.user-actions__favorite {
+  flex: none;
+  width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.user-actions__favorite--active { border-color: var(--accent); color: var(--accent-text); }
+
+.user-actions__secondary--active { border-color: var(--accent); color: var(--accent-text); }
+
+/* Shared trigger-button styling consumed by AddToListButton.jsx (not part of this
+   task's rewrite) so its "Add to List" button stays visually consistent with the
+   rest of the Entry sidebar instead of falling back to an unstyled <button>. */
 .user-actions__btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 500;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-body);
+  font: var(--weight-body) 13px var(--font);
   cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
 }
+.user-actions__btn:hover { border-color: var(--accent); color: var(--accent-text); }
 
-.user-actions__btn:hover {
-  border-color: var(--border-hover);
-  background: var(--bg-card-hover);
-}
-
-.user-actions__btn.active {
-  border-color: var(--accent);
-  background: var(--accent-dim);
-  color: var(--accent);
-}
-
-.user-actions__btn:disabled {
-  opacity: 0.5;
-  cursor: wait;
-}
-
-.user-actions__icon {
-  font-size: 1rem;
-}
+.user-actions__icon { font-size: 14px; }
