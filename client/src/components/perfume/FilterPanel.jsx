@@ -1,3 +1,5 @@
+import './FilterPanel.css';
+
 const SORT_OPTIONS = [
   { value: 'performance', label: 'Best rated' },
   { value: 'newest', label: 'Newest' },
