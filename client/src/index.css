@@ -22,6 +22,10 @@
   --accent-line: #5d5294;
   --section: #262a60;
 
+  --success: #34d399;
+  --danger: #f87171;
+  --warning: #fbbf24;
+
   --font: 'Inter', system-ui, sans-serif;
   --weight-heading: 500;
   --weight-label: 500;
