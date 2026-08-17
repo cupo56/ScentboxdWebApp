@@ -133,6 +133,19 @@ export async function getReviewCount() {
 }
 
 /**
+ * Get review count for a specific user.
+ */
+export async function getReviewCountByUser(userId) {
+  const { count, error } = await supabase
+    .from('reviews')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId);
+
+  if (error) throw error;
+  return count;
+}
+
+/**
  * Get latest reviews across all perfumes.
  */
 export async function getLatestReviews(limit = 5) {

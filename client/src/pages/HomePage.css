@@ -1,324 +1,73 @@
-/* ===== Hero ===== */
-.home__hero {
-  position: relative;
-  padding: 120px 0 90px;
-  overflow: hidden;
-}
+.feed { max-width: var(--max-width); margin: 0 auto; }
 
-.home__hero-bg {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at 50% 0%,
-    rgba(167, 139, 250, 0.12) 0%,
-    transparent 60%
-  );
-  pointer-events: none;
-}
-
-/* ===== Animated hero decor (SVG + aurora) ===== */
-.home__hero-decor {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.home__aurora {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.5;
-  will-change: transform;
-}
-
-.home__aurora--1 {
-  width: 420px;
-  height: 420px;
-  top: -120px;
-  left: 8%;
-  background: radial-gradient(circle, rgba(124, 92, 255, 0.55), transparent 70%);
-  animation: aurora 16s ease-in-out infinite;
-}
-
-.home__aurora--2 {
-  width: 360px;
-  height: 360px;
-  top: -60px;
-  right: 6%;
-  background: radial-gradient(circle, rgba(245, 200, 66, 0.28), transparent 70%);
-  animation: aurora 20s ease-in-out infinite reverse;
-}
-
-.home__aurora--3 {
-  width: 300px;
-  height: 300px;
-  bottom: -120px;
-  left: 42%;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.4), transparent 70%);
-  animation: aurora 24s ease-in-out infinite;
-}
-
-.home__deco--1 { top: 14%;  left: 6%;  animation-delay: 0s;   animation-duration: 15s; }
-.home__deco--2 { top: 22%;  right: 9%; animation-delay: -3s;  animation-duration: 18s; }
-.home__deco--3 { bottom: 18%; left: 14%; animation-delay: -6s; animation-duration: 13s; }
-.home__deco--4 { bottom: 6%; right: 14%; animation-delay: -2s; animation-duration: 22s; opacity: 0.35; }
-
-.home__hero-content {
-  position: relative;
-  text-align: center;
-  max-width: 680px;
-  margin: 0 auto;
-}
-
-.home__hero-title {
-  font-size: 3.2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  margin-bottom: 16px;
-}
-
-.home__hero-accent {
-  color: var(--accent);
-}
-
-.home__hero-subtitle {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-}
-
-.home__hero-search {
-  display: flex;
-  gap: 8px;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 8px;
-  border-radius: 99px;
-  transition: box-shadow 0.3s ease, transform 0.3s var(--ease-spring);
-}
-
-.home__hero-search:focus-within {
-  box-shadow: var(--shadow-glow);
-  transform: translateY(-2px);
-}
-
-.home__hero-search .input {
-  flex: 1;
-  padding: 14px 20px;
-  font-size: 1rem;
-  background: transparent;
-  border: none;
-  border-radius: 99px;
-}
-
-.home__hero-search .input:focus {
-  box-shadow: none;
-}
-
-.home__hero-search .btn {
-  border-radius: 99px;
-  padding-inline: 26px;
-}
-
-/* ===== Stats ===== */
-.home__stats {
-  padding: 32px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.home__stats-grid {
-  display: flex;
-  justify-content: center;
-  gap: 64px;
-}
-
-.home__stat {
-  text-align: center;
-}
-
-.home__stat-number {
-  display: block;
-  font-size: 2.4rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: var(--grad-accent);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-variant-numeric: tabular-nums;
-}
-
-.home__stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
-}
-
-/* ===== Sections ===== */
-.home__section {
-  padding: 48px 0;
-}
-
-.home__section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-/* ===== Brands Grid ===== */
-.home__brands-grid {
+.feed__columns {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: 264px 1fr 300px;
+  border-bottom: 1px solid var(--hairline);
 }
 
-.home__brand-card {
+.feed__col { padding: var(--space-10); border-right: 1px solid var(--hairline); display: flex; flex-direction: column; gap: var(--space-6); }
+.feed__col--activity { border-right: none; }
+
+.feed__label { font: var(--weight-label) 11.5px var(--font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+.feed__label--accent { color: var(--accent); }
+
+.feed__stats { display: flex; flex-direction: column; gap: var(--space-4); }
+.feed__stat-row { display: flex; justify-content: space-between; align-items: baseline; font: var(--weight-body) 14px var(--font); color: var(--text-body); }
+.feed__stat-row span:last-child { font: var(--weight-heading) 20px var(--font); color: var(--text); font-variant-numeric: tabular-nums; }
+.feed__hr { height: 1px; background: var(--hairline); }
+
+.feed__bottle { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-10); align-items: start; }
+.feed__bottle-img img { padding: var(--space-6); }
+.feed__bottle-brand { font: var(--weight-body) 12px var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.feed__bottle-name { font: var(--weight-heading) 34px/1.1 var(--font); letter-spacing: -0.02em; color: var(--text); margin: var(--space-2) 0 var(--space-4); }
+.feed__bottle-desc { font: var(--weight-body) 14.5px/1.6 var(--font); color: var(--text-body); margin-bottom: var(--space-6); }
+.feed__bottle-actions { display: flex; gap: var(--space-3); }
+.feed__bottle-skeleton { height: 260px; }
+
+.feed__activity { display: flex; flex-direction: column; }
+.feed__activity-row { display: flex; gap: var(--space-4); padding: var(--space-4) 0; border-top: 1px solid var(--hairline); }
+.feed__avatar {
+  width: 28px; height: 28px; flex: none; border-radius: 50%;
+  background: var(--accent-tint); color: var(--accent-text);
+  display: flex; align-items: center; justify-content: center;
+  font: var(--weight-label) 12px var(--font);
+}
+.feed__activity-text { font: var(--weight-body) 13px/1.5 var(--font); color: var(--text-body); }
+.feed__activity-item { color: var(--accent-text); font-weight: var(--weight-label); }
+.feed__activity-time { font: var(--weight-body) 11.5px var(--font); color: var(--text-dim); margin-top: 4px; }
+.feed__empty { color: var(--text-dim); font-size: 13px; }
+
+.feed__section {
+  background: var(--section);
+  padding: var(--space-10) var(--space-14);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 24px 16px;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  gap: 8px;
+  gap: var(--space-10);
 }
+.feed__section-title { font: var(--weight-heading) 20px var(--font); color: var(--text); }
+.feed__section-sub { font: var(--weight-body) 14px var(--font); color: var(--accent-text); margin-top: var(--space-2); }
+.feed__section-btn { border: 1px solid var(--accent-text); color: var(--text); flex: none; }
 
-.home__brand-initial {
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--grad-accent);
-  background-size: 180% 180%;
-  color: #0a0a0f;
-  font-size: 1.3rem;
-  font-weight: 800;
-  box-shadow: 0 6px 18px -6px rgba(124, 92, 255, 0.7);
-  transition: transform 0.4s var(--ease-spring);
-}
+.feed__verdicts { padding: var(--space-10) var(--space-14) var(--space-14); }
+.feed__verdicts-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-8); }
+.feed__verdicts-head h2 { font: var(--weight-heading) 22px var(--font); color: var(--text); }
+.feed__verdicts-head a { font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
 
-.home__brand-card:hover .home__brand-initial {
-  transform: translateZ(40px) scale(1.08);
-}
+.feed__verdicts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+.feed__verdict-card { border: 1px solid var(--hairline); border-radius: var(--radius-lg); background: var(--surface); padding: var(--space-8); }
+.feed__verdict-head { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4); }
+.feed__verdict-user { font: var(--weight-label) 13.5px var(--font); color: var(--text); }
+.feed__verdict-on { font: var(--weight-body) 11.5px var(--font); color: var(--text-dim); }
+.feed__verdict-score { margin-left: auto; font: var(--weight-label) 13px var(--font); color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.feed__verdict-text { font: var(--weight-body) 15px/1.65 var(--font); color: var(--text-body); }
 
-.home__brand-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.home__brand-country {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* ===== Reviews ===== */
-.home__reviews-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.home__review-perfume {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  text-decoration: none;
-}
-
-.home__review-perfume:hover {
-  color: var(--accent);
-}
-
-.home__review-perfume strong {
-  color: var(--text-secondary);
-}
-
-/* ===== CTA ===== */
-.home__cta {
-  padding: 48px 0;
-}
-
-.home__cta-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-xl);
-  padding: 56px 48px;
-  text-align: center;
-}
-
-.home__cta-deco {
-  top: -30px;
-  right: -30px;
-  opacity: 0.4;
-  animation-duration: 26s;
-}
-
-.home__cta-card h2,
-.home__cta-card p,
-.home__cta-buttons {
-  position: relative;
-  z-index: 1;
-}
-
-.home__cta-card h2 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-}
-
-.home__cta-card p {
-  color: var(--text-secondary);
-  margin-bottom: 24px;
-}
-
-.home__cta-buttons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .home__hero-title {
-    font-size: 2.2rem;
-  }
-
-  .home__hero-search {
-    flex-direction: column;
-    border-radius: var(--radius-lg);
-  }
-
-  .home__hero-search .input,
-  .home__hero-search .btn {
-    border-radius: var(--radius-sm);
-  }
-
-  .home__stats-grid {
-    gap: 32px;
-  }
-
-  .home__stat-number {
-    font-size: 1.8rem;
-  }
-
-  /* Trim heavy decoration on small screens */
-  .home__deco--2,
-  .home__deco--4 {
-    display: none;
-  }
-
-  .home__aurora {
-    filter: blur(50px);
-    opacity: 0.35;
-  }
+@media (max-width: 900px) {
+  .feed__columns { grid-template-columns: 1fr; }
+  .feed__col { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .feed__bottle { grid-template-columns: 116px 1fr; gap: var(--space-6); }
+  .feed__bottle-name { font-size: 26px; }
+  .feed__section { padding: var(--space-6); flex-direction: column; align-items: flex-start; }
+  .feed__verdicts { padding: var(--space-6); }
+  .feed__verdicts-grid { grid-template-columns: 1fr; }
 }
