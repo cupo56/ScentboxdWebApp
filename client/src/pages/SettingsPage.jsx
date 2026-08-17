@@ -48,7 +48,11 @@ export default function SettingsPage() {
       setNotifs(prefs);
       setInitial({ username: profile.username || '', bio: profile.bio || '', is_public: profile.is_public, ...prefs });
     }).catch((err) => toast.error('Failed to load settings: ' + err.message));
-  }, [user, profile]);
+    // Deliberately keyed on profile?.id rather than profile: authStore.setProfile hands back a
+    // new object reference on every save/upload for the same user, and re-running this effect
+    // on identity alone would redundantly refetch prefs and reset local edits after every save.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile?.id]);
 
   if (!initial || !notifs) {
     return <div className="spinner-container"><div className="spinner spinner-lg" /></div>;
@@ -65,18 +69,20 @@ export default function SettingsPage() {
   };
 
   const handleSave = async () => {
+    const trimmedUsername = username.trim();
+    if (!/^[a-zA-Z0-9_]{3,20}$/.test(trimmedUsername)) {
+      toast.error('Handle must be 3–20 characters: letters, numbers, and underscores only.');
+      return;
+    }
     setSaving(true);
     try {
       const [updatedProfile] = await Promise.all([
-        updateProfile({ username: username.trim(), bio: bio.trim(), is_public: isPublic }),
+        updateProfile({ username: trimmedUsername, bio: bio.trim(), is_public: isPublic }),
         updateNotificationPreferences(user.id, Object.fromEntries(NOTIF_FIELDS.map((f) => [f.key, notifs[f.key]]))),
       ]);
       setProfile(updatedProfile);
       setInitial({ username: updatedProfile.username || '', bio: updatedProfile.bio || '', is_public: updatedProfile.is_public, ...notifs });
       toast.success('Settings saved.');
-      if (updatedProfile.username !== profile.username) {
-        navigate(`/settings`, { replace: true });
-      }
     } catch (err) {
       toast.error('Failed to save: ' + err.message);
     } finally {
@@ -177,7 +183,7 @@ export default function SettingsPage() {
               <button type="button" className="btn btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
                 {uploading ? 'Uploading…' : 'Upload'}
               </button>
-              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg" hidden onChange={handleAvatarFile} />
+              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={handleAvatarFile} />
             </div>
 
             <div className="settings__row-2col">
