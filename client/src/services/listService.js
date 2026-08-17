@@ -28,7 +28,7 @@ export async function getListById(listId) {
       list_items(
         id,
         added_at,
-        perfumes(id, name, image_url, concentration, brands(name))
+        perfumes(id, name, image_url, concentration, performance, brands(name))
       )
     `)
     .eq('id', listId)
