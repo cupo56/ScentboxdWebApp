@@ -8,7 +8,7 @@ export async function getPerfumes({
   brand = '',
   concentration = '',
   noteFamily = '',
-  minLongevity = 0,
+  longevity = '',
   sortBy = 'name',
   page = 1,
   pageSize = 24,
@@ -53,8 +53,8 @@ export async function getPerfumes({
     query = query.eq('concentration', concentration);
   }
 
-  if (minLongevity) {
-    query = query.gte('longevity', minLongevity);
+  if (longevity) {
+    query = query.eq('longevity', longevity);
   }
 
   // Sort
@@ -125,6 +125,21 @@ export async function getConcentrations() {
   if (error) throw error;
 
   const unique = [...new Set(data.map((d) => d.concentration).filter(Boolean))];
+  return unique.sort();
+}
+
+/**
+ * Get all unique longevity levels for filter dropdown.
+ */
+export async function getLongevityLevels() {
+  const { data, error } = await supabase
+    .from('perfumes')
+    .select('longevity')
+    .not('longevity', 'is', null);
+
+  if (error) throw error;
+
+  const unique = [...new Set(data.map((d) => d.longevity).filter(Boolean))];
   return unique.sort();
 }
 

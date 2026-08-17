@@ -1,14 +1,20 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './PerfumeRow.css';
 
 export default function PerfumeRow({ perfume }) {
   const brandName = perfume.brands?.name || 'Unknown';
   const notes = (perfume.perfume_notes || []).slice(0, 2).map((pn) => pn.notes?.name).filter(Boolean);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <Link to={`/perfume/${perfume.id}`} className="perfume-row">
       <div className="bottle perfume-row__image">
-        {perfume.image_url ? <img src={perfume.image_url} alt="" loading="lazy" /> : <span aria-hidden="true">◆</span>}
+        {perfume.image_url && !imgError ? (
+          <img src={perfume.image_url} alt="" loading="lazy" onError={() => setImgError(true)} />
+        ) : (
+          <span aria-hidden="true">◆</span>
+        )}
       </div>
       <div className="perfume-row__main">
         <div className="perfume-row__name">{perfume.name}</div>

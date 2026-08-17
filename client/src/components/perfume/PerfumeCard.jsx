@@ -1,15 +1,17 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './PerfumeCard.css';
 
 export default function PerfumeCard({ perfume }) {
   const brandName = perfume.brands?.name || 'Unknown';
   const topNote = perfume.perfume_notes?.[0]?.notes?.name;
+  const [imgError, setImgError] = useState(false);
 
   return (
     <Link to={`/perfume/${perfume.id}`} className="perfume-card">
       <div className="bottle perfume-card__image">
-        {perfume.image_url ? (
-          <img src={perfume.image_url} alt={perfume.name} loading="lazy" />
+        {perfume.image_url && !imgError ? (
+          <img src={perfume.image_url} alt={perfume.name} loading="lazy" onError={() => setImgError(true)} />
         ) : (
           <span className="perfume-card__placeholder" aria-hidden="true">◆</span>
         )}

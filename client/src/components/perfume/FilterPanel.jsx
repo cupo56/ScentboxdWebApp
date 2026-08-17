@@ -9,7 +9,7 @@ export default function FilterPanel({
   sortBy, onSortChange,
   concentrations, concentration, onConcentrationChange,
   noteFamilies, noteFamily, onNoteFamilyChange,
-  minLongevity, onMinLongevityChange,
+  longevityLevels, longevity, onLongevityChange,
   onReset,
 }) {
   return (
@@ -65,19 +65,20 @@ export default function FilterPanel({
       </div>
 
       <div className="filter-panel__group">
-        <div className="filter-panel__label">
-          <span>Longevity at least</span>
-          <span>{minLongevity} h</span>
+        <div className="filter-panel__label">Longevity</div>
+        <div className="filter-panel__check-list">
+          {longevityLevels.map((l) => (
+            <button
+              key={l}
+              type="button"
+              className={`filter-panel__check-item ${longevity === l ? 'active' : ''}`}
+              onClick={() => onLongevityChange(longevity === l ? '' : l)}
+            >
+              <span className="filter-panel__check-box" aria-hidden="true">{longevity === l ? '◼' : '◻'}</span>
+              {l}
+            </button>
+          ))}
         </div>
-        <input
-          type="range"
-          className="filter-panel__slider"
-          min={0}
-          max={12}
-          step={1}
-          value={minLongevity}
-          onChange={(e) => onMinLongevityChange(Number(e.target.value))}
-        />
       </div>
 
       <button type="button" className="filter-panel__reset" onClick={onReset}>Reset all filters</button>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { List as ListIcon, SquaresFour } from '@phosphor-icons/react';
-import { getPerfumes, getConcentrations, getNoteFamilies } from '../services/perfumeService';
+import { getPerfumes, getConcentrations, getNoteFamilies, getLongevityLevels } from '../services/perfumeService';
 import { toast } from '../store/toastStore';
 import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import PerfumeRow from '../components/perfume/PerfumeRow';
@@ -19,19 +19,20 @@ export default function ExplorePage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [concentrations, setConcentrations] = useState([]);
   const [noteFamilies, setNoteFamilies] = useState([]);
+  const [longevityLevels, setLongevityLevels] = useState([]);
   const [view, setView] = useState(() => localStorage.getItem('scentboxd:exploreView') || 'rows');
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const search = searchParams.get('q') || '';
   const concentration = searchParams.get('concentration') || '';
   const noteFamily = searchParams.get('family') || '';
-  const minLongevity = Number(searchParams.get('longevity') || 0);
+  const longevity = searchParams.get('longevity') || '';
   const sortBy = searchParams.get('sort') || 'performance';
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    Promise.all([getConcentrations(), getNoteFamilies()])
-      .then(([c, nf]) => { setConcentrations(c); setNoteFamilies(nf); })
+    Promise.all([getConcentrations(), getNoteFamilies(), getLongevityLevels()])
+      .then(([c, nf, ll]) => { setConcentrations(c); setNoteFamilies(nf); setLongevityLevels(ll); })
       .catch((err) => toast.error('Failed to load filters: ' + err.message));
   }, []);
 
@@ -39,7 +40,7 @@ export default function ExplorePage() {
     (append ? setLoadingMore : setLoading)(true);
     try {
       const result = await getPerfumes({
-        search, concentration, noteFamily, minLongevity, sortBy, page: targetPage, pageSize: PAGE_SIZE,
+        search, concentration, noteFamily, longevity, sortBy, page: targetPage, pageSize: PAGE_SIZE,
       });
       setPerfumes((prev) => (append ? [...prev, ...result.perfumes] : result.perfumes));
       setTotal(result.total);
@@ -48,7 +49,7 @@ export default function ExplorePage() {
       toast.error('Failed to load perfumes: ' + err.message);
     }
     (append ? setLoadingMore : setLoading)(false);
-  }, [search, concentration, noteFamily, minLongevity, sortBy]);
+  }, [search, concentration, noteFamily, longevity, sortBy]);
 
   useEffect(() => { loadPerfumes(1, false); }, [loadPerfumes]);
 
@@ -73,13 +74,13 @@ export default function ExplorePage() {
   const activeFilterTags = [];
   if (concentration) activeFilterTags.push({ key: 'concentration', label: concentration });
   if (noteFamily) activeFilterTags.push({ key: 'family', label: noteFamily });
-  if (minLongevity > 0) activeFilterTags.push({ key: 'longevity', label: `Longevity ${minLongevity}h+` });
+  if (longevity) activeFilterTags.push({ key: 'longevity', label: longevity });
 
   const filterProps = {
     sortBy, onSortChange: (v) => updateFilter('sort', v),
     concentrations, concentration, onConcentrationChange: (v) => updateFilter('concentration', v),
     noteFamilies, noteFamily, onNoteFamilyChange: (v) => updateFilter('family', v),
-    minLongevity, onMinLongevityChange: (v) => updateFilter('longevity', v ? String(v) : ''),
+    longevityLevels, longevity, onLongevityChange: (v) => updateFilter('longevity', v),
     onReset: resetAll,
   };
 
