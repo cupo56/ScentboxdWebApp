@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists } from '../services/listService';
@@ -10,6 +10,7 @@ import './AccountPage.css';
 
 export default function AccountPage() {
   const { user, profile, logout, shelfPath, setProfile } = useAuth();
+  const navigate = useNavigate();
   const [counts, setCounts] = useState({ owned: 0, want: 0, lists: 0, verdicts: 0 });
   const [togglingPublic, setTogglingPublic] = useState(false);
 
@@ -37,6 +38,11 @@ export default function AccountPage() {
     } finally {
       setTogglingPublic(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
   };
 
   const joined = profile.created_at
@@ -75,7 +81,7 @@ export default function AccountPage() {
         <button type="button" className="account-page__row account-page__row--toggle" onClick={handleTogglePublic} disabled={togglingPublic}>
           Public shelf <span>{profile.is_public ? 'On' : 'Off'}</span>
         </button>
-        <button type="button" className="account-page__row account-page__row--muted" onClick={logout}>Sign out</button>
+        <button type="button" className="account-page__row account-page__row--muted" onClick={handleLogout}>Sign out</button>
       </div>
     </div>
   );
