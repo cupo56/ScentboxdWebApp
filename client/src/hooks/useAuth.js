@@ -5,6 +5,7 @@ export function useAuth() {
     useAuthStore();
 
   const isAuthenticated = !!session;
+  const shelfPath = isAuthenticated ? `/profile/${profile?.username || 'me'}` : '/login';
 
   return {
     user,
@@ -13,6 +14,7 @@ export function useAuth() {
     loading,
     error,
     isAuthenticated,
+    shelfPath,
     login,
     register,
     logout,

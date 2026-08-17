@@ -18,7 +18,7 @@ function Logo() {
 }
 
 export default function Navbar() {
-  const { isAuthenticated, profile, logout } = useAuth();
+  const { isAuthenticated, profile, logout, shelfPath } = useAuth();
   const navigate = useNavigate();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -28,8 +28,6 @@ export default function Navbar() {
   const searchRef = useRef(null);
   const inputRef = useRef(null);
   const debouncedSearch = useDebounce(searchQuery, 300);
-
-  const shelfPath = isAuthenticated ? `/profile/${profile?.username || 'me'}` : '/login';
 
   useEffect(() => {
     if (!debouncedSearch.trim()) {
@@ -57,6 +55,9 @@ export default function Navbar() {
   useEffect(() => {
     const onKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        const tag = e.target.tagName;
+        const isEditable = tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable;
+        if (isEditable && e.target !== inputRef.current) return;
         e.preventDefault();
         setSearchOpen(true);
         requestAnimationFrame(() => inputRef.current?.focus());
@@ -90,7 +91,7 @@ export default function Navbar() {
       <div className="navbar__inner">
         <Logo />
 
-        <div className="navbar__segment" role="tablist" aria-label="Main navigation">
+        <div className="navbar__segment">
           <NavLink to="/" end className="navbar__segment-item">Feed</NavLink>
           <NavLink to="/explore" className="navbar__segment-item">Index</NavLink>
           <NavLink to="/brands" className="navbar__segment-item">Houses</NavLink>
@@ -104,7 +105,7 @@ export default function Navbar() {
               className="navbar__search-pill"
               onClick={() => { setSearchOpen(true); requestAnimationFrame(() => inputRef.current?.focus()); }}
             >
-              <MagnifyingGlass size={14} weight="regular" />
+              <MagnifyingGlass size={14} weight="regular" aria-hidden="true" />
               <span>Search</span>
               <kbd>⌘K</kbd>
             </button>
@@ -162,7 +163,12 @@ export default function Navbar() {
 
           {isAuthenticated ? (
             <div className="navbar__user">
-              <Link to={shelfPath} className="navbar__avatar" title={profile?.username || 'Profile'}>
+              <Link
+                to={shelfPath}
+                className="navbar__avatar"
+                title={profile?.username || 'Profile'}
+                aria-label={profile?.username || 'Profile'}
+              >
                 {profile?.avatar_url ? (
                   <img src={profile.avatar_url} alt="" />
                 ) : (
