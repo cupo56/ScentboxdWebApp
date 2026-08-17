@@ -65,11 +65,9 @@ export default function ResetPasswordPage() {
   if (validSession === null) {
     return (
       <div className="auth">
-        <div className="container">
-          <div className="auth__card" style={{ textAlign: 'center' }}>
-            <div className="spinner spinner-md" style={{ margin: '0 auto 16px' }}></div>
-            <p className="auth__sub">Verifying reset link…</p>
-          </div>
+        <div className="auth__card" style={{ textAlign: 'center' }}>
+          <div className="spinner spinner-md" style={{ margin: '0 auto 16px' }}></div>
+          <p className="auth__sub">Verifying reset link…</p>
         </div>
       </div>
     );
@@ -79,25 +77,23 @@ export default function ResetPasswordPage() {
   if (!validSession) {
     return (
       <div className="auth">
-        <div className="container">
-          <div className="auth__card">
-            <div className="auth__success-icon">⚠️</div>
-            <h1 className="auth__headline">Invalid or expired link</h1>
-            <p className="auth__sub">
-              This password reset link is no longer valid. Please request a new one.
-            </p>
-            <Link
-              to="/forgot-password"
-              className="btn btn-primary btn-lg"
-              style={{ width: '100%', marginTop: '16px' }}
-              id="request-new-link"
-            >
-              Request New Link
-            </Link>
-            <p className="auth__footer">
-              <Link to="/login">← Back to sign in</Link>
-            </p>
-          </div>
+        <div className="auth__card">
+          <div className="auth__success-icon">⚠️</div>
+          <h1 className="auth__headline">Invalid or expired link</h1>
+          <p className="auth__sub">
+            This password reset link is no longer valid. Please request a new one.
+          </p>
+          <Link
+            to="/forgot-password"
+            className="btn btn-primary btn-lg"
+            style={{ width: '100%', marginTop: '16px' }}
+            id="request-new-link"
+          >
+            Request New Link
+          </Link>
+          <p className="auth__footer">
+            <Link to="/login">← Back to sign in</Link>
+          </p>
         </div>
       </div>
     );
@@ -105,74 +101,72 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="auth">
-      <div className="container">
-        <div className="auth__card">
-          {success ? (
-            <>
-              <div className="auth__success-icon">✅</div>
-              <h1 className="auth__headline">Password updated!</h1>
-              <p className="auth__sub">
-                Your password has been successfully changed. Redirecting you to sign in…
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 className="auth__headline">Set a new password</h1>
-              <p className="auth__sub">
-                Enter your new password below. Must be at least 6 characters.
-              </p>
+      <div className="auth__card">
+        {success ? (
+          <>
+            <div className="auth__success-icon">✅</div>
+            <h1 className="auth__headline">Password updated!</h1>
+            <p className="auth__sub">
+              Your password has been successfully changed. Redirecting you to sign in…
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="auth__headline">Set a new password</h1>
+            <p className="auth__sub">
+              Enter your new password below. Must be at least 6 characters.
+            </p>
 
-              {error && <p className="auth__error">{error}</p>}
+            {error && <p className="auth__error">{error}</p>}
 
-              <form onSubmit={handleSubmit} className="auth__form">
-                <div className="auth__field">
-                  <label>New Password</label>
-                  <input
-                    className="input"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    minLength={6}
-                    required
-                    autoFocus
-                    id="reset-password"
-                  />
-                </div>
-                <div className="auth__field">
-                  <label>Confirm Password</label>
-                  <input
-                    className="input"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    minLength={6}
-                    required
-                    id="reset-password-confirm"
-                  />
-                </div>
+            <form onSubmit={handleSubmit} className="auth__form">
+              <div className="auth__field">
+                <label>New Password</label>
+                <input
+                  className="input"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  minLength={6}
+                  required
+                  autoFocus
+                  id="reset-password"
+                />
+              </div>
+              <div className="auth__field">
+                <label>Confirm Password</label>
+                <input
+                  className="input"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  minLength={6}
+                  required
+                  id="reset-password-confirm"
+                />
+              </div>
 
-                {/* Password match indicator */}
-                {confirmPassword && (
-                  <p className={`auth__match ${password === confirmPassword ? 'auth__match--ok' : 'auth__match--mismatch'}`}>
-                    {password === confirmPassword ? '✓ Passwords match' : '✕ Passwords do not match'}
-                  </p>
-                )}
+              {/* Password match indicator */}
+              {confirmPassword && (
+                <p className={`auth__match ${password === confirmPassword ? 'auth__match--ok' : 'auth__match--mismatch'}`}>
+                  {password === confirmPassword ? '✓ Passwords match' : '✕ Passwords do not match'}
+                </p>
+              )}
 
-                <button
-                  className="btn btn-primary btn-lg"
-                  type="submit"
-                  disabled={loading}
-                  style={{ width: '100%' }}
-                  id="submit-new-password"
-                >
-                  {loading ? 'Updating…' : 'Update Password'}
-                </button>
-              </form>
-            </>
-          )}
-        </div>
+              <button
+                className="btn btn-primary btn-lg"
+                type="submit"
+                disabled={loading}
+                style={{ width: '100%' }}
+                id="submit-new-password"
+              >
+                {loading ? 'Updating…' : 'Update Password'}
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

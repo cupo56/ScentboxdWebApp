@@ -31,6 +31,7 @@ export async function getListById(listId) {
         perfumes(id, name, image_url, concentration, performance, brands(name))
       )
     `)
+    .order('added_at', { foreignTable: 'list_items' })
     .eq('id', listId)
     .single();
 

@@ -13,6 +13,8 @@ export default function AuthPage({ initialMode = 'signin' }) {
 
   const switchMode = (next) => {
     clearError();
+    setPassword('');
+    setUsername('');
     setMode(next);
   };
 

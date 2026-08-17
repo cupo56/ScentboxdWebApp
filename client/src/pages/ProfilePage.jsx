@@ -31,6 +31,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     setLoading(true);
+    setActiveTab('owned');
     getProfileByUsername(username)
       .then(async (p) => {
         setProfile(p);
