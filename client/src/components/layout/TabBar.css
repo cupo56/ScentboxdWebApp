@@ -30,6 +30,23 @@
   }
   .tabbar__item.active { color: var(--accent-text); font-weight: var(--weight-label); }
 
+  .tabbar__you-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-tint);
+    border: 1px solid var(--hairline-strong);
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    font-weight: var(--weight-label);
+    overflow: hidden;
+  }
+  .tabbar__you-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .tabbar__item--you.active .tabbar__you-avatar { border-color: var(--accent); color: var(--accent-text); }
+
   .tabbar__compose {
     min-height: 44px;
     display: flex;

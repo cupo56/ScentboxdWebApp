@@ -15,6 +15,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import AccountPage from './pages/AccountPage';
 import ListDetailPage from './pages/ListDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/profile/:username" element={<RequireAuth><ProfilePage /></RequireAuth>} />
           <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
+          <Route path="/account" element={<RequireAuth><AccountPage /></RequireAuth>} />
           <Route path="/list/:id" element={<ListDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
