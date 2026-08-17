@@ -110,19 +110,13 @@ export default function PerfumeDetailPage() {
           </div>
           {perfume.desc && <p className="entry__desc">{perfume.desc}</p>}
 
-          <div className="entry__perf-grid">
-            <div>
-              <div className="pyramid__label-row">Accords</div>
-              {/* Accords data isn't in the current schema — omitted; Performance below covers the numeric metrics that do exist. */}
-            </div>
-            <div>
-              <div className="pyramid__label-row">Performance · community median</div>
-              {avgLongevity != null && <PerformanceBar label="Longevity" value={avgLongevity} maxValue={100} suffix="%" />}
-              {avgSillage != null && <PerformanceBar label="Sillage" value={avgSillage} maxValue={100} suffix="%" />}
-              {avgLongevity == null && avgSillage == null && (
-                <p className="entry__no-performance">No verdicts yet — performance data appears once someone rates this one.</p>
-              )}
-            </div>
+          <div className="entry__perf">
+            <div className="pyramid__label-row">Performance · community average</div>
+            {avgLongevity != null && <PerformanceBar label="Longevity" value={avgLongevity} maxValue={100} suffix="%" />}
+            {avgSillage != null && <PerformanceBar label="Sillage" value={avgSillage} maxValue={100} suffix="%" />}
+            {avgLongevity == null && avgSillage == null && (
+              <p className="entry__no-performance">No verdicts yet — performance data appears once someone rates this one.</p>
+            )}
           </div>
 
           <FragrancePyramid notes={perfume.perfume_notes} />

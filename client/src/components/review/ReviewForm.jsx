@@ -6,7 +6,6 @@ import './ReviewForm.css';
 const OCCASION_OPTIONS = ['Daily', 'Office', 'Date Night', 'Evening Out', 'Summer', 'Winter', 'Special Occasion'];
 
 export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCancel }) {
-  const [title, setTitle] = useState(initialData?.title || '');
   const [text, setText] = useState(initialData?.text || '');
   const [rating, setRating] = useState(initialData?.rating || 0);
   const [longevity, setLongevity] = useState(initialData?.longevity ?? '');
@@ -23,17 +22,18 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!rating || !title.trim() || text.trim().length < 10) {
-      setError('Please provide a rating, title, and at least 10 characters of text.');
+    if (!rating || text.trim().length < 10) {
+      setError('Please provide a rating and at least 10 characters of text.');
       return;
     }
 
     setSubmitting(true);
     setError('');
     try {
+      const title = text.trim().slice(0, 60);
       const payload = {
         perfume_id: perfumeId,
-        title: title.trim(),
+        title,
         text: text.trim(),
         rating,
         longevity: longevity !== '' ? parseInt(longevity) : null,
@@ -47,7 +47,6 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
       } else {
         const review = await createReview(payload);
         onReviewAdded?.(review);
-        setTitle('');
         setText('');
         setRating(0);
         setLongevity('');
@@ -69,17 +68,6 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
       <div className="composer__rating">
         <label>Rating</label>
         <StarRating rating={rating} size="lg" interactive onChange={setRating} />
-      </div>
-
-      <div className="composer__field">
-        <label>Title</label>
-        <input
-          className="input"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Sum up your experience..."
-          maxLength={100}
-        />
       </div>
 
       <div className="composer__field">

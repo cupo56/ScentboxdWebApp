@@ -30,8 +30,8 @@
 .entry__score { font: var(--weight-heading) 22px var(--font); color: var(--accent-text); font-variant-numeric: tabular-nums; }
 .entry__desc { font: var(--weight-body) 16px/1.7 var(--font); color: var(--text-body); max-width: 62ch; margin-bottom: var(--space-8); }
 
-.entry__perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10); margin-bottom: var(--space-8); }
-.entry__perf-grid .perf-bar { margin-bottom: var(--space-4); }
+.entry__perf { margin-bottom: var(--space-8); }
+.entry__perf .perf-bar { margin-bottom: var(--space-4); }
 .entry__no-performance { font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
 
 .entry__verdicts-head { margin: var(--space-8) 0 var(--space-6); }
@@ -55,6 +55,5 @@
   .entry__layout { grid-template-columns: 1fr; }
   .entry__side { position: static; border-right: none; border-bottom: 1px solid var(--hairline); }
   .entry__name { font-size: 30px; }
-  .entry__perf-grid { grid-template-columns: 1fr; }
   .detail-loading { grid-template-columns: 1fr; }
 }
