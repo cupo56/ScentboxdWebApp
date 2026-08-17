@@ -9,7 +9,7 @@
 }
 
 .star-rating__star.filled {
-  color: var(--gold);
+  color: var(--accent-text);
 }
 
 .star-rating--interactive .star-rating__star {
@@ -17,7 +17,7 @@
 }
 
 .star-rating--interactive .star-rating__star:hover {
-  color: var(--gold);
+  color: var(--accent-text);
 }
 
 .star-rating--sm { font-size: 0.8rem; }
