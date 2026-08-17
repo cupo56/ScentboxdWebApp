@@ -27,7 +27,7 @@ export default function ExplorePage() {
   const noteFamily = searchParams.get('family') || '';
   const minLongevity = Number(searchParams.get('longevity') || 0);
   const sortBy = searchParams.get('sort') || 'performance';
-  const page = parseInt(searchParams.get('page') || '1', 10);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     Promise.all([getConcentrations(), getNoteFamilies()])
@@ -43,6 +43,7 @@ export default function ExplorePage() {
       });
       setPerfumes((prev) => (append ? [...prev, ...result.perfumes] : result.perfumes));
       setTotal(result.total);
+      setPage(targetPage);
     } catch (err) {
       toast.error('Failed to load perfumes: ' + err.message);
     }
@@ -61,9 +62,7 @@ export default function ExplorePage() {
   const resetAll = () => setSearchParams(new URLSearchParams());
 
   const loadMore = () => {
-    const next = page + 1;
-    setSearchParams((p) => { p.set('page', String(next)); return p; }, { replace: true });
-    loadPerfumes(next, true);
+    loadPerfumes(page + 1, true);
   };
 
   const setView_ = (v) => {
