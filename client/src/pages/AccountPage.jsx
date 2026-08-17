@@ -72,7 +72,7 @@ export default function AccountPage() {
         <Link to={shelfPath} className="account-page__row">Your shelf <span>{counts.owned} ›</span></Link>
         <Link to={shelfPath} className="account-page__row">Your lists <span>{counts.lists} ›</span></Link>
         <Link to={shelfPath} className="account-page__row">Your verdicts <span>{counts.verdicts} ›</span></Link>
-        <Link to={shelfPath} className="account-page__row">Want to try <span>{counts.want} ›</span></Link>
+        <Link to={`${shelfPath}?tab=want_to_try`} className="account-page__row">Want to try <span>{counts.want} ›</span></Link>
       </div>
 
       <div className="account-page__list">

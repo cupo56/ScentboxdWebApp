@@ -82,7 +82,7 @@ export default function AccountMenu() {
             <NavLink to={shelfPath} className="account-menu__item" onClick={() => setOpen(false)}>
               Your verdicts <span>{counts.verdicts}</span>
             </NavLink>
-            <NavLink to={shelfPath} className="account-menu__item" onClick={() => setOpen(false)}>
+            <NavLink to={`${shelfPath}?tab=want_to_try`} className="account-menu__item" onClick={() => setOpen(false)}>
               Want to try <span>{counts.want}</span>
             </NavLink>
           </div>

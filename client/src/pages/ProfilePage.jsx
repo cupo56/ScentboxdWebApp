@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
@@ -17,6 +17,7 @@ const TABS = [
 
 export default function ProfilePage() {
   const { username } = useParams();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [counts, setCounts] = useState({ owned: 0, want_to_try: 0, favorites: 0 });
@@ -28,7 +29,11 @@ export default function ProfilePage() {
 
   useEffect(() => {
     setLoading(true);
-    setActiveTab('owned');
+    // Read the requested tab once at load time (e.g. `?tab=want_to_try` from
+    // AccountMenu/AccountPage's "Want to try" link) — not a reactive dep, so
+    // navigating with a new ?tab while already on this page won't re-fetch.
+    const requestedTab = TABS.find((t) => t.key === searchParams.get('tab')) || TABS[0];
+    setActiveTab(requestedTab.key);
     getProfileByUsername(username)
       .then(async (p) => {
         setProfile(p);
@@ -39,11 +44,13 @@ export default function ProfilePage() {
           getUserLists(p.id),
         ]);
         setCounts({ owned: owned.length, want_to_try: want.length, favorites: fav.length });
-        setPerfumes(owned.map((d) => d.perfumes).filter(Boolean));
+        const byField = { is_owned: owned, is_want_to_try: want, is_favorite: fav };
+        setPerfumes(byField[requestedTab.field].map((d) => d.perfumes).filter(Boolean));
         setLists(listData || []);
       })
       .catch((err) => toast.error('Failed to load profile: ' + err.message))
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   const loadTab = async (tab) => {
