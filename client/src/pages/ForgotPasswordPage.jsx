@@ -33,13 +33,13 @@ export default function ForgotPasswordPage() {
         <div className="auth__card">
           {sent ? (
             <>
-              <div className="auth-card__success-icon">✉️</div>
-              <h1 className="auth-card__title">Check your email</h1>
-              <p className="auth-card__subtitle">
+              <div className="auth__success-icon">✉️</div>
+              <h1 className="auth__headline">Check your email</h1>
+              <p className="auth__sub">
                 We've sent a password reset link to <strong>{email}</strong>.
                 Click the link in the email to set a new password.
               </p>
-              <p className="auth-card__hint">
+              <p className="auth__hint">
                 Didn't receive the email? Check your spam folder or try again.
               </p>
               <button
@@ -50,21 +50,21 @@ export default function ForgotPasswordPage() {
               >
                 Try again
               </button>
-              <p className="auth-card__footer">
+              <p className="auth__footer">
                 <Link to="/login">← Back to sign in</Link>
               </p>
             </>
           ) : (
             <>
-              <h1 className="auth-card__title">Forgot your password?</h1>
-              <p className="auth-card__subtitle">
+              <h1 className="auth__headline">Forgot your password?</h1>
+              <p className="auth__sub">
                 Enter your email address and we'll send you a link to reset your password.
               </p>
 
-              {error && <p className="auth-card__error">{error}</p>}
+              {error && <p className="auth__error">{error}</p>}
 
-              <form onSubmit={handleSubmit} className="auth-card__form">
-                <div className="auth-card__field">
+              <form onSubmit={handleSubmit} className="auth__form">
+                <div className="auth__field">
                   <label>Email</label>
                   <input
                     className="input"
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
                 </button>
               </form>
 
-              <p className="auth-card__footer">
+              <p className="auth__footer">
                 Remember your password? <Link to="/login">Sign in</Link>
               </p>
             </>

@@ -17,3 +17,11 @@
 .auth__links a { color: var(--text-dim); }
 
 .auth__footnote { margin-top: var(--space-8); padding-top: var(--space-8); border-top: 1px solid var(--hairline); font: var(--weight-body) 12px/1.6 var(--font); color: var(--text-dim); }
+
+.auth__success-icon { font-size: 2.5rem; text-align: center; margin-bottom: var(--space-4); }
+.auth__hint { font: var(--weight-body) 12.5px var(--font); color: var(--text-dim); margin-top: var(--space-2); }
+.auth__footer { margin-top: var(--space-6); text-align: center; font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
+.auth__footer a { color: var(--accent-text); }
+.auth__match { font: var(--weight-body) 12.5px var(--font); }
+.auth__match--ok { color: var(--success); }
+.auth__match--mismatch { color: var(--danger); }
