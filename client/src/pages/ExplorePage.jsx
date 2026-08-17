@@ -7,6 +7,7 @@ import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import PerfumeRow from '../components/perfume/PerfumeRow';
 import FilterPanel from '../components/perfume/FilterPanel';
 import FilterSheet from '../components/perfume/FilterSheet';
+import SkeletonRow from '../components/layout/SkeletonRow';
 import './ExplorePage.css';
 
 const PAGE_SIZE = 24;
@@ -142,7 +143,7 @@ export default function ExplorePage() {
                 <span></span><span>Fragrance</span><span>House</span><span>Accords</span><span>Rating</span>
               </div>
               {loading ? (
-                Array.from({ length: 8 }).map((_, i) => <div key={i} className="explore__row-skeleton skeleton" />)
+                <SkeletonRow count={8} />
               ) : perfumes.length === 0 ? (
                 <div className="explore__empty">
                   <div className="explore__empty-title">Nothing matches these filters.</div>

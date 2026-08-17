@@ -58,8 +58,6 @@
   color: var(--text-muted);
 }
 
-.explore__row-skeleton { height: 68px; margin-top: var(--space-3); }
-
 .explore__empty { border: 1px solid var(--hairline); border-radius: var(--radius-lg); background: var(--surface); padding: var(--space-10); text-align: left; }
 .explore__empty-title { font: var(--weight-heading) 20px var(--font); color: var(--text); }
 .explore__empty p { color: var(--text-muted); margin: var(--space-3) 0 var(--space-6); }

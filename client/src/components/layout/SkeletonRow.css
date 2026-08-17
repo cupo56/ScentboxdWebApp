@@ -1,0 +1,10 @@
+.skeleton-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 88px;
+  gap: var(--space-6);
+  align-items: center;
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--hairline);
+}
+.skeleton-row__thumb { aspect-ratio: 3/4; border-radius: var(--radius-sm); }
+.skeleton-row__lines { display: flex; flex-direction: column; }

@@ -55,7 +55,23 @@ export default function ProfilePage() {
     setPerfumes(data.map((d) => d.perfumes).filter(Boolean));
   };
 
-  if (loading) return <div className="spinner-container"><div className="spinner spinner-lg" /></div>;
+  if (loading) {
+    return (
+      <div className="shelf">
+        <div className="shelf__head">
+          <div className="skeleton" style={{ width: 72, height: 72, borderRadius: '50%' }} />
+          <div className="shelf__head-info">
+            <div className="skeleton" style={{ height: 22, width: 140 }} />
+          </div>
+        </div>
+        <div className="shelf__main" style={{ borderRight: 'none' }}>
+          <div className="shelf__grid">
+            {Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton" style={{ aspectRatio: '3/4', borderRadius: 'var(--radius-md)' }} />)}
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (!profile) return <div className="empty-state"><h3>User not found</h3></div>;
 
   const isOwn = user?.id === profile.id;
