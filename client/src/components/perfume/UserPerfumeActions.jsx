@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Check, Heart } from '@phosphor-icons/react';
+import { Check, Heart, Star } from '@phosphor-icons/react';
 import { useAuth } from '../../hooks/useAuth';
-import { getUserPerfumeStatus, togglePerfumeStatus } from '../../services/userPerfumeService';
+import { getUserPerfumeStatus, togglePerfumeStatus, setSignatureScent } from '../../services/userPerfumeService';
 import { toast } from '../../store/toastStore';
 import './UserPerfumeActions.css';
 
@@ -28,9 +28,21 @@ export default function UserPerfumeActions({ perfumeId }) {
     setLoading(false);
   };
 
+  const handleToggleSignature = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      setStatus(await setSignatureScent(perfumeId));
+    } catch (err) {
+      toast.error('Failed to update signature scent: ' + err.message);
+    }
+    setLoading(false);
+  };
+
   const owned = status?.is_owned || false;
   const wantToTry = status?.is_want_to_try || false;
   const favorite = status?.is_favorite || false;
+  const signature = status?.is_signature || false;
 
   return (
     <div className="user-actions">
@@ -50,6 +62,16 @@ export default function UserPerfumeActions({ perfumeId }) {
           aria-pressed={favorite}
         >
           <Heart size={16} weight={favorite ? 'fill' : 'regular'} aria-hidden="true" />
+        </button>
+        <button
+          className={`user-actions__favorite ${signature ? 'user-actions__favorite--active' : ''}`}
+          onClick={handleToggleSignature}
+          disabled={loading}
+          aria-label={signature ? 'Remove as signature scent' : 'Set as signature scent'}
+          aria-pressed={signature}
+          title="Signature scent"
+        >
+          <Star size={16} weight={signature ? 'fill' : 'regular'} aria-hidden="true" />
         </button>
       </div>
       <button

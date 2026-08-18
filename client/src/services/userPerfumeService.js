@@ -66,6 +66,76 @@ export async function togglePerfumeStatus(perfumeId, field) {
 }
 
 /**
+ * Toggle a perfume as the user's signature scent. Setting one clears any
+ * previous signature scent, since a user has at most one at a time.
+ */
+export async function setSignatureScent(perfumeId) {
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+  if (!user) throw new Error('Not authenticated');
+
+  const { data: existing } = await supabase
+    .from('user_perfumes')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('perfume_id', perfumeId)
+    .maybeSingle();
+
+  const newValue = !(existing?.is_signature || false);
+
+  if (newValue) {
+    await supabase
+      .from('user_perfumes')
+      .update({ is_signature: false })
+      .eq('user_id', user.id)
+      .eq('is_signature', true);
+  }
+
+  if (existing) {
+    const { error } = await supabase
+      .from('user_perfumes')
+      .update({ is_signature: newValue })
+      .eq('user_id', user.id)
+      .eq('perfume_id', perfumeId);
+
+    if (error) throw error;
+    return { ...existing, is_signature: newValue };
+  } else {
+    const newRow = {
+      user_id: user.id,
+      perfume_id: perfumeId,
+      is_favorite: false,
+      is_owned: false,
+      is_want_to_try: false,
+      is_signature: newValue,
+    };
+    const { data, error } = await supabase
+      .from('user_perfumes')
+      .insert(newRow)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+}
+
+/**
+ * Get the perfume a user has marked as their signature scent, if any.
+ */
+export async function getSignaturePerfume(userId) {
+  const { data, error } = await supabase
+    .from('user_perfumes')
+    .select(`perfumes(id, name, image_url, concentration, brands(name))`)
+    .eq('user_id', userId)
+    .eq('is_signature', true)
+    .limit(1);
+
+  if (error) throw error;
+  return data?.[0]?.perfumes || null;
+}
+
+/**
  * Get all user perfumes with a specific status.
  */
 export async function getUserPerfumesByStatus(userId, field) {

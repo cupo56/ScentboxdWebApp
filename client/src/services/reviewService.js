@@ -135,6 +135,20 @@ export async function getReviewsByUser(userId) {
 }
 
 /**
+ * Get the reviews a user has liked, most recently liked first.
+ */
+export async function getLikedReviewsByUser(userId) {
+  const { data, error } = await supabase
+    .from('review_likes')
+    .select(`created_at, reviews(*, profiles(username, avatar_url), perfumes(id, name, image_url, brands(name)))`)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data.map((row) => row.reviews).filter(Boolean);
+}
+
+/**
  * Get total review count.
  */
 export async function getReviewCount() {
