@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
-import EditProfileModal from '../components/profile/EditProfileModal';
 import ListFormModal from '../components/list/ListFormModal';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
@@ -18,20 +17,23 @@ const TABS = [
 
 export default function ProfilePage() {
   const { username } = useParams();
-  const { user, setProfile: setAuthProfile } = useAuth();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [counts, setCounts] = useState({ owned: 0, want_to_try: 0, favorites: 0 });
   const [activeTab, setActiveTab] = useState('owned');
   const [perfumes, setPerfumes] = useState([]);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    setActiveTab('owned');
+    // Read the requested tab once at load time (e.g. `?tab=want_to_try` from
+    // AccountMenu/AccountPage's "Want to try" link) — not a reactive dep, so
+    // navigating with a new ?tab while already on this page won't re-fetch.
+    const requestedTab = TABS.find((t) => t.key === searchParams.get('tab')) || TABS[0];
+    setActiveTab(requestedTab.key);
     getProfileByUsername(username)
       .then(async (p) => {
         setProfile(p);
@@ -42,11 +44,13 @@ export default function ProfilePage() {
           getUserLists(p.id),
         ]);
         setCounts({ owned: owned.length, want_to_try: want.length, favorites: fav.length });
-        setPerfumes(owned.map((d) => d.perfumes).filter(Boolean));
+        const byField = { is_owned: owned, is_want_to_try: want, is_favorite: fav };
+        setPerfumes(byField[requestedTab.field].map((d) => d.perfumes).filter(Boolean));
         setLists(listData || []);
       })
       .catch((err) => toast.error('Failed to load profile: ' + err.message))
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
 
   const loadTab = async (tab) => {
@@ -94,13 +98,6 @@ export default function ProfilePage() {
     setLists((prev) => prev.filter((l) => l.id !== listId));
   };
 
-  const handleProfileSave = (updated) => {
-    setProfile(updated);
-    setAuthProfile(updated);
-    setShowEditModal(false);
-    if (updated.username !== username) navigate(`/profile/${updated.username}`, { replace: true });
-  };
-
   return (
     <>
       <div className="shelf">
@@ -116,7 +113,7 @@ export default function ProfilePage() {
             <div><span>{counts.owned}</span><label>Owned</label></div>
             <div><span>{counts.want_to_try}</span><label>Wishlist</label></div>
           </div>
-          {isOwn && <button className="btn btn-secondary" onClick={() => setShowEditModal(true)}>Edit profile</button>}
+          {isOwn && <Link to="/settings" className="btn btn-secondary">Edit profile</Link>}
         </div>
 
         <div className="shelf__body">
@@ -163,7 +160,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {showEditModal && <EditProfileModal profile={profile} onSave={handleProfileSave} onClose={() => setShowEditModal(false)} />}
       {showCreateListModal && <ListFormModal onSave={handleListCreated} onClose={() => setShowCreateListModal(false)} />}
     </>
   );

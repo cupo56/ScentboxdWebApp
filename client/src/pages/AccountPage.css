@@ -1,0 +1,39 @@
+.account-page { padding-bottom: var(--space-10); }
+
+.account-page__head { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-6); border-bottom: 1px solid var(--hairline); }
+.account-page__avatar {
+  width: 56px; height: 56px; flex: none; border-radius: 50%;
+  background: var(--accent-tint); border: 1px solid var(--accent-line); color: var(--accent-text);
+  display: flex; align-items: center; justify-content: center; font: var(--weight-heading) 20px var(--font); overflow: hidden;
+}
+.account-page__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.account-page__head-info { flex: 1; }
+.account-page__handle { font: var(--weight-heading) 20px var(--font); color: var(--text); }
+.account-page__joined { font: var(--weight-body) 12.5px var(--font); color: var(--text-dim); margin-top: 3px; }
+
+.account-page__stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--hairline); }
+.account-page__stats div { padding: var(--space-6); text-align: center; border-right: 1px solid var(--hairline); }
+.account-page__stats div:last-child { border-right: none; }
+.account-page__stats span { display: block; font: var(--weight-heading) 20px var(--font); color: var(--text); font-variant-numeric: tabular-nums; }
+.account-page__stats label { font: var(--weight-body) 10.5px var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-top: 3px; }
+
+.account-page__list { padding: var(--space-8) var(--space-6) 0; display: flex; flex-direction: column; }
+.account-page__section-label { font: var(--weight-label) 11.5px var(--font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: var(--space-2); }
+
+.account-page__row {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--hairline);
+  font: var(--weight-body) 15px var(--font);
+  color: var(--text);
+  text-decoration: none;
+  background: none;
+  border-left: none; border-right: none; border-top: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.account-page__row span { margin-left: auto; font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
+.account-page__row--toggle span { color: var(--accent-text); }
+.account-page__row--muted { color: var(--text-muted); }
