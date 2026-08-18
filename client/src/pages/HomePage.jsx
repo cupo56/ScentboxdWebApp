@@ -4,6 +4,7 @@ import { getPerfumes } from '../services/perfumeService';
 import { getLatestReviews, getReviewsByUserIds, getReviewCountByUser } from '../services/reviewService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getFollowingIds } from '../services/followService';
+import { getBlockedIds } from '../services/blockService';
 import { useAuth } from '../hooks/useAuth';
 import './HomePage.css';
 
@@ -36,22 +37,31 @@ export default function HomePage() {
 
   useEffect(() => {
     const load = async () => {
-      const followingIds = isAuthenticated && user ? await getFollowingIds(user.id).catch(() => []) : [];
+      const [followingIds, blockedIds] = isAuthenticated && user
+        ? await Promise.all([getFollowingIds(user.id).catch(() => []), getBlockedIds().catch(() => [])])
+        : [[], []];
+      const notBlocked = (r) => !blockedIds.includes(r.user_id);
 
       const [bottleResult, topResult] = await Promise.allSettled([
         getPerfumes({ sortBy: 'performance', pageSize: 1 }),
-        getLatestReviews(2),
+        getLatestReviews(4),
       ]);
       if (bottleResult.status === 'fulfilled') setBottleOfDay(bottleResult.value.perfumes?.[0] || null);
-      if (topResult.status === 'fulfilled') setVerdicts(topResult.value);
+      if (topResult.status === 'fulfilled') {
+        setVerdicts((blockedIds.length ? topResult.value.filter(notBlocked) : topResult.value).slice(0, 2));
+      }
 
       // Prefer activity from people the user follows; fall back to the global
       // feed if they don't follow anyone yet, or nobody they follow has posted.
       let feedItems = followingIds.length > 0
         ? await getReviewsByUserIds(followingIds, 4).catch(() => [])
         : [];
+      if (blockedIds.length) feedItems = feedItems.filter(notBlocked);
       const usePersonalized = feedItems.length > 0;
-      if (!usePersonalized) feedItems = await getLatestReviews(4).catch(() => []);
+      if (!usePersonalized) {
+        feedItems = await getLatestReviews(4).catch(() => []);
+        if (blockedIds.length) feedItems = feedItems.filter(notBlocked);
+      }
 
       setActivity(feedItems);
       setPersonalized(usePersonalized);

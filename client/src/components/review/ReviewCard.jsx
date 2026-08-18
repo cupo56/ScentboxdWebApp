@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChatCircle } from '@phosphor-icons/react';
+import { ChatCircle, Flag } from '@phosphor-icons/react';
 import StarRating from './StarRating';
 import ReviewForm from './ReviewForm';
 import CommentSection from './CommentSection';
+import ReportModal from '../report/ReportModal';
 import { toggleReviewLike, getReviewLikeCount, hasUserLikedReview } from '../../services/reviewService';
 import { getCommentCount } from '../../services/commentService';
 import { useAuth } from '../../hooks/useAuth';
@@ -17,6 +18,7 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
   const [likeAnimating, setLikeAnimating] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [reporting, setReporting] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -208,16 +210,34 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
           {commentCount > 0 && <span className="verdict-row__comment-count">{commentCount}</span>}
         </button>
 
-        {isOwner && (
+        {isOwner ? (
           <div className="verdict-row__actions">
             <button className="btn btn-ghost btn-sm" onClick={() => setIsEditing(true)}>Edit</button>
             <button className="btn btn-ghost btn-sm verdict-row__delete-btn" onClick={handleDelete}>Delete</button>
           </div>
+        ) : (
+          <button
+            type="button"
+            className="verdict-row__report-btn"
+            onClick={() => (isAuthenticated ? setReporting(true) : navigate('/login'))}
+            aria-label="Report this review"
+          >
+            <Flag size={16} aria-hidden="true" />
+          </button>
         )}
       </div>
 
       {commentsOpen && (
         <CommentSection reviewId={review.id} currentUserId={currentUserId} onCountChange={setCommentCount} />
+      )}
+
+      {reporting && (
+        <ReportModal
+          contentType="review"
+          contentId={review.id}
+          reportedUserId={review.user_id}
+          onClose={() => setReporting(false)}
+        />
       )}
     </div>
   );

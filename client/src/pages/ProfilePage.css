@@ -15,6 +15,10 @@
 .shelf__follow-counts button:hover { color: var(--accent-text); }
 .shelf__follow-counts strong { color: var(--text); font-weight: var(--weight-label); margin-right: var(--space-1); }
 .shelf__follow-sep { color: var(--hairline-strong); font-size: 13px; }
+.shelf__profile-actions { display: flex; align-items: center; gap: var(--space-3); }
+.shelf__report-btn { border: none; background: none; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; padding: var(--space-2); }
+.shelf__report-btn:hover { color: var(--danger); }
+
 .shelf__head-stats { margin-left: auto; display: flex; gap: var(--space-10); text-align: right; }
 .shelf__head-stats span { display: block; font: var(--weight-heading) 22px var(--font); color: var(--text); font-variant-numeric: tabular-nums; }
 .shelf__head-stats label { font: var(--weight-body) 11.5px var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }

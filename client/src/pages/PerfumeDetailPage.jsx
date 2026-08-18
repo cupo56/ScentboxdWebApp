@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
 import { getReviewsByPerfume, deleteReview } from '../services/reviewService';
+import { getBlockedIds } from '../services/blockService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
 import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
@@ -25,14 +26,18 @@ export default function PerfumeDetailPage() {
     setLoading(true);
     setError('');
     getPerfumeById(id)
-      .then((data) => {
+      .then(async (data) => {
         setPerfume(data);
-        getReviewsByPerfume(id).then(setReviews).catch(() => {});
+        const [reviewData, blockedIds] = await Promise.all([
+          getReviewsByPerfume(id).catch(() => []),
+          isAuthenticated ? getBlockedIds().catch(() => []) : Promise.resolve([]),
+        ]);
+        setReviews(blockedIds.length ? reviewData.filter((r) => !blockedIds.includes(r.user_id)) : reviewData);
         if (data.brand_id) getSimilarPerfumes(data.brand_id, id).then(setSimilar).catch(() => {});
       })
       .catch((err) => setError(err.message || 'Failed to load perfume'))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   const handleDeleteReview = async (reviewId) => {
     try {
