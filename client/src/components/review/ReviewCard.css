@@ -35,6 +35,10 @@
 .verdict-row__like-icon { flex-shrink: 0; transition: transform 0.15s ease; }
 .verdict-row__like-count { font-variant-numeric: tabular-nums; min-width: 1ch; }
 .verdict-row__like-btn--pop .verdict-row__like-icon { animation: verdict-like-pop 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
+
+.verdict-row__comment-btn { display: flex; align-items: center; gap: var(--space-2); border: none; background: none; color: var(--text-dim); cursor: pointer; font-size: 12px; }
+.verdict-row__comment-btn--active, .verdict-row__comment-btn:hover { color: var(--accent-text); }
+.verdict-row__comment-count { font-variant-numeric: tabular-nums; min-width: 1ch; }
 @keyframes verdict-like-pop {
   0%   { transform: scale(1); }
   30%  { transform: scale(1.35); }
