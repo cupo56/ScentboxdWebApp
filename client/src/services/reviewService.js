@@ -25,6 +25,9 @@ export async function createReview({
   longevity = null,
   sillage = null,
   occasions = [],
+  bottle_rating = null,
+  value_rating = null,
+  seasons = [],
 }) {
   const { data: { session } } = await supabase.auth.getSession();
   const user = session?.user;
@@ -41,6 +44,9 @@ export async function createReview({
       longevity,
       sillage,
       occasions,
+      bottle_rating,
+      value_rating,
+      seasons,
     })
     .select(`*, profiles(username, avatar_url)`)
     .single();
@@ -230,6 +236,9 @@ export async function updateReview(reviewId, updates) {
       longevity: updates.longevity,
       sillage: updates.sillage,
       occasions: updates.occasions,
+      bottle_rating: updates.bottle_rating,
+      value_rating: updates.value_rating,
+      seasons: updates.seasons,
     })
     .eq('id', reviewId)
     .eq('user_id', user.id)

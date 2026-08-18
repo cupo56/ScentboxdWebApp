@@ -145,10 +145,28 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         </div>
       )}
 
-      {review.occasions?.length > 0 && (
+      {(review.bottle_rating > 0 || review.value_rating > 0) && (
+        <div className="verdict-row__sub-ratings">
+          {review.bottle_rating > 0 && (
+            <span className="verdict-row__sub-rating">
+              Bottle <StarRating rating={review.bottle_rating} size="sm" />
+            </span>
+          )}
+          {review.value_rating > 0 && (
+            <span className="verdict-row__sub-rating">
+              Value <StarRating rating={review.value_rating} size="sm" />
+            </span>
+          )}
+        </div>
+      )}
+
+      {(review.occasions?.length > 0 || review.seasons?.length > 0) && (
         <div className="verdict-row__occasions">
-          {review.occasions.map((occ, i) => (
-            <span key={i} className="badge badge-accent">{occ}</span>
+          {review.occasions?.map((occ, i) => (
+            <span key={`occ-${i}`} className="badge badge-accent">{occ}</span>
+          ))}
+          {review.seasons?.map((season, i) => (
+            <span key={`season-${i}`} className="badge">{season}</span>
           ))}
         </div>
       )}
