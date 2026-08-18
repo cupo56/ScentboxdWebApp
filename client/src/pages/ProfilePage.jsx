@@ -4,10 +4,13 @@ import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
 import { getReviewsByUser, getLikedReviewsByUser, deleteReview } from '../services/reviewService';
+import { getFollowCounts } from '../services/followService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
 import ReviewCard from '../components/review/ReviewCard';
 import ListFormModal from '../components/list/ListFormModal';
+import FollowButton from '../components/profile/FollowButton';
+import FollowListModal from '../components/profile/FollowListModal';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
 
@@ -31,6 +34,8 @@ export default function ProfilePage() {
   const [perfumes, setPerfumes] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [likedReviews, setLikedReviews] = useState([]);
+  const [followCounts, setFollowCounts] = useState({ followers: 0, following: 0 });
+  const [followModalTab, setFollowModalTab] = useState(null);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
@@ -45,19 +50,21 @@ export default function ProfilePage() {
     getProfileByUsername(username)
       .then(async (p) => {
         setProfile(p);
-        const [owned, want, fav, listData, reviewData, likedData] = await Promise.all([
+        const [owned, want, fav, listData, reviewData, likedData, followData] = await Promise.all([
           getUserPerfumesByStatus(p.id, 'is_owned'),
           getUserPerfumesByStatus(p.id, 'is_want_to_try'),
           getUserPerfumesByStatus(p.id, 'is_favorite'),
           getUserLists(p.id),
           getReviewsByUser(p.id),
           getLikedReviewsByUser(p.id),
+          getFollowCounts(p.id),
         ]);
         setCounts({ owned: owned.length, want_to_try: want.length, favorites: fav.length, reviews: reviewData.length, liked: likedData.length });
         const byField = { is_owned: owned, is_want_to_try: want, is_favorite: fav };
         if (requestedTab.field) setPerfumes(byField[requestedTab.field].map((d) => d.perfumes).filter(Boolean));
         setReviews(reviewData);
         setLikedReviews(likedData);
+        setFollowCounts(followData);
         setLists(listData || []);
       })
       .catch((err) => toast.error('Failed to load profile: ' + err.message))
@@ -152,13 +159,29 @@ export default function ProfilePage() {
             <h1>{profile.username}</h1>
             {profile.bio && <p>{profile.bio}</p>}
             {memberSince && <p className="shelf__member-since">Member since {memberSince}</p>}
+            <div className="shelf__follow-counts">
+              <button type="button" onClick={() => setFollowModalTab('followers')}>
+                <strong>{followCounts.followers}</strong> Followers
+              </button>
+              <span className="shelf__follow-sep">·</span>
+              <button type="button" onClick={() => setFollowModalTab('following')}>
+                <strong>{followCounts.following}</strong> Following
+              </button>
+            </div>
           </div>
           <div className="shelf__head-stats">
             <div><span>{counts.owned}</span><label>Owned</label></div>
             <div><span>{counts.want_to_try}</span><label>Wishlist</label></div>
             <div><span>{counts.reviews}</span><label>Reviews</label></div>
           </div>
-          {isOwn && <Link to="/settings" className="btn btn-secondary">Edit profile</Link>}
+          {isOwn ? (
+            <Link to="/settings" className="btn btn-secondary">Edit profile</Link>
+          ) : (
+            <FollowButton
+              targetUserId={profile.id}
+              onChange={(nowFollowing) => setFollowCounts((prev) => ({ ...prev, followers: prev.followers + (nowFollowing ? 1 : -1) }))}
+            />
+          )}
         </div>
 
         <div className="shelf__body">
@@ -242,6 +265,9 @@ export default function ProfilePage() {
       </div>
 
       {showCreateListModal && <ListFormModal onSave={handleListCreated} onClose={() => setShowCreateListModal(false)} />}
+      {followModalTab && (
+        <FollowListModal userId={profile.id} initialTab={followModalTab} onClose={() => setFollowModalTab(null)} />
+      )}
     </>
   );
 }
