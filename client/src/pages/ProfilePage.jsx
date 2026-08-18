@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { Star } from '@phosphor-icons/react';
 import { getProfileByUsername } from '../services/profileService';
-import { getUserPerfumesByStatus, getSignaturePerfume } from '../services/userPerfumeService';
+import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
 import { getReviewsByUser, getLikedReviewsByUser, deleteReview } from '../services/reviewService';
 import { toast } from '../store/toastStore';
@@ -32,7 +31,6 @@ export default function ProfilePage() {
   const [perfumes, setPerfumes] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [likedReviews, setLikedReviews] = useState([]);
-  const [signaturePerfume, setSignaturePerfume] = useState(null);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
@@ -47,21 +45,19 @@ export default function ProfilePage() {
     getProfileByUsername(username)
       .then(async (p) => {
         setProfile(p);
-        const [owned, want, fav, listData, reviewData, likedData, signature] = await Promise.all([
+        const [owned, want, fav, listData, reviewData, likedData] = await Promise.all([
           getUserPerfumesByStatus(p.id, 'is_owned'),
           getUserPerfumesByStatus(p.id, 'is_want_to_try'),
           getUserPerfumesByStatus(p.id, 'is_favorite'),
           getUserLists(p.id),
           getReviewsByUser(p.id),
           getLikedReviewsByUser(p.id),
-          getSignaturePerfume(p.id),
         ]);
         setCounts({ owned: owned.length, want_to_try: want.length, favorites: fav.length, reviews: reviewData.length, liked: likedData.length });
         const byField = { is_owned: owned, is_want_to_try: want, is_favorite: fav };
         if (requestedTab.field) setPerfumes(byField[requestedTab.field].map((d) => d.perfumes).filter(Boolean));
         setReviews(reviewData);
         setLikedReviews(likedData);
-        setSignaturePerfume(signature);
         setLists(listData || []);
       })
       .catch((err) => toast.error('Failed to load profile: ' + err.message))
@@ -156,12 +152,6 @@ export default function ProfilePage() {
             <h1>{profile.username}</h1>
             {profile.bio && <p>{profile.bio}</p>}
             {memberSince && <p className="shelf__member-since">Member since {memberSince}</p>}
-            {signaturePerfume && (
-              <Link to={`/perfume/${signaturePerfume.id}`} className="shelf__signature">
-                <Star size={12} weight="fill" aria-hidden="true" />
-                <span>{signaturePerfume.brands?.name} {signaturePerfume.name}</span>
-              </Link>
-            )}
           </div>
           <div className="shelf__head-stats">
             <div><span>{counts.owned}</span><label>Owned</label></div>
