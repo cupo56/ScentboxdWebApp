@@ -25,6 +25,9 @@ export async function createReview({
   longevity = null,
   sillage = null,
   occasions = [],
+  bottle_rating = null,
+  value_rating = null,
+  seasons = [],
 }) {
   const { data: { session } } = await supabase.auth.getSession();
   const user = session?.user;
@@ -41,7 +44,37 @@ export async function createReview({
       longevity,
       sillage,
       occasions,
+      bottle_rating,
+      value_rating,
+      seasons,
     })
+    .select(`*, profiles(username, avatar_url)`)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Upload a photo for a review and attach it to that review.
+ * Path matches the review-photos storage policies: `{reviewId}.jpg`.
+ */
+export async function uploadReviewPhoto(reviewId, file) {
+  const path = `${reviewId}.jpg`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('review-photos')
+    .upload(path, file, { upsert: true, contentType: file.type || 'image/jpeg' });
+
+  if (uploadError) throw uploadError;
+
+  const { data: { publicUrl } } = supabase.storage.from('review-photos').getPublicUrl(path);
+  const bustedUrl = `${publicUrl}?t=${Date.now()}`;
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .update({ photo_url: bustedUrl })
+    .eq('id', reviewId)
     .select(`*, profiles(username, avatar_url)`)
     .single();
 
@@ -230,6 +263,9 @@ export async function updateReview(reviewId, updates) {
       longevity: updates.longevity,
       sillage: updates.sillage,
       occasions: updates.occasions,
+      bottle_rating: updates.bottle_rating,
+      value_rating: updates.value_rating,
+      seasons: updates.seasons,
     })
     .eq('id', reviewId)
     .eq('user_id', user.id)

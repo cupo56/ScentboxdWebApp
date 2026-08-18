@@ -130,6 +130,10 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
       <h4 className="verdict-row__title">{review.title}</h4>
       <p className="verdict-row__text">{review.text}</p>
 
+      {review.photo_url && (
+        <img src={review.photo_url} alt="" className="verdict-row__photo" />
+      )}
+
       {(review.longevity || review.sillage) && (
         <div className="verdict-row__metrics">
           {review.longevity !== null && (
@@ -145,10 +149,28 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         </div>
       )}
 
-      {review.occasions?.length > 0 && (
+      {(review.bottle_rating > 0 || review.value_rating > 0) && (
+        <div className="verdict-row__sub-ratings">
+          {review.bottle_rating > 0 && (
+            <span className="verdict-row__sub-rating">
+              Bottle <StarRating rating={review.bottle_rating} size="sm" />
+            </span>
+          )}
+          {review.value_rating > 0 && (
+            <span className="verdict-row__sub-rating">
+              Value <StarRating rating={review.value_rating} size="sm" />
+            </span>
+          )}
+        </div>
+      )}
+
+      {(review.occasions?.length > 0 || review.seasons?.length > 0) && (
         <div className="verdict-row__occasions">
-          {review.occasions.map((occ, i) => (
-            <span key={i} className="badge badge-accent">{occ}</span>
+          {review.occasions?.map((occ, i) => (
+            <span key={`occ-${i}`} className="badge badge-accent">{occ}</span>
+          ))}
+          {review.seasons?.map((season, i) => (
+            <span key={`season-${i}`} className="badge">{season}</span>
           ))}
         </div>
       )}

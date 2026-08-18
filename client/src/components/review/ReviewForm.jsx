@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import StarRating from './StarRating';
-import { createReview, updateReview } from '../../services/reviewService';
+import { createReview, updateReview, uploadReviewPhoto } from '../../services/reviewService';
 import './ReviewForm.css';
 
 const OCCASION_OPTIONS = ['Daily', 'Office', 'Date Night', 'Evening Out', 'Summer', 'Winter', 'Special Occasion'];
+const SEASON_OPTIONS = ['Spring', 'Summer', 'Fall', 'Winter'];
 
 export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCancel }) {
   const [text, setText] = useState(initialData?.text || '');
@@ -11,6 +12,11 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
   const [longevity, setLongevity] = useState(initialData?.longevity ?? '');
   const [sillage, setSillage] = useState(initialData?.sillage ?? '');
   const [occasions, setOccasions] = useState(initialData?.occasions || []);
+  const [bottleRating, setBottleRating] = useState(initialData?.bottle_rating || 0);
+  const [valueRating, setValueRating] = useState(initialData?.value_rating || 0);
+  const [seasons, setSeasons] = useState(initialData?.seasons || []);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(initialData?.photo_url || null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -18,6 +24,19 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
     setOccasions((prev) =>
       prev.includes(occ) ? prev.filter((o) => o !== occ) : [...prev, occ]
     );
+  };
+
+  const toggleSeason = (season) => {
+    setSeasons((prev) =>
+      prev.includes(season) ? prev.filter((s) => s !== season) : [...prev, season]
+    );
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoFile(file);
+    setPhotoPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
@@ -39,19 +58,32 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         longevity: longevity !== '' ? parseInt(longevity) : null,
         sillage: sillage !== '' ? parseInt(sillage) : null,
         occasions,
+        bottle_rating: bottleRating || null,
+        value_rating: valueRating || null,
+        seasons,
       };
 
-      if (initialData) {
-        const updated = await updateReview(initialData.id, payload);
-        onReviewAdded?.(updated);
-      } else {
-        const review = await createReview(payload);
-        onReviewAdded?.(review);
+      let review = initialData
+        ? await updateReview(initialData.id, payload)
+        : await createReview(payload);
+
+      if (photoFile) {
+        review = await uploadReviewPhoto(review.id, photoFile);
+      }
+
+      onReviewAdded?.(review);
+
+      if (!initialData) {
         setText('');
         setRating(0);
         setLongevity('');
         setSillage('');
         setOccasions([]);
+        setBottleRating(0);
+        setValueRating(0);
+        setSeasons([]);
+        setPhotoFile(null);
+        setPhotoPreview(null);
       }
     } catch (err) {
       setError(err.message || 'Failed to submit review');
@@ -110,6 +142,17 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         </div>
       </div>
 
+      <div className="composer__row">
+        <div className="composer__field">
+          <label>Bottle</label>
+          <StarRating rating={bottleRating} size="sm" interactive onChange={setBottleRating} />
+        </div>
+        <div className="composer__field">
+          <label>Value for money</label>
+          <StarRating rating={valueRating} size="sm" interactive onChange={setValueRating} />
+        </div>
+      </div>
+
       <div className="composer__field">
         <label>Best for</label>
         <div className="composer__occasions">
@@ -123,6 +166,33 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
               {occ}
             </button>
           ))}
+        </div>
+      </div>
+
+      <div className="composer__field">
+        <label>Seasons</label>
+        <div className="composer__occasions">
+          {SEASON_OPTIONS.map((season) => (
+            <button
+              key={season}
+              type="button"
+              className={`composer__occ-btn ${seasons.includes(season) ? 'active' : ''}`}
+              onClick={() => toggleSeason(season)}
+            >
+              {season}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="composer__field">
+        <label>Photo</label>
+        <div className="composer__photo">
+          {photoPreview && <img src={photoPreview} alt="" className="composer__photo-preview" />}
+          <label className="btn btn-secondary btn-sm composer__photo-btn">
+            {photoPreview ? 'Change photo' : 'Add a photo'}
+            <input type="file" accept="image/*" onChange={handlePhotoChange} hidden />
+          </label>
         </div>
       </div>
 
