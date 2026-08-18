@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import StarRating from './StarRating';
 import ReviewForm from './ReviewForm';
 import { toggleReviewLike, getReviewLikeCount, hasUserLikedReview } from '../../services/reviewService';
@@ -105,6 +105,18 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         </div>
         <StarRating rating={review.rating} size="sm" />
       </div>
+
+      {review.perfumes && (
+        <Link to={`/perfume/${review.perfumes.id}`} className="verdict-row__perfume">
+          <span className="verdict-row__perfume-thumb">
+            {review.perfumes.image_url ? <img src={review.perfumes.image_url} alt="" /> : '◆'}
+          </span>
+          <span>
+            <span className="verdict-row__perfume-brand">{review.perfumes.brands?.name}</span>
+            <span className="verdict-row__perfume-name">{review.perfumes.name}</span>
+          </span>
+        </Link>
+      )}
 
       <h4 className="verdict-row__title">{review.title}</h4>
       <p className="verdict-row__text">{review.text}</p>
