@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { ChatCircle } from '@phosphor-icons/react';
 import StarRating from './StarRating';
 import ReviewForm from './ReviewForm';
+import CommentSection from './CommentSection';
 import { toggleReviewLike, getReviewLikeCount, hasUserLikedReview } from '../../services/reviewService';
+import { getCommentCount } from '../../services/commentService';
 import { useAuth } from '../../hooks/useAuth';
 import './ReviewCard.css';
 
@@ -12,6 +15,8 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
   const [likeCount, setLikeCount] = useState(0);
   const [likeLoading, setLikeLoading] = useState(false);
   const [likeAnimating, setLikeAnimating] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+  const [commentsOpen, setCommentsOpen] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -29,6 +34,10 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
   useEffect(() => {
     getReviewLikeCount(review.id)
       .then(setLikeCount)
+      .catch(() => {});
+
+    getCommentCount(review.id)
+      .then(setCommentCount)
       .catch(() => {});
 
     if (isAuthenticated) {
@@ -170,6 +179,17 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
           )}
         </button>
 
+        <button
+          type="button"
+          className={`verdict-row__comment-btn ${commentsOpen ? 'verdict-row__comment-btn--active' : ''}`}
+          onClick={() => setCommentsOpen((v) => !v)}
+          aria-expanded={commentsOpen}
+          aria-label={commentsOpen ? 'Hide comments' : 'Show comments'}
+        >
+          <ChatCircle size={18} weight={commentsOpen ? 'fill' : 'regular'} aria-hidden="true" />
+          {commentCount > 0 && <span className="verdict-row__comment-count">{commentCount}</span>}
+        </button>
+
         {isOwner && (
           <div className="verdict-row__actions">
             <button className="btn btn-ghost btn-sm" onClick={() => setIsEditing(true)}>Edit</button>
@@ -177,6 +197,10 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
           </div>
         )}
       </div>
+
+      {commentsOpen && (
+        <CommentSection reviewId={review.id} currentUserId={currentUserId} onCountChange={setCommentCount} />
+      )}
     </div>
   );
 }
