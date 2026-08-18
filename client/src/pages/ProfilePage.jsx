@@ -163,6 +163,7 @@ export default function ProfilePage() {
               <button type="button" onClick={() => setFollowModalTab('followers')}>
                 <strong>{followCounts.followers}</strong> Followers
               </button>
+              <span className="shelf__follow-sep">·</span>
               <button type="button" onClick={() => setFollowModalTab('following')}>
                 <strong>{followCounts.following}</strong> Following
               </button>
