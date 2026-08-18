@@ -130,10 +130,6 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
       <h4 className="verdict-row__title">{review.title}</h4>
       <p className="verdict-row__text">{review.text}</p>
 
-      {review.photo_url && (
-        <img src={review.photo_url} alt="" className="verdict-row__photo" />
-      )}
-
       {(review.longevity || review.sillage) && (
         <div className="verdict-row__metrics">
           {review.longevity !== null && (

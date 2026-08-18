@@ -25,8 +25,6 @@
 .verdict-row__title { display: none; } /* titles dropped — the design shows body text only */
 .verdict-row__text { font: var(--weight-body) 15px/1.7 var(--font); color: var(--text-body); margin-bottom: var(--space-4); }
 
-.verdict-row__photo { display: block; max-width: 220px; max-height: 220px; border-radius: var(--radius-md); object-fit: cover; margin-bottom: var(--space-4); }
-
 .verdict-row__metrics { display: flex; gap: var(--space-6); font: var(--weight-body) 12px var(--font); color: var(--text-dim); margin-bottom: var(--space-4); }
 
 .verdict-row__sub-ratings { display: flex; gap: var(--space-6); margin-bottom: var(--space-4); }

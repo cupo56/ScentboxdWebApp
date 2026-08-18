@@ -23,10 +23,6 @@
 }
 .composer__occ-btn.active { border-color: var(--accent); color: var(--accent-text); }
 
-.composer__photo { display: flex; align-items: center; gap: var(--space-4); }
-.composer__photo-preview { width: 64px; height: 64px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--hairline); }
-.composer__photo-btn { cursor: pointer; }
-
 .composer__actions { display: flex; gap: var(--space-4); }
 
 @media (max-width: 640px) {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import StarRating from './StarRating';
-import { createReview, updateReview, uploadReviewPhoto } from '../../services/reviewService';
+import { createReview, updateReview } from '../../services/reviewService';
 import './ReviewForm.css';
 
 const OCCASION_OPTIONS = ['Daily', 'Office', 'Date Night', 'Evening Out', 'Summer', 'Winter', 'Special Occasion'];
@@ -15,8 +15,6 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
   const [bottleRating, setBottleRating] = useState(initialData?.bottle_rating || 0);
   const [valueRating, setValueRating] = useState(initialData?.value_rating || 0);
   const [seasons, setSeasons] = useState(initialData?.seasons || []);
-  const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(initialData?.photo_url || null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -30,13 +28,6 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
     setSeasons((prev) =>
       prev.includes(season) ? prev.filter((s) => s !== season) : [...prev, season]
     );
-  };
-
-  const handlePhotoChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setPhotoFile(file);
-    setPhotoPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
@@ -63,13 +54,9 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         seasons,
       };
 
-      let review = initialData
+      const review = initialData
         ? await updateReview(initialData.id, payload)
         : await createReview(payload);
-
-      if (photoFile) {
-        review = await uploadReviewPhoto(review.id, photoFile);
-      }
 
       onReviewAdded?.(review);
 
@@ -82,8 +69,6 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         setBottleRating(0);
         setValueRating(0);
         setSeasons([]);
-        setPhotoFile(null);
-        setPhotoPreview(null);
       }
     } catch (err) {
       setError(err.message || 'Failed to submit review');
@@ -182,17 +167,6 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
               {season}
             </button>
           ))}
-        </div>
-      </div>
-
-      <div className="composer__field">
-        <label>Photo</label>
-        <div className="composer__photo">
-          {photoPreview && <img src={photoPreview} alt="" className="composer__photo-preview" />}
-          <label className="btn btn-secondary btn-sm composer__photo-btn">
-            {photoPreview ? 'Change photo' : 'Add a photo'}
-            <input type="file" accept="image/*" onChange={handlePhotoChange} hidden />
-          </label>
         </div>
       </div>
 

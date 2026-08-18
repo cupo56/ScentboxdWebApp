@@ -56,33 +56,6 @@ export async function createReview({
 }
 
 /**
- * Upload a photo for a review and attach it to that review.
- * Path matches the review-photos storage policies: `{reviewId}.jpg`.
- */
-export async function uploadReviewPhoto(reviewId, file) {
-  const path = `${reviewId}.jpg`;
-
-  const { error: uploadError } = await supabase.storage
-    .from('review-photos')
-    .upload(path, file, { upsert: true, contentType: file.type || 'image/jpeg' });
-
-  if (uploadError) throw uploadError;
-
-  const { data: { publicUrl } } = supabase.storage.from('review-photos').getPublicUrl(path);
-  const bustedUrl = `${publicUrl}?t=${Date.now()}`;
-
-  const { data, error } = await supabase
-    .from('reviews')
-    .update({ photo_url: bustedUrl })
-    .eq('id', reviewId)
-    .select(`*, profiles(username, avatar_url)`)
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-/**
  * Delete a review (only own reviews).
  */
 export async function deleteReview(reviewId) {
