@@ -9,6 +9,7 @@
 .shelf__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .shelf__head-info h1 { font: var(--weight-heading) 26px var(--font); color: var(--text); }
 .shelf__head-info p { font: var(--weight-body) 14px var(--font); color: var(--text-muted); margin-top: var(--space-2); }
+.shelf__member-since { font-size: 12.5px; color: var(--text-dim); }
 .shelf__head-stats { margin-left: auto; display: flex; gap: var(--space-10); text-align: right; }
 .shelf__head-stats span { display: block; font: var(--weight-heading) 22px var(--font); color: var(--text); font-variant-numeric: tabular-nums; }
 .shelf__head-stats label { font: var(--weight-body) 11.5px var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
