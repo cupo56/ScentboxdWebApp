@@ -69,6 +69,9 @@
 .settings__toggle-row > div:first-child { flex: 1; }
 .settings__toggle-row--danger { align-items: flex-start; }
 
+.settings__blocked-list { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-4); }
+.settings__blocked-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); font: var(--weight-body) 13.5px var(--font); color: var(--text); }
+
 .settings__switch {
   width: 44px; height: 24px; flex: none;
   border-radius: var(--radius-pill);

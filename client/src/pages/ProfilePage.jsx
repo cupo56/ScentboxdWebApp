@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { Flag } from '@phosphor-icons/react';
 import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
 import { getReviewsByUser, getLikedReviewsByUser, deleteReview } from '../services/reviewService';
 import { getFollowCounts } from '../services/followService';
+import { isBlocked, blockUser, unblockUser } from '../services/blockService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
 import ReviewCard from '../components/review/ReviewCard';
 import ListFormModal from '../components/list/ListFormModal';
 import FollowButton from '../components/profile/FollowButton';
 import FollowListModal from '../components/profile/FollowListModal';
+import ReportModal from '../components/report/ReportModal';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
 
@@ -39,6 +42,8 @@ export default function ProfilePage() {
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+  const [reportingProfile, setReportingProfile] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -71,6 +76,28 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username]);
+
+  useEffect(() => {
+    if (!profile || !user || user.id === profile.id) return;
+    isBlocked(profile.id).then(setBlocked).catch(() => {});
+  }, [profile, user]);
+
+  const handleToggleBlock = async () => {
+    try {
+      if (blocked) {
+        await unblockUser(profile.id);
+        setBlocked(false);
+        toast.success(`Unblocked ${profile.username}.`);
+      } else {
+        if (!window.confirm(`Block ${profile.username}? You won't see their reviews in your feeds anymore.`)) return;
+        await blockUser(profile.id);
+        setBlocked(true);
+        toast.success(`Blocked ${profile.username}.`);
+      }
+    } catch (err) {
+      toast.error('Failed to update block status: ' + err.message);
+    }
+  };
 
   const loadTab = async (tab) => {
     setActiveTab(tab.key);
@@ -177,10 +204,18 @@ export default function ProfilePage() {
           {isOwn ? (
             <Link to="/settings" className="btn btn-secondary">Edit profile</Link>
           ) : (
-            <FollowButton
-              targetUserId={profile.id}
-              onChange={(nowFollowing) => setFollowCounts((prev) => ({ ...prev, followers: prev.followers + (nowFollowing ? 1 : -1) }))}
-            />
+            <div className="shelf__profile-actions">
+              <FollowButton
+                targetUserId={profile.id}
+                onChange={(nowFollowing) => setFollowCounts((prev) => ({ ...prev, followers: prev.followers + (nowFollowing ? 1 : -1) }))}
+              />
+              <button type="button" className="btn btn-secondary" onClick={handleToggleBlock}>
+                {blocked ? 'Unblock' : 'Block'}
+              </button>
+              <button type="button" className="shelf__report-btn" onClick={() => setReportingProfile(true)} aria-label="Report this profile">
+                <Flag size={16} aria-hidden="true" />
+              </button>
+            </div>
           )}
         </div>
 
@@ -267,6 +302,9 @@ export default function ProfilePage() {
       {showCreateListModal && <ListFormModal onSave={handleListCreated} onClose={() => setShowCreateListModal(false)} />}
       {followModalTab && (
         <FollowListModal userId={profile.id} initialTab={followModalTab} onClose={() => setFollowModalTab(null)} />
+      )}
+      {reportingProfile && (
+        <ReportModal contentType="profile" reportedUserId={profile.id} onClose={() => setReportingProfile(false)} />
       )}
     </>
   );

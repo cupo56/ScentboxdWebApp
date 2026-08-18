@@ -48,3 +48,6 @@
 
 .verdict-row__actions { margin-left: auto; display: flex; gap: var(--space-3); }
 .verdict-row__delete-btn { color: var(--danger) !important; }
+
+.verdict-row__report-btn { margin-left: auto; display: flex; align-items: center; border: none; background: none; color: var(--text-dim); cursor: pointer; }
+.verdict-row__report-btn:hover { color: var(--danger); }
