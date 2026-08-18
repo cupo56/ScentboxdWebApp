@@ -192,6 +192,28 @@ export async function getLatestReviews(limit = 5) {
 }
 
 /**
+ * Get the latest reviews written by any of the given users (e.g. for a
+ * "people you follow" feed).
+ */
+export async function getReviewsByUserIds(userIds, limit = 10) {
+  if (!userIds.length) return [];
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .select(`
+      *,
+      profiles(username, avatar_url),
+      perfumes(id, name, image_url, brands(name))
+    `)
+    .in('user_id', userIds)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data;
+}
+
+/**
  * Update an existing review.
  */
 export async function updateReview(reviewId, updates) {

@@ -43,6 +43,19 @@ export async function getFollowing(userId) {
 }
 
 /**
+ * Get the ids of the profiles this user follows (lightweight, for feed filters).
+ */
+export async function getFollowingIds(userId) {
+  const { data, error } = await supabase
+    .from('follows')
+    .select('following_id')
+    .eq('follower_id', userId);
+
+  if (error) throw error;
+  return data.map((row) => row.following_id);
+}
+
+/**
  * Whether the current user follows the given profile.
  */
 export async function isFollowing(targetUserId) {
