@@ -3,8 +3,10 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { getProfileByUsername } from '../services/profileService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import { getUserLists, deleteList } from '../services/listService';
+import { getReviewsByUser, deleteReview } from '../services/reviewService';
 import { toast } from '../store/toastStore';
 import PerfumeCard from '../components/perfume/PerfumeCard';
+import ReviewCard from '../components/review/ReviewCard';
 import ListFormModal from '../components/list/ListFormModal';
 import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
@@ -13,6 +15,7 @@ const TABS = [
   { key: 'owned', field: 'is_owned', label: 'Owned' },
   { key: 'want_to_try', field: 'is_want_to_try', label: 'Want to try' },
   { key: 'favorites', field: 'is_favorite', label: 'Favorites' },
+  { key: 'reviews', label: 'Reviews' },
 ];
 
 export default function ProfilePage() {
@@ -20,9 +23,10 @@ export default function ProfilePage() {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
-  const [counts, setCounts] = useState({ owned: 0, want_to_try: 0, favorites: 0 });
+  const [counts, setCounts] = useState({ owned: 0, want_to_try: 0, favorites: 0, reviews: 0 });
   const [activeTab, setActiveTab] = useState('owned');
   const [perfumes, setPerfumes] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
@@ -37,15 +41,17 @@ export default function ProfilePage() {
     getProfileByUsername(username)
       .then(async (p) => {
         setProfile(p);
-        const [owned, want, fav, listData] = await Promise.all([
+        const [owned, want, fav, listData, reviewData] = await Promise.all([
           getUserPerfumesByStatus(p.id, 'is_owned'),
           getUserPerfumesByStatus(p.id, 'is_want_to_try'),
           getUserPerfumesByStatus(p.id, 'is_favorite'),
           getUserLists(p.id),
+          getReviewsByUser(p.id),
         ]);
-        setCounts({ owned: owned.length, want_to_try: want.length, favorites: fav.length });
+        setCounts({ owned: owned.length, want_to_try: want.length, favorites: fav.length, reviews: reviewData.length });
         const byField = { is_owned: owned, is_want_to_try: want, is_favorite: fav };
-        setPerfumes(byField[requestedTab.field].map((d) => d.perfumes).filter(Boolean));
+        if (requestedTab.field) setPerfumes(byField[requestedTab.field].map((d) => d.perfumes).filter(Boolean));
+        setReviews(reviewData);
         setLists(listData || []);
       })
       .catch((err) => toast.error('Failed to load profile: ' + err.message))
@@ -55,8 +61,23 @@ export default function ProfilePage() {
 
   const loadTab = async (tab) => {
     setActiveTab(tab.key);
+    if (!tab.field) return; // reviews tab is already loaded in full on mount
     const data = await getUserPerfumesByStatus(profile.id, tab.field);
     setPerfumes(data.map((d) => d.perfumes).filter(Boolean));
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await deleteReview(reviewId);
+      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+      setCounts((prev) => ({ ...prev, reviews: prev.reviews - 1 }));
+    } catch (err) {
+      toast.error('Failed to delete review: ' + err.message);
+    }
+  };
+
+  const handleUpdateReview = (updated) => {
+    setReviews((prev) => prev.map((r) => (r.id === updated.id ? { ...r, ...updated } : r)));
   };
 
   if (loading) {
@@ -112,6 +133,7 @@ export default function ProfilePage() {
           <div className="shelf__head-stats">
             <div><span>{counts.owned}</span><label>Owned</label></div>
             <div><span>{counts.want_to_try}</span><label>Wishlist</label></div>
+            <div><span>{counts.reviews}</span><label>Reviews</label></div>
           </div>
           {isOwn && <Link to="/settings" className="btn btn-secondary">Edit profile</Link>}
         </div>
@@ -125,7 +147,25 @@ export default function ProfilePage() {
                 </button>
               ))}
             </div>
-            {perfumes.length > 0 ? (
+            {activeTab === 'reviews' ? (
+              reviews.length > 0 ? (
+                <div className="shelf__reviews">
+                  {reviews.map((r) => (
+                    <ReviewCard key={r.id} review={r} currentUserId={user?.id} onDelete={handleDeleteReview} onUpdate={handleUpdateReview} />
+                  ))}
+                </div>
+              ) : (
+                <div className="shelf__empty">
+                  <div className="shelf__empty-outlines">
+                    <span /><span /><span />
+                  </div>
+                  <div>
+                    <div>No verdicts yet</div>
+                    {isOwn && <p>Write one from any fragrance's page.</p>}
+                  </div>
+                </div>
+              )
+            ) : perfumes.length > 0 ? (
               <div className="shelf__grid">
                 {perfumes.map((p) => <PerfumeCard key={p.id} perfume={p} />)}
               </div>

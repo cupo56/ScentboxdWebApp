@@ -81,6 +81,18 @@ const useAuthStore = create((set, get) => ({
 
   register: async (email, password, username) => {
     set({ loading: true, error: null });
+
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', username)
+      .maybeSingle();
+
+    if (existingProfile) {
+      set({ error: 'That username is already taken.', loading: false });
+      return false;
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -93,10 +105,14 @@ const useAuthStore = create((set, get) => ({
 
     // Create profile with username
     if (data.user) {
-      await supabase.from('profiles').upsert({
+      const { error: profileError } = await supabase.from('profiles').upsert({
         id: data.user.id,
         username,
       });
+      if (profileError) {
+        set({ error: profileError.message, loading: false });
+        return false;
+      }
     }
 
     set({ loading: false });
