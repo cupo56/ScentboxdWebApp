@@ -13,9 +13,11 @@ npm run dev       # Start dev server (http://localhost:5173)
 npm run build     # Production build
 npm run preview   # Preview production build
 npm run lint      # Run ESLint
+npm test          # Run the Vitest test suite once
+npm run test:watch # Run Vitest in watch mode
 ```
 
-There is no test suite configured.
+Tests use Vitest + React Testing Library (`client/vite.config.js` `test` block, jsdom environment, setup file at `client/src/test/setup.js`). Service tests mock `../lib/supabaseClient` via the chainable builder mock in `client/src/test/supabaseMock.js` — see `perfumeService.test.js` for the pattern. Tests are colocated with the file they cover (`Foo.js` → `Foo.test.js`/`Foo.test.jsx`).
 
 ## Architecture
 

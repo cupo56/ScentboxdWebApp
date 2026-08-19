@@ -42,6 +42,9 @@
 .entry__empty-verdicts { color: var(--text-dim); }
 .entry__empty-verdicts div { font: var(--weight-heading) 17px var(--font); color: var(--text); }
 
+.entry__load-more-reviews { display: flex; align-items: center; gap: var(--space-6); margin-top: var(--space-8); padding-top: var(--space-8); border-top: 1px solid var(--hairline); }
+.entry__load-more-reviews span { font: var(--weight-body) 12.5px var(--font); color: var(--text-dim); }
+
 .entry__similar { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-14) var(--space-14); }
 .entry__similar h2 { font: var(--weight-heading) 20px var(--font); color: var(--text); margin-bottom: var(--space-6); }
 

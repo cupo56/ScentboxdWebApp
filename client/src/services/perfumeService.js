@@ -1,5 +1,62 @@
 import { supabase } from '../lib/supabaseClient';
 
+function sortToRpcParams(sortBy) {
+  switch (sortBy) {
+    case 'name_desc':
+      return { column: 'name', ascending: false };
+    case 'performance':
+      return { column: 'performance', ascending: false };
+    case 'newest':
+      return { column: 'created_at', ascending: false };
+    case 'name':
+    default:
+      return { column: 'name', ascending: true };
+  }
+}
+
+// noteFamily can't be filtered server-side via a plain column (it lives on the
+// related notes table), so it's routed through the get_perfumes_by_notes RPC,
+// which expects individual note names rather than a family.
+async function getPerfumesByNoteFamily({ search, brand, concentration, noteFamily, longevity, sortBy, from, pageSize }) {
+  const { data: familyNotes, error: notesError } = await supabase
+    .from('notes')
+    .select('name')
+    .eq('family', noteFamily);
+
+  if (notesError) throw notesError;
+
+  const noteNames = familyNotes.map((n) => n.name);
+  if (noteNames.length === 0) {
+    return { perfumes: [], total: 0 };
+  }
+
+  const { column, ascending } = sortToRpcParams(sortBy);
+
+  const { data, error } = await supabase.rpc('get_perfumes_by_notes', {
+    p_notes: noteNames,
+    p_brand_id: brand || null,
+    p_concentration: concentration || null,
+    p_longevity: longevity || null,
+    p_search_query: search || null,
+    p_sort_column: column,
+    p_sort_ascending: ascending,
+    p_limit: pageSize,
+    p_offset: from,
+    p_count_only: false,
+  });
+
+  if (error) throw error;
+
+  const total = data?.[0]?.total_count ?? 0;
+  const perfumes = (data || []).map((row) => {
+    const perfume = { ...row };
+    delete perfume.total_count;
+    return perfume;
+  });
+
+  return { perfumes, total };
+}
+
 /**
  * Fetch perfumes with brand + notes, supporting search, filters, and pagination.
  */
@@ -15,6 +72,10 @@ export async function getPerfumes({
 } = {}) {
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
+
+  if (noteFamily) {
+    return getPerfumesByNoteFamily({ search, brand, concentration, noteFamily, longevity, sortBy, from, pageSize });
+  }
 
   let query = supabase
     .from('perfumes')
@@ -81,15 +142,7 @@ export async function getPerfumes({
 
   if (error) throw error;
 
-  // Filter by note family client-side if needed (Supabase doesn't support deep nested filters easily)
-  let filtered = data;
-  if (noteFamily) {
-    filtered = data.filter((p) =>
-      p.perfume_notes?.some((pn) => pn.notes?.family === noteFamily)
-    );
-  }
-
-  return { perfumes: filtered, total: count };
+  return { perfumes: data, total: count };
 }
 
 /**

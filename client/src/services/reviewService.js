@@ -1,14 +1,32 @@
 import { supabase } from '../lib/supabaseClient';
 
 /**
- * Fetch reviews for a perfume.
+ * Fetch a page of reviews for a perfume, newest first.
  */
-export async function getReviewsByPerfume(perfumeId) {
-  const { data, error } = await supabase
+export async function getReviewsByPerfume(perfumeId, { page = 1, pageSize = 10 } = {}) {
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, error, count } = await supabase
     .from('reviews')
-    .select(`*, profiles(username, avatar_url)`)
+    .select(`*, profiles(username, avatar_url)`, { count: 'exact' })
     .eq('perfume_id', perfumeId)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .range(from, to);
+
+  if (error) throw error;
+  return { reviews: data, total: count };
+}
+
+/**
+ * Aggregate rating stats (avg rating, review count, avg longevity/sillage) for a
+ * perfume, computed server-side across all reviews — independent of any review
+ * list pagination, so it stays correct as getReviewsByPerfume only loads a page.
+ */
+export async function getPerfumeRatingSummary(perfumeId) {
+  const { data, error } = await supabase
+    .rpc('get_perfume_rating', { p_perfume_id: perfumeId })
+    .single();
 
   if (error) throw error;
   return data;
