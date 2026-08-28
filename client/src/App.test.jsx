@@ -11,7 +11,7 @@ describe('App maintenance gate', () => {
     const { container } = render(<App />);
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Wir bauen gerade an scentboxd'
+      'Wir bauen gerade an Scentboxd'
     );
     // Kein Layout gemountet -> keine Navigation im Baum.
     expect(container.querySelector('nav')).toBeNull();

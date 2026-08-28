@@ -5,7 +5,7 @@ const WAITLIST_URL = 'https://waitlist.scent-boxd.com';
 
 export default function MaintenancePage() {
   useEffect(() => {
-    document.title = 'scentboxd — wird gerade gebaut';
+    document.title = 'Scentboxd — wird gerade gebaut';
 
     // Zur Laufzeit gesetzt, nicht in index.html: dort würde es die volle App
     // auf allen anderen Hosts mit deindexieren.
@@ -24,13 +24,13 @@ export default function MaintenancePage() {
       <div className="maintenance__glow" aria-hidden="true" />
 
       <div className="maintenance__content">
-        <p className="maintenance__wordmark">scentboxd</p>
+        <p className="maintenance__wordmark">Scentboxd</p>
 
-        <h1 className="maintenance__title">Wir bauen gerade an scentboxd</h1>
+        <h1 className="maintenance__title">Wir bauen gerade an Scentboxd</h1>
 
         <p className="maintenance__subtitle">
           Deine Duftsammlung, endlich an einem Ort. Wir feilen noch an den
-          letzten Details — trag dich in die Warteliste ein und du bist beim
+          letzten Details. Trag dich in die Warteliste ein und du bist beim
           Start dabei.
         </p>
 

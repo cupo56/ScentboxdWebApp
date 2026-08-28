@@ -12,7 +12,7 @@ describe('MaintenancePage', () => {
     render(<MaintenancePage />);
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Wir bauen gerade an scentboxd'
+      'Wir bauen gerade an Scentboxd'
     );
   });
 
