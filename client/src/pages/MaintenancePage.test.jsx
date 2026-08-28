@@ -1,11 +1,6 @@
-import { describe, it, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import MaintenancePage from './MaintenancePage';
-
-// vite.config.js setzt `globals` nicht, deshalb registriert Testing Library
-// sein automatisches Cleanup nicht selbst — ohne das hier bleiben die Renders
-// der vorherigen Tests im Dokument stehen.
-afterEach(cleanup);
 
 describe('MaintenancePage', () => {
   it('shows the headline', () => {
