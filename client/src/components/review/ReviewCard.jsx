@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { ChatCircle, Flag } from '@phosphor-icons/react';
 import StarRating from './StarRating';
 import ReviewForm from './ReviewForm';
+import CommentSection from './CommentSection';
+import ReportModal from '../report/ReportModal';
 import { toggleReviewLike, getReviewLikeCount, hasUserLikedReview } from '../../services/reviewService';
+import { getCommentCount } from '../../services/commentService';
 import { useAuth } from '../../hooks/useAuth';
 import './ReviewCard.css';
 
@@ -12,6 +16,9 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
   const [likeCount, setLikeCount] = useState(0);
   const [likeLoading, setLikeLoading] = useState(false);
   const [likeAnimating, setLikeAnimating] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [reporting, setReporting] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -29,6 +36,10 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
   useEffect(() => {
     getReviewLikeCount(review.id)
       .then(setLikeCount)
+      .catch(() => {});
+
+    getCommentCount(review.id)
+      .then(setCommentCount)
       .catch(() => {});
 
     if (isAuthenticated) {
@@ -106,6 +117,18 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         <StarRating rating={review.rating} size="sm" />
       </div>
 
+      {review.perfumes && (
+        <Link to={`/perfume/${review.perfumes.id}`} className="verdict-row__perfume">
+          <span className="verdict-row__perfume-thumb">
+            {review.perfumes.image_url ? <img src={review.perfumes.image_url} alt="" /> : '◆'}
+          </span>
+          <span>
+            <span className="verdict-row__perfume-brand">{review.perfumes.brands?.name}</span>
+            <span className="verdict-row__perfume-name">{review.perfumes.name}</span>
+          </span>
+        </Link>
+      )}
+
       <h4 className="verdict-row__title">{review.title}</h4>
       <p className="verdict-row__text">{review.text}</p>
 
@@ -124,10 +147,28 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         </div>
       )}
 
-      {review.occasions?.length > 0 && (
+      {(review.bottle_rating > 0 || review.value_rating > 0) && (
+        <div className="verdict-row__sub-ratings">
+          {review.bottle_rating > 0 && (
+            <span className="verdict-row__sub-rating">
+              Bottle <StarRating rating={review.bottle_rating} size="sm" />
+            </span>
+          )}
+          {review.value_rating > 0 && (
+            <span className="verdict-row__sub-rating">
+              Value <StarRating rating={review.value_rating} size="sm" />
+            </span>
+          )}
+        </div>
+      )}
+
+      {(review.occasions?.length > 0 || review.seasons?.length > 0) && (
         <div className="verdict-row__occasions">
-          {review.occasions.map((occ, i) => (
-            <span key={i} className="badge badge-accent">{occ}</span>
+          {review.occasions?.map((occ, i) => (
+            <span key={`occ-${i}`} className="badge badge-accent">{occ}</span>
+          ))}
+          {review.seasons?.map((season, i) => (
+            <span key={`season-${i}`} className="badge">{season}</span>
           ))}
         </div>
       )}
@@ -158,13 +199,46 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
           )}
         </button>
 
-        {isOwner && (
+        <button
+          type="button"
+          className={`verdict-row__comment-btn ${commentsOpen ? 'verdict-row__comment-btn--active' : ''}`}
+          onClick={() => setCommentsOpen((v) => !v)}
+          aria-expanded={commentsOpen}
+          aria-label={commentsOpen ? 'Hide comments' : 'Show comments'}
+        >
+          <ChatCircle size={18} weight={commentsOpen ? 'fill' : 'regular'} aria-hidden="true" />
+          {commentCount > 0 && <span className="verdict-row__comment-count">{commentCount}</span>}
+        </button>
+
+        {isOwner ? (
           <div className="verdict-row__actions">
             <button className="btn btn-ghost btn-sm" onClick={() => setIsEditing(true)}>Edit</button>
             <button className="btn btn-ghost btn-sm verdict-row__delete-btn" onClick={handleDelete}>Delete</button>
           </div>
+        ) : (
+          <button
+            type="button"
+            className="verdict-row__report-btn"
+            onClick={() => (isAuthenticated ? setReporting(true) : navigate('/login'))}
+            aria-label="Report this review"
+          >
+            <Flag size={16} aria-hidden="true" />
+          </button>
         )}
       </div>
+
+      {commentsOpen && (
+        <CommentSection reviewId={review.id} currentUserId={currentUserId} onCountChange={setCommentCount} />
+      )}
+
+      {reporting && (
+        <ReportModal
+          contentType="review"
+          contentId={review.id}
+          reportedUserId={review.user_id}
+          onClose={() => setReporting(false)}
+        />
+      )}
     </div>
   );
 }

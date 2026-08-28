@@ -1,0 +1,25 @@
+.report-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: var(--space-6);
+}
+
+.report-modal {
+  width: 100%; max-width: 380px;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--radius-md); overflow: hidden;
+}
+
+.report-modal__header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--hairline); padding: var(--space-5) var(--space-6); }
+.report-modal__header h2 { font: var(--weight-heading) 16px var(--font); color: var(--text); }
+.report-modal__close { border: none; background: transparent; color: var(--text-dim); cursor: pointer; font-size: 14px; padding: var(--space-2); }
+
+.report-modal__body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+
+.report-modal__reasons { display: flex; flex-direction: column; gap: var(--space-3); }
+.report-modal__reason { display: flex; align-items: center; gap: var(--space-3); font: var(--weight-body) 13.5px var(--font); color: var(--text-body); cursor: pointer; }
+.report-modal__reason input { accent-color: var(--accent); }
+
+.report-modal__body textarea.input { min-height: 72px; resize: vertical; }
+
+.report-modal__actions { display: flex; justify-content: flex-end; gap: var(--space-3); }

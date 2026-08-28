@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getPerfumes } from '../services/perfumeService';
-import { getLatestReviews, getReviewCountByUser } from '../services/reviewService';
+import { getLatestReviews, getReviewsByUserIds, getReviewCountByUser } from '../services/reviewService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
+import { getFollowingIds } from '../services/followService';
+import { getBlockedIds } from '../services/blockService';
 import { useAuth } from '../hooks/useAuth';
 import './HomePage.css';
 
@@ -25,6 +27,7 @@ export default function HomePage() {
   const { isAuthenticated, user } = useAuth();
   const [bottleOfDay, setBottleOfDay] = useState(null);
   const [activity, setActivity] = useState([]);
+  const [personalized, setPersonalized] = useState(false);
   const [verdicts, setVerdicts] = useState([]);
   const [ownedCount, setOwnedCount] = useState(0);
   const [wantCount, setWantCount] = useState(0);
@@ -33,16 +36,39 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.allSettled([
-      getPerfumes({ sortBy: 'performance', pageSize: 1 }),
-      getLatestReviews(4),
-      getLatestReviews(2),
-    ]).then(([bottle, feed, top]) => {
-      if (bottle.status === 'fulfilled') setBottleOfDay(bottle.value.perfumes?.[0] || null);
-      if (feed.status === 'fulfilled') setActivity(feed.value);
-      if (top.status === 'fulfilled') setVerdicts(top.value);
-    }).finally(() => setLoading(false));
-  }, []);
+    const load = async () => {
+      const [followingIds, blockedIds] = isAuthenticated && user
+        ? await Promise.all([getFollowingIds(user.id).catch(() => []), getBlockedIds().catch(() => [])])
+        : [[], []];
+      const notBlocked = (r) => !blockedIds.includes(r.user_id);
+
+      const [bottleResult, topResult] = await Promise.allSettled([
+        getPerfumes({ sortBy: 'performance', pageSize: 1 }),
+        getLatestReviews(4),
+      ]);
+      if (bottleResult.status === 'fulfilled') setBottleOfDay(bottleResult.value.perfumes?.[0] || null);
+      if (topResult.status === 'fulfilled') {
+        setVerdicts((blockedIds.length ? topResult.value.filter(notBlocked) : topResult.value).slice(0, 2));
+      }
+
+      // Prefer activity from people the user follows; fall back to the global
+      // feed if they don't follow anyone yet, or nobody they follow has posted.
+      let feedItems = followingIds.length > 0
+        ? await getReviewsByUserIds(followingIds, 4).catch(() => [])
+        : [];
+      if (blockedIds.length) feedItems = feedItems.filter(notBlocked);
+      const usePersonalized = feedItems.length > 0;
+      if (!usePersonalized) {
+        feedItems = await getLatestReviews(4).catch(() => []);
+        if (blockedIds.length) feedItems = feedItems.filter(notBlocked);
+      }
+
+      setActivity(feedItems);
+      setPersonalized(usePersonalized);
+      setLoading(false);
+    };
+    load();
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (!isAuthenticated || !user) {
@@ -107,7 +133,7 @@ export default function HomePage() {
         </div>
 
         <div className="feed__col feed__col--activity">
-          <span className="feed__label">Right now</span>
+          <span className="feed__label">{personalized ? 'From people you follow' : 'Right now'}</span>
           <div className="feed__activity">
             {activity.map((r) => <ActivityRow key={r.id} review={r} />)}
             {!loading && activity.length === 0 && <p className="feed__empty">No activity yet.</p>}

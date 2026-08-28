@@ -36,6 +36,16 @@ export async function updateProfile({ username, bio, avatar_url, is_public }) {
   const user = session?.user;
   if (!user) throw new Error('Not authenticated');
 
+  if (username !== undefined) {
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', username)
+      .neq('id', user.id)
+      .maybeSingle();
+    if (existingProfile) throw new Error('That username is already taken.');
+  }
+
   const updates = {};
   if (username !== undefined) updates.username = username;
   if (bio !== undefined) updates.bio = bio;

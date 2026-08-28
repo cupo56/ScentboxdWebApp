@@ -43,6 +43,9 @@ export async function createReview({
   longevity = null,
   sillage = null,
   occasions = [],
+  bottle_rating = null,
+  value_rating = null,
+  seasons = [],
 }) {
   const { data: { session } } = await supabase.auth.getSession();
   const user = session?.user;
@@ -59,6 +62,9 @@ export async function createReview({
       longevity,
       sillage,
       occasions,
+      bottle_rating,
+      value_rating,
+      seasons,
     })
     .select(`*, profiles(username, avatar_url)`)
     .single();
@@ -139,6 +145,34 @@ export async function hasUserLikedReview(reviewId) {
 }
 
 /**
+ * Get all reviews written by a user, most recent first.
+ */
+export async function getReviewsByUser(userId) {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select(`*, profiles(username, avatar_url), perfumes(id, name, image_url, brands(name))`)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Get the reviews a user has liked, most recently liked first.
+ */
+export async function getLikedReviewsByUser(userId) {
+  const { data, error } = await supabase
+    .from('review_likes')
+    .select(`created_at, reviews(*, profiles(username, avatar_url), perfumes(id, name, image_url, brands(name)))`)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data.map((row) => row.reviews).filter(Boolean);
+}
+
+/**
  * Get total review count.
  */
 export async function getReviewCount() {
@@ -182,6 +216,28 @@ export async function getLatestReviews(limit = 5) {
 }
 
 /**
+ * Get the latest reviews written by any of the given users (e.g. for a
+ * "people you follow" feed).
+ */
+export async function getReviewsByUserIds(userIds, limit = 10) {
+  if (!userIds.length) return [];
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .select(`
+      *,
+      profiles(username, avatar_url),
+      perfumes(id, name, image_url, brands(name))
+    `)
+    .in('user_id', userIds)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data;
+}
+
+/**
  * Update an existing review.
  */
 export async function updateReview(reviewId, updates) {
@@ -198,6 +254,9 @@ export async function updateReview(reviewId, updates) {
       longevity: updates.longevity,
       sillage: updates.sillage,
       occasions: updates.occasions,
+      bottle_rating: updates.bottle_rating,
+      value_rating: updates.value_rating,
+      seasons: updates.seasons,
     })
     .eq('id', reviewId)
     .eq('user_id', user.id)

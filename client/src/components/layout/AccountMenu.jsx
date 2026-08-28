@@ -4,13 +4,14 @@ import { useAuth } from '../../hooks/useAuth';
 import { getUserPerfumesByStatus } from '../../services/userPerfumeService';
 import { getUserLists } from '../../services/listService';
 import { getReviewCountByUser } from '../../services/reviewService';
+import { getFollowCounts } from '../../services/followService';
 import './AccountMenu.css';
 
 export default function AccountMenu() {
   const { profile, user, logout, shelfPath } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [counts, setCounts] = useState({ owned: 0, lists: 0, verdicts: 0, want: 0 });
+  const [counts, setCounts] = useState({ owned: 0, lists: 0, verdicts: 0, want: 0, followers: 0, following: 0 });
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -20,8 +21,9 @@ export default function AccountMenu() {
       getUserPerfumesByStatus(user.id, 'is_want_to_try'),
       getUserLists(user.id),
       getReviewCountByUser(user.id),
-    ]).then(([owned, want, lists, verdicts]) => {
-      setCounts({ owned: owned.length, want: want.length, lists: (lists || []).length, verdicts });
+      getFollowCounts(user.id),
+    ]).then(([owned, want, lists, verdicts, follows]) => {
+      setCounts({ owned: owned.length, want: want.length, lists: (lists || []).length, verdicts, followers: follows.followers, following: follows.following });
     }).catch(() => {});
   }, [open, user]);
 
@@ -69,6 +71,7 @@ export default function AccountMenu() {
             <div>
               <div className="account-menu__handle">{profile?.username}</div>
               <div className="account-menu__meta">{counts.owned} owned · {counts.verdicts} verdicts</div>
+              <div className="account-menu__meta">{counts.followers} followers · {counts.following} following</div>
             </div>
           </div>
 

@@ -4,6 +4,7 @@ import { createReview, updateReview } from '../../services/reviewService';
 import './ReviewForm.css';
 
 const OCCASION_OPTIONS = ['Daily', 'Office', 'Date Night', 'Evening Out', 'Summer', 'Winter', 'Special Occasion'];
+const SEASON_OPTIONS = ['Spring', 'Summer', 'Fall', 'Winter'];
 
 export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCancel }) {
   const [text, setText] = useState(initialData?.text || '');
@@ -11,12 +12,21 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
   const [longevity, setLongevity] = useState(initialData?.longevity ?? '');
   const [sillage, setSillage] = useState(initialData?.sillage ?? '');
   const [occasions, setOccasions] = useState(initialData?.occasions || []);
+  const [bottleRating, setBottleRating] = useState(initialData?.bottle_rating || 0);
+  const [valueRating, setValueRating] = useState(initialData?.value_rating || 0);
+  const [seasons, setSeasons] = useState(initialData?.seasons || []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const toggleOccasion = (occ) => {
     setOccasions((prev) =>
       prev.includes(occ) ? prev.filter((o) => o !== occ) : [...prev, occ]
+    );
+  };
+
+  const toggleSeason = (season) => {
+    setSeasons((prev) =>
+      prev.includes(season) ? prev.filter((s) => s !== season) : [...prev, season]
     );
   };
 
@@ -39,19 +49,26 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         longevity: longevity !== '' ? parseInt(longevity) : null,
         sillage: sillage !== '' ? parseInt(sillage) : null,
         occasions,
+        bottle_rating: bottleRating || null,
+        value_rating: valueRating || null,
+        seasons,
       };
 
-      if (initialData) {
-        const updated = await updateReview(initialData.id, payload);
-        onReviewAdded?.(updated);
-      } else {
-        const review = await createReview(payload);
-        onReviewAdded?.(review);
+      const review = initialData
+        ? await updateReview(initialData.id, payload)
+        : await createReview(payload);
+
+      onReviewAdded?.(review);
+
+      if (!initialData) {
         setText('');
         setRating(0);
         setLongevity('');
         setSillage('');
         setOccasions([]);
+        setBottleRating(0);
+        setValueRating(0);
+        setSeasons([]);
       }
     } catch (err) {
       setError(err.message || 'Failed to submit review');
@@ -110,6 +127,17 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         </div>
       </div>
 
+      <div className="composer__row">
+        <div className="composer__field">
+          <label>Bottle</label>
+          <StarRating rating={bottleRating} size="sm" interactive onChange={setBottleRating} />
+        </div>
+        <div className="composer__field">
+          <label>Value for money</label>
+          <StarRating rating={valueRating} size="sm" interactive onChange={setValueRating} />
+        </div>
+      </div>
+
       <div className="composer__field">
         <label>Best for</label>
         <div className="composer__occasions">
@@ -121,6 +149,22 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
               onClick={() => toggleOccasion(occ)}
             >
               {occ}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="composer__field">
+        <label>Seasons</label>
+        <div className="composer__occasions">
+          {SEASON_OPTIONS.map((season) => (
+            <button
+              key={season}
+              type="button"
+              className={`composer__occ-btn ${seasons.includes(season) ? 'active' : ''}`}
+              onClick={() => toggleSeason(season)}
+            >
+              {season}
             </button>
           ))}
         </div>

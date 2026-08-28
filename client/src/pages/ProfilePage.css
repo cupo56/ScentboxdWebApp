@@ -9,6 +9,16 @@
 .shelf__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .shelf__head-info h1 { font: var(--weight-heading) 26px var(--font); color: var(--text); }
 .shelf__head-info p { font: var(--weight-body) 14px var(--font); color: var(--text-muted); margin-top: var(--space-2); }
+.shelf__member-since { font-size: 12.5px; color: var(--text-dim); }
+.shelf__follow-counts { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-3); }
+.shelf__follow-counts button { border: none; background: none; padding: 0; cursor: pointer; color: var(--text-muted); font: var(--weight-body) 13px var(--font); transition: color 0.15s ease; }
+.shelf__follow-counts button:hover { color: var(--accent-text); }
+.shelf__follow-counts strong { color: var(--text); font-weight: var(--weight-label); margin-right: var(--space-1); }
+.shelf__follow-sep { color: var(--hairline-strong); font-size: 13px; }
+.shelf__profile-actions { display: flex; align-items: center; gap: var(--space-3); }
+.shelf__report-btn { border: none; background: none; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; padding: var(--space-2); }
+.shelf__report-btn:hover { color: var(--danger); }
+
 .shelf__head-stats { margin-left: auto; display: flex; gap: var(--space-10); text-align: right; }
 .shelf__head-stats span { display: block; font: var(--weight-heading) 22px var(--font); color: var(--text); font-variant-numeric: tabular-nums; }
 .shelf__head-stats label { font: var(--weight-body) 11.5px var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
@@ -21,6 +31,8 @@
 .shelf__tabs button.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
 
 .shelf__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-6); }
+
+.shelf__reviews { display: flex; flex-direction: column; gap: var(--space-6); }
 
 .shelf__empty { display: flex; align-items: center; gap: var(--space-8); color: var(--text-muted); }
 .shelf__empty-outlines { display: flex; gap: var(--space-3); }

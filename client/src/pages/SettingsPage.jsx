@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { updateProfile, uploadAvatar } from '../services/profileService';
 import { getNotificationPreferences, updateNotificationPreferences } from '../services/notificationService';
+import { getBlockedUsers, unblockUser } from '../services/blockService';
 import { supabase } from '../lib/supabaseClient';
 import { toast } from '../store/toastStore';
 import './SettingsPage.css';
@@ -33,6 +34,7 @@ export default function SettingsPage() {
   const [bio, setBio] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const [notifs, setNotifs] = useState(null);
+  const [blockedUsers, setBlockedUsers] = useState([]);
   const [initial, setInitial] = useState(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -53,6 +55,20 @@ export default function SettingsPage() {
     // on identity alone would redundantly refetch prefs and reset local edits after every save.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, profile?.id]);
+
+  useEffect(() => {
+    if (!user) return;
+    getBlockedUsers().then(setBlockedUsers).catch(() => {});
+  }, [user]);
+
+  const handleUnblock = async (targetId) => {
+    try {
+      await unblockUser(targetId);
+      setBlockedUsers((prev) => prev.filter((p) => p.id !== targetId));
+    } catch (err) {
+      toast.error('Failed to unblock: ' + err.message);
+    }
+  };
 
   if (!initial || !notifs) {
     return <div className="spinner-container"><div className="spinner spinner-lg" /></div>;
@@ -221,6 +237,24 @@ export default function SettingsPage() {
               >
                 <span />
               </button>
+            </div>
+
+            <div className="settings__toggle-row">
+              <div>
+                <div className="settings__field-title">Blocked users</div>
+                {blockedUsers.length === 0 ? (
+                  <div className="settings__field-hint">You haven't blocked anyone.</div>
+                ) : (
+                  <div className="settings__blocked-list">
+                    {blockedUsers.map((p) => (
+                      <div key={p.id} className="settings__blocked-row">
+                        <span>{p.username}</span>
+                        <button type="button" className="btn btn-secondary btn-sm" onClick={() => handleUnblock(p.id)}>Unblock</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </section>
 

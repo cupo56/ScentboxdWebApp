@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
 import { getReviewsByPerfume, getPerfumeRatingSummary, deleteReview } from '../services/reviewService';
+import { getBlockedIds } from '../services/blockService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
 import PerformanceBar from '../components/perfume/PerformanceBar';
 import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
@@ -14,6 +15,9 @@ import './PerfumeDetailPage.css';
 
 const REVIEWS_PAGE_SIZE = 10;
 
+const withoutBlocked = (rows, blocked) =>
+  blocked.length ? rows.filter((r) => !blocked.includes(r.user_id)) : rows;
+
 export default function PerfumeDetailPage() {
   const { id } = useParams();
   const { isAuthenticated, user } = useAuth();
@@ -21,6 +25,7 @@ export default function PerfumeDetailPage() {
   const [reviews, setReviews] = useState([]);
   const [reviewsTotal, setReviewsTotal] = useState(0);
   const [reviewPage, setReviewPage] = useState(1);
+  const [blockedIds, setBlockedIds] = useState([]);
   const [loadingMoreReviews, setLoadingMoreReviews] = useState(false);
   const [ratingSummary, setRatingSummary] = useState(null);
   const [similar, setSimilar] = useState([]);
@@ -35,28 +40,30 @@ export default function PerfumeDetailPage() {
     setLoading(true);
     setError('');
     getPerfumeById(id)
-      .then((data) => {
+      .then(async (data) => {
         setPerfume(data);
-        getReviewsByPerfume(id, { page: 1, pageSize: REVIEWS_PAGE_SIZE })
-          .then(({ reviews: firstPage, total }) => {
-            setReviews(firstPage);
-            setReviewsTotal(total);
-            setReviewPage(1);
-          })
-          .catch(() => {});
+        const [firstPage, blocked] = await Promise.all([
+          getReviewsByPerfume(id, { page: 1, pageSize: REVIEWS_PAGE_SIZE })
+            .catch(() => ({ reviews: [], total: 0 })),
+          isAuthenticated ? getBlockedIds().catch(() => []) : Promise.resolve([]),
+        ]);
+        setBlockedIds(blocked);
+        setReviews(withoutBlocked(firstPage.reviews, blocked));
+        setReviewsTotal(firstPage.total);
+        setReviewPage(1);
         refreshRatingSummary(id);
         if (data.brand_id) getSimilarPerfumes(data.brand_id, id).then(setSimilar).catch(() => {});
       })
       .catch((err) => setError(err.message || 'Failed to load perfume'))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   const loadMoreReviews = async () => {
     setLoadingMoreReviews(true);
     try {
       const nextPage = reviewPage + 1;
       const { reviews: nextReviews, total } = await getReviewsByPerfume(id, { page: nextPage, pageSize: REVIEWS_PAGE_SIZE });
-      setReviews((prev) => [...prev, ...nextReviews]);
+      setReviews((prev) => [...prev, ...withoutBlocked(nextReviews, blockedIds)]);
       setReviewsTotal(total);
       setReviewPage(nextPage);
     } catch (err) {
