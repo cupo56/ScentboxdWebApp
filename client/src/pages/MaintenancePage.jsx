@@ -21,10 +21,16 @@ export default function MaintenancePage() {
 
   return (
     <main className="maintenance" id="maintenance-page">
-      <div className="maintenance__glow" aria-hidden="true" />
+      <div className="maintenance__aurora" aria-hidden="true">
+        <div className="maintenance__blob maintenance__blob--1" />
+        <div className="maintenance__blob maintenance__blob--2" />
+        <div className="maintenance__blob maintenance__blob--3" />
+      </div>
 
       <div className="maintenance__content">
-        <p className="maintenance__wordmark">Scentboxd</p>
+        <p className="maintenance__wordmark">
+          Scent<span className="maintenance__wordmark-accent">boxd</span>
+        </p>
 
         <h1 className="maintenance__title">Wir bauen gerade an Scentboxd</h1>
 
@@ -35,7 +41,7 @@ export default function MaintenancePage() {
         </p>
 
         <a
-          className="btn btn-primary btn-lg"
+          className="maintenance__cta"
           href={WAITLIST_URL}
           id="maintenance-waitlist-btn"
         >

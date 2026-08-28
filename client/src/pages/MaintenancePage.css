@@ -1,74 +1,195 @@
-/* ===== Maintenance — scent-boxd.com ===== */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap');
+
+/* ===== Maintenance — scent-boxd.com =====
+   Übernimmt die visuelle Sprache von waitlist.scent-boxd.com: Magenta-Akzent
+   auf fast-schwarzem Grund, Fraunces als Display-Serif, driftende Aurora-Blobs.
+   Alle Tokens sind auf .maintenance gescoped, damit die Palette der App in
+   src/index.css unberührt bleibt. */
 
 .maintenance {
+  --wl-primary: #C20A66;
+  --wl-bg: #0D0B0F;
+  --wl-text: #F2EEF0;
+  --wl-text-secondary: #A9A2A6;
+  --wl-gold: #D4A017;
+  --wl-green: #4A9E6A;
+  --wl-pink: #E85D9F;
+  --wl-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  --wl-font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: var(--space-14) var(--space-8);
+  padding: clamp(32px, 9vw, 64px) max(20px, env(safe-area-inset-right, 0px))
+    clamp(36px, 9vw, 48px) max(20px, env(safe-area-inset-left, 0px));
   overflow: hidden;
-  background: var(--bg);
+  background: var(--wl-bg);
+  color: var(--wl-text);
+  font-family: var(--wl-font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Weicher Akzent-Schein hinter dem Text */
-.maintenance__glow {
+/* ── Aurora-Hintergrund ─────────────────────────────── */
+
+.maintenance__aurora {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(760px, 120vw);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
-    transparent 68%
-  );
-  animation: maintenance-breathe 9s ease-in-out infinite;
 }
 
-@keyframes maintenance-breathe {
-  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
-  50%      { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.12); }
+.maintenance__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(clamp(48px, 14vw, 80px));
+  opacity: 0.35;
+  animation: maintenance-aurora 20s ease-in-out infinite;
+  will-change: transform;
 }
+
+.maintenance__blob--1 {
+  width: min(500px, 105vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, var(--wl-primary), transparent 70%);
+  top: -10%;
+  left: -10%;
+}
+
+.maintenance__blob--2 {
+  width: min(400px, 85vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, var(--wl-gold), transparent 70%);
+  bottom: 10%;
+  right: -5%;
+  animation-delay: -7s;
+}
+
+.maintenance__blob--3 {
+  width: min(350px, 70vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, var(--wl-green), transparent 70%);
+  top: 40%;
+  left: 60%;
+  animation-delay: -14s;
+}
+
+@keyframes maintenance-aurora {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -50px) scale(1.1); }
+  66%      { transform: translate(-20px, 30px) scale(0.9); }
+}
+
+/* ── Inhalt ─────────────────────────────────────────── */
 
 .maintenance__content {
   position: relative;
   z-index: 1;
-  max-width: 560px;
+  max-width: 720px;
   text-align: center;
 }
 
 .maintenance__wordmark {
-  margin-bottom: var(--space-10);
-  color: var(--accent-text);
-  font-size: 14px;
-  font-weight: var(--weight-label);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  margin: 0 0 clamp(24px, 7vw, 40px);
+  font-family: var(--wl-font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--wl-text);
+}
+
+.maintenance__wordmark-accent {
+  color: var(--wl-primary);
 }
 
 .maintenance__title {
-  margin-bottom: var(--space-6);
-  color: var(--text);
-  font-size: clamp(28px, 6vw, 44px);
-  font-weight: var(--weight-heading);
-  line-height: 1.15;
+  margin: 0 0 20px;
+  font-family: var(--wl-font-display);
+  font-size: clamp(34px, 9.5vw, 60px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0;
   text-wrap: balance;
+  overflow-wrap: break-word;
+  color: var(--wl-text);
+  background: linear-gradient(
+    105deg,
+    var(--wl-text) 45%,
+    var(--wl-pink) 75%,
+    var(--wl-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: maintenance-rise 0.6s ease both,
+    maintenance-gradient 6s ease infinite;
+  animation-delay: 0.05s, 0s;
 }
 
 .maintenance__subtitle {
-  margin-bottom: var(--space-10);
-  color: var(--text-body);
-  font-size: clamp(15px, 2.4vw, 17px);
-  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto clamp(24px, 6vw, 32px);
+  color: var(--wl-text-secondary);
+  font-size: clamp(15px, 4.1vw, 17px);
+  line-height: 1.55;
   text-wrap: pretty;
+  animation: maintenance-rise 0.6s ease both;
+  animation-delay: 0.12s;
+}
+
+.maintenance__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: var(--wl-primary);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: maintenance-rise 0.6s ease both;
+  animation-delay: 0.2s;
+}
+
+.maintenance__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(194, 10, 102, 0.35);
+}
+
+@keyframes maintenance-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes maintenance-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .maintenance__glow {
+  .maintenance__blob,
+  .maintenance__subtitle,
+  .maintenance__cta {
     animation: none;
+  }
+
+  .maintenance__title {
+    animation: none;
+    background-size: 100% auto;
+  }
+
+  .maintenance__cta:hover {
+    transform: none;
   }
 }
