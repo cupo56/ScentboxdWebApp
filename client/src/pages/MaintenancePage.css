@@ -1,0 +1,74 @@
+/* ===== Maintenance — scent-boxd.com ===== */
+
+.maintenance {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--space-14) var(--space-8);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Weicher Akzent-Schein hinter dem Text */
+.maintenance__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(760px, 120vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
+    transparent 68%
+  );
+  animation: maintenance-breathe 9s ease-in-out infinite;
+}
+
+@keyframes maintenance-breathe {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.12); }
+}
+
+.maintenance__content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  text-align: center;
+}
+
+.maintenance__wordmark {
+  margin-bottom: var(--space-10);
+  color: var(--accent-text);
+  font-size: 14px;
+  font-weight: var(--weight-label);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.maintenance__title {
+  margin-bottom: var(--space-6);
+  color: var(--text);
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: var(--weight-heading);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.maintenance__subtitle {
+  margin-bottom: var(--space-10);
+  color: var(--text-body);
+  font-size: clamp(15px, 2.4vw, 17px);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maintenance__glow {
+    animation: none;
+  }
+}
