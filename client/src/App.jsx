@@ -18,8 +18,18 @@ import SettingsPage from './pages/SettingsPage';
 import AccountPage from './pages/AccountPage';
 import ListDetailPage from './pages/ListDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
+import MaintenancePage from './pages/MaintenancePage';
+import { isMaintenanceMode } from './config/maintenance';
 
 export default function App() {
+  // Absichtlich vor jedem Hook: App selbst hält keinen State, deshalb kann
+  // dieser Early Return die Rules of Hooks nicht verletzen.
+  if (isMaintenanceMode()) return <MaintenancePage />;
+
+  return <AppRoutes />;
+}
+
+function AppRoutes() {
   const initialize = useAuthStore((s) => s.initialize);
 
   useEffect(() => {
