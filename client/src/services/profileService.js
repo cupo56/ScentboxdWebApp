@@ -1,12 +1,19 @@
 import { supabase } from '../lib/supabaseClient';
 
 /**
+ * Columns of profiles the web app reads. preferred_locale is left out on
+ * purpose: it is going to be locked per column, and a `select('*')` would then
+ * fail (SCE-141).
+ */
+export const PROFILE_COLUMNS = 'id, username, avatar_url, bio, is_public, created_at, updated_at';
+
+/**
  * Get profile by user ID.
  */
 export async function getProfileById(userId) {
   const { data, error } = await supabase
     .from('profiles')
-    .select('*')
+    .select(PROFILE_COLUMNS)
     .eq('id', userId)
     .single();
 
@@ -20,7 +27,7 @@ export async function getProfileById(userId) {
 export async function getProfileByUsername(username) {
   const { data, error } = await supabase
     .from('profiles')
-    .select('*')
+    .select(PROFILE_COLUMNS)
     .eq('username', username)
     .single();
 
@@ -57,7 +64,7 @@ export async function updateProfile({ username, bio, avatar_url, is_public }) {
     .from('profiles')
     .update(updates)
     .eq('id', user.id)
-    .select()
+    .select(PROFILE_COLUMNS)
     .single();
 
   if (error) throw error;

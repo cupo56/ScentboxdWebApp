@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { PROFILE_COLUMNS } from '../services/profileService';
 import { supabase } from '../lib/supabaseClient';
 
 const useAuthStore = create((set, get) => ({
@@ -22,7 +23,7 @@ const useAuthStore = create((set, get) => ({
       if (session?.user) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('*')
+          .select(PROFILE_COLUMNS)
           .eq('id', session.user.id)
           .single();
 
@@ -36,7 +37,7 @@ const useAuthStore = create((set, get) => ({
         if (session?.user) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('*')
+            .select(PROFILE_COLUMNS)
             .eq('id', session.user.id)
             .single();
 
@@ -66,7 +67,7 @@ const useAuthStore = create((set, get) => ({
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('*')
+      .select(PROFILE_COLUMNS)
       .eq('id', data.user.id)
       .single();
 

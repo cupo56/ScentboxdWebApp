@@ -1,6 +1,14 @@
 import { supabase } from '../lib/supabaseClient';
 
 /**
+ * Columns of user_perfumes the web app reads. Private columns (purchase_price,
+ * bottle_size, fill_level) are left out on purpose: they are going to be locked
+ * per column, and a `select('*')` would then fail (SCE-141).
+ */
+export const USER_PERFUME_COLUMNS =
+  'user_id, perfume_id, is_favorite, is_owned, is_want_to_try, is_signature, created_at';
+
+/**
  * Get user's perfume statuses (favorites, owned, want to try).
  */
 export async function getUserPerfumeStatus(perfumeId) {
@@ -10,7 +18,7 @@ export async function getUserPerfumeStatus(perfumeId) {
 
   const { data, error } = await supabase
     .from('user_perfumes')
-    .select('*')
+    .select(USER_PERFUME_COLUMNS)
     .eq('user_id', user.id)
     .eq('perfume_id', perfumeId)
     .maybeSingle();
@@ -30,7 +38,7 @@ export async function togglePerfumeStatus(perfumeId, field) {
   // Get current status
   const { data: existing } = await supabase
     .from('user_perfumes')
-    .select('*')
+    .select(USER_PERFUME_COLUMNS)
     .eq('user_id', user.id)
     .eq('perfume_id', perfumeId)
     .maybeSingle();
@@ -57,7 +65,7 @@ export async function togglePerfumeStatus(perfumeId, field) {
     const { data, error } = await supabase
       .from('user_perfumes')
       .insert(newRow)
-      .select()
+      .select(USER_PERFUME_COLUMNS)
       .single();
 
     if (error) throw error;
@@ -72,7 +80,7 @@ export async function getUserPerfumesByStatus(userId, field) {
   const { data, error } = await supabase
     .from('user_perfumes')
     .select(`
-      *,
+      ${USER_PERFUME_COLUMNS},
       perfumes(id, name, image_url, concentration, brands(name))
     `)
     .eq('user_id', userId)
