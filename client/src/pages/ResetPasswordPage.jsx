@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { MIN_PASSWORD_LENGTH } from '../lib/passwordPolicy';
 import './AuthPage.css';
 
 export default function ResetPasswordPage() {
@@ -40,8 +41,8 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
       return;
     }
 
@@ -114,7 +115,7 @@ export default function ResetPasswordPage() {
           <>
             <h1 className="auth__headline">Set a new password</h1>
             <p className="auth__sub">
-              Enter your new password below. Must be at least 6 characters.
+              Enter your new password below. Must be at least {MIN_PASSWORD_LENGTH} characters.
             </p>
 
             {error && <p className="auth__error">{error}</p>}
@@ -128,7 +129,7 @@ export default function ResetPasswordPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  minLength={6}
+                  minLength={MIN_PASSWORD_LENGTH}
                   required
                   autoFocus
                   id="reset-password"
@@ -142,7 +143,7 @@ export default function ResetPasswordPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  minLength={6}
+                  minLength={MIN_PASSWORD_LENGTH}
                   required
                   id="reset-password-confirm"
                 />

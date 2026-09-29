@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { MIN_PASSWORD_LENGTH } from '../lib/passwordPolicy';
 import './AuthPage.css';
 
 export default function AuthPage({ initialMode = 'signin' }) {
@@ -54,7 +55,7 @@ export default function AuthPage({ initialMode = 'signin' }) {
           </div>
           <div className="auth__field">
             <label>Password</label>
-            <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" minLength={mode === 'register' ? 6 : undefined} required />
+            <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" minLength={mode === 'register' ? MIN_PASSWORD_LENGTH : undefined} required />
           </div>
           <button className="btn btn-primary btn-lg" type="submit" disabled={loading}>
             {loading ? (mode === 'signin' ? 'Signing in…' : 'Creating account…') : (mode === 'signin' ? 'Sign in' : 'Create account')}
