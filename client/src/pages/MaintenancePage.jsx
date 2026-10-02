@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './MaintenancePage.css';
 
 const WAITLIST_URL = 'https://waitlist.scent-boxd.com';
 
-export default function MaintenancePage() {
+export default function MaintenancePage({ onAdminLogin }) {
   useEffect(() => {
     document.title = 'Scentboxd — wird gerade gebaut';
 
@@ -47,7 +47,76 @@ export default function MaintenancePage() {
         >
           Zur Warteliste
         </a>
+
+        {onAdminLogin && <AdminLogin onSubmit={onAdminLogin} />}
       </div>
     </main>
+  );
+}
+
+// Dezenter Zugang fürs Team: zugeklappt nur ein kleiner Textlink.
+function AdminLogin({ onSubmit }) {
+  const [expanded, setExpanded] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  if (!expanded) {
+    return (
+      <button
+        type="button"
+        className="maintenance__admin-toggle"
+        onClick={() => setExpanded(true)}
+      >
+        Admin
+      </button>
+    );
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    const nextError = await onSubmit(email, password);
+    // Bei Erfolg wird die Seite durch die App ersetzt, nur Fehler landen hier.
+    if (nextError) {
+      setError(nextError);
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form className="maintenance__admin" onSubmit={handleSubmit} aria-label="Admin-Login">
+      <input
+        className="maintenance__admin-input"
+        type="email"
+        placeholder="E-Mail"
+        autoComplete="email"
+        aria-label="E-Mail"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        autoFocus
+      />
+      <input
+        className="maintenance__admin-input"
+        type="password"
+        placeholder="Passwort"
+        autoComplete="current-password"
+        aria-label="Passwort"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button className="maintenance__admin-submit" type="submit" disabled={submitting}>
+        {submitting ? 'Prüfe…' : 'Einloggen'}
+      </button>
+      {error && (
+        <p className="maintenance__admin-error" role="alert">
+          {error}
+        </p>
+      )}
+    </form>
   );
 }
