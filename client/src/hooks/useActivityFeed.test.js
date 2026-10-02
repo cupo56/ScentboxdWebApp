@@ -79,4 +79,24 @@ describe('loadActivity', () => {
 
     expect(result.items).toEqual([review('g1', 'x')]);
   });
+
+  it('filters blocked users out of the personalized feed too', async () => {
+    getFollowingIds.mockResolvedValue(['a', 'y']);
+    getBlockedIds.mockResolvedValue(['y']);
+    getReviewsByUserIds.mockResolvedValue([review('f1', 'a'), review('f2', 'y')]);
+
+    const result = await loadActivity({ userId: 'me', limit: 4, scope: 'auto' });
+
+    expect(result).toEqual({ items: [review('f1', 'a')], personalized: true });
+  });
+
+  it('falls back to the global feed when every followed review is blocked', async () => {
+    getFollowingIds.mockResolvedValue(['y']);
+    getBlockedIds.mockResolvedValue(['y']);
+    getReviewsByUserIds.mockResolvedValue([review('f2', 'y')]);
+
+    const result = await loadActivity({ userId: 'me', limit: 4, scope: 'auto' });
+
+    expect(result).toEqual({ items: [review('g1', 'x')], personalized: false });
+  });
 });

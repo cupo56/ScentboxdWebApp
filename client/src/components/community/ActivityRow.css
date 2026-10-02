@@ -2,9 +2,8 @@
   display: flex;
   gap: var(--space-4);
   padding: var(--space-4) 0;
-  border-top: 1px solid var(--hairline);
 }
-.activity-row:first-child { border-top: none; }
+.activity-row + .activity-row { border-top: 1px solid var(--hairline); }
 
 .activity-row__avatar {
   width: 28px;

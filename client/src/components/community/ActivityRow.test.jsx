@@ -17,7 +17,7 @@ describe('ActivityRow', () => {
 
     expect(screen.getByRole('link', { name: 'mara' })).toHaveAttribute('href', '/profile/mara');
     expect(screen.getByRole('link', { name: 'Layton' })).toHaveAttribute('href', '/perfume/p1');
-    expect(screen.getByText('★ 4')).toBeInTheDocument();
+    expect(screen.getByText('★ 4.0')).toBeInTheDocument();
   });
 
   it('falls back when the profile is missing', () => {

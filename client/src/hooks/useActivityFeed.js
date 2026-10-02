@@ -40,6 +40,7 @@ export function useActivityFeed({ limit = 4, scope = 'auto' } = {}) {
         setItems(result.items);
         setPersonalized(result.personalized);
       })
+      .catch(() => {})
       .finally(() => {
         if (active) setLoading(false);
       });

@@ -9,7 +9,7 @@ export default function ActivityRow({ review }) {
 
   return (
     <div className="activity-row">
-      <span className="activity-row__avatar">
+      <span className="activity-row__avatar" aria-hidden="true">
         {avatar ? <img src={avatar} alt="" /> : (username || 'S')[0].toUpperCase()}
       </span>
       <div className="activity-row__body">
@@ -17,7 +17,7 @@ export default function ActivityRow({ review }) {
           {username ? <Link to={`/profile/${username}`}>{username}</Link> : <strong>Someone</strong>}
           {' rated '}
           {perfume ? <Link to={`/perfume/${perfume.id}`}>{perfume.name}</Link> : <strong>a fragrance</strong>}
-          {review.rating != null && <span className="activity-row__rating">★ {review.rating}</span>}
+          {review.rating != null && <span className="activity-row__rating">★ {Number(review.rating).toFixed(1)}</span>}
         </div>
         <div className="activity-row__time">{new Date(review.created_at).toLocaleDateString()}</div>
       </div>
