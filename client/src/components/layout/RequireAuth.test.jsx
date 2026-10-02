@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 vi.mock('../../hooks/useAuth', () => ({ useAuth: vi.fn() }));
 import { useAuth } from '../../hooks/useAuth';
@@ -15,6 +16,11 @@ const renderGuard = (props) =>
       </Routes>
     </MemoryRouter>
   );
+
+function FromProbe() {
+  const { state } = useLocation();
+  return <p>from: {state?.from}</p>;
+}
 
 beforeEach(() => vi.clearAllMocks());
 
@@ -39,6 +45,22 @@ describe('RequireAuth', () => {
     expect(screen.getByText('Sign in to see it.')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/login');
     expect(screen.queryByText('Protected')).toBeNull();
+  });
+
+  it('tells the login page where to return to', async () => {
+    useAuth.mockReturnValue({ isAuthenticated: false, loading: false });
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={['/collection']}>
+        <Routes>
+          <Route path="/collection" element={<RequireAuth prompt={{ title: 'x', text: 'y' }}><p>Protected</p></RequireAuth>} />
+          <Route path="/login" element={<FromProbe />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await user.click(screen.getByRole('link', { name: 'Sign in' }));
+    expect(screen.getByText('from: /collection')).toBeInTheDocument();
   });
 
   it('renders children when signed in', () => {

@@ -37,8 +37,9 @@ export default function ShelfPage({ status }) {
         if (active) setLoaded({ field, perfumes: rows.map((r) => r.perfumes).filter(Boolean) });
       })
       .catch((err) => {
+        if (!active) return;
         toast.error(`Failed to load ${title.toLowerCase()}: ` + err.message);
-        if (active) setLoaded({ field, perfumes: [] });
+        setLoaded({ field, perfumes: [] });
       });
     return () => {
       active = false;
@@ -48,7 +49,7 @@ export default function ShelfPage({ status }) {
   const count = perfumes.length;
 
   return (
-    <div className="container page shelf-page">
+    <div className="container page shelf-page" aria-busy={loading}>
       <header className="shelf-page__head">
         <h1 className="shelf-page__title">{title}</h1>
         {!loading && (

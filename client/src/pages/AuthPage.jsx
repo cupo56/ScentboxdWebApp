@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import './AuthPage.css';
 
 export default function AuthPage({ initialMode = 'signin' }) {
   const { login, register, loading, error, clearError } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/';
   const [mode, setMode] = useState(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +24,7 @@ export default function AuthPage({ initialMode = 'signin' }) {
     e.preventDefault();
     clearError();
     if (mode === 'signin') {
-      if (await login(email, password)) navigate('/');
+      if (await login(email, password)) navigate(from, { replace: true });
     } else if (await register(email, password, username)) {
       switchMode('signin');
     }

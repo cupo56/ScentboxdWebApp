@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('../hooks/useAuth', () => ({ useAuth: vi.fn() }));
@@ -8,6 +8,9 @@ vi.mock('../components/perfume/PerfumeCard', () => ({
   default: ({ perfume }) => <div data-testid="card">{perfume.name}</div>,
 }));
 
+vi.mock('../store/toastStore', () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+
+import { toast } from '../store/toastStore';
 import { useAuth } from '../hooks/useAuth';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
 import ShelfPage from './ShelfPage';
@@ -53,5 +56,33 @@ describe('ShelfPage', () => {
 
     expect(await screen.findByText(/No favorites yet/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /catalog/i })).toHaveAttribute('href', '/catalog');
+  });
+
+  it('shows a toast and the empty state when loading fails', async () => {
+    getUserPerfumesByStatus.mockRejectedValue(new Error('boom'));
+
+    renderPage('owned');
+
+    expect(await screen.findByText(/Nothing in your collection yet/)).toBeInTheDocument();
+    expect(toast.error).toHaveBeenCalledWith('Failed to load collection: boom');
+  });
+
+  it('shows skeletons again and refetches when the status changes', async () => {
+    let resolveFavorites;
+    getUserPerfumesByStatus
+      .mockResolvedValueOnce([{ perfumes: { id: 'p1', name: 'Layton' } }])
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveFavorites = resolve; }));
+
+    const { rerender } = renderPage('owned');
+    await screen.findByText('1 fragrance');
+
+    rerender(<MemoryRouter><ShelfPage status="favorite" /></MemoryRouter>);
+
+    expect(screen.queryByText('1 fragrance')).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Favorites' })).toBeInTheDocument();
+    expect(getUserPerfumesByStatus).toHaveBeenLastCalledWith('u1', 'is_favorite');
+
+    await act(async () => { resolveFavorites([]); });
+    expect(await screen.findByText(/No favorites yet/)).toBeInTheDocument();
   });
 });
