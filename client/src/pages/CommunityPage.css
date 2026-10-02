@@ -12,6 +12,7 @@
 .community__scope { display: flex; gap: var(--space-2); }
 
 .community__feed { padding: var(--space-2) var(--space-6); }
+.community__feed[aria-busy='true'] { opacity: 0.6; transition: opacity 0.2s ease; }
 .community__empty { padding: var(--space-8) 0; color: var(--text-body); text-align: center; }
 
 .community__more { display: flex; margin: var(--space-8) auto 0; }

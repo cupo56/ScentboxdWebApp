@@ -20,7 +20,7 @@ const review = (id) => ({
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useActivityFeed.mockReturnValue({ items: [review(1), review(2)], personalized: false, loading: false });
+  useActivityFeed.mockReturnValue({ items: [review(1), review(2)], personalized: false, loading: false, hasMore: false });
 });
 
 const renderPage = () => render(<MemoryRouter><CommunityPage /></MemoryRouter>);
@@ -52,6 +52,7 @@ describe('CommunityPage', () => {
       items: Array.from({ length: 20 }, (_, i) => review(i)),
       personalized: false,
       loading: false,
+      hasMore: true,
     });
     const user = userEvent.setup();
     renderPage();
@@ -60,9 +61,31 @@ describe('CommunityPage', () => {
     expect(useActivityFeed).toHaveBeenLastCalledWith({ limit: 40, scope: 'everyone' });
   });
 
+  it('hides "Load more" when the feed has no more rows', () => {
+    useAuth.mockReturnValue({ isAuthenticated: false });
+    renderPage();
+
+    expect(screen.queryByRole('button', { name: 'Load more' })).toBeNull();
+  });
+
+  it('marks the pressed scope chip and resets the limit on switch', async () => {
+    useAuth.mockReturnValue({ isAuthenticated: true });
+    useActivityFeed.mockReturnValue({ items: [review(1)], personalized: true, loading: false, hasMore: true });
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(screen.getByRole('button', { name: 'Load more' }));
+    expect(useActivityFeed).toHaveBeenLastCalledWith({ limit: 40, scope: 'following' });
+
+    await user.click(screen.getByRole('button', { name: 'Everyone' }));
+    expect(screen.getByRole('button', { name: 'Everyone' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Following' })).toHaveAttribute('aria-pressed', 'false');
+    expect(useActivityFeed).toHaveBeenLastCalledWith({ limit: 20, scope: 'everyone' });
+  });
+
   it('shows an empty state', () => {
     useAuth.mockReturnValue({ isAuthenticated: true });
-    useActivityFeed.mockReturnValue({ items: [], personalized: true, loading: false });
+    useActivityFeed.mockReturnValue({ items: [], personalized: true, loading: false, hasMore: false });
     renderPage();
 
     expect(screen.getByText(/Nobody you follow has posted yet/)).toBeInTheDocument();
