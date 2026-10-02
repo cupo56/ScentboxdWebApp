@@ -1,6 +1,8 @@
+import { useNoteName } from '../../hooks/useNoteName';
 import './FragrancePyramid.css';
 
 export default function FragrancePyramid({ notes }) {
+  const noteName = useNoteName();
   if (!notes || notes.length === 0) return null;
 
   const rows = [
@@ -19,7 +21,7 @@ export default function FragrancePyramid({ notes }) {
           <span className="pyramid__row-label">{row.label}</span>
           <div className="pyramid__row-notes">
             {row.list.map((pn, i) => (
-              <span key={i} className="chip">{pn.notes?.name || 'Unknown'}</span>
+              <span key={i} className="chip">{noteName(pn.notes?.name) || 'Unknown'}</span>
             ))}
           </div>
         </div>
