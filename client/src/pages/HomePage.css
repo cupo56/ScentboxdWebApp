@@ -26,16 +26,12 @@
 .feed__bottle-skeleton { height: 260px; }
 
 .feed__activity { display: flex; flex-direction: column; }
-.feed__activity-row { display: flex; gap: var(--space-4); padding: var(--space-4) 0; border-top: 1px solid var(--hairline); }
 .feed__avatar {
   width: 28px; height: 28px; flex: none; border-radius: 50%;
   background: var(--accent-tint); color: var(--accent-text);
   display: flex; align-items: center; justify-content: center;
   font: var(--weight-label) 12px var(--font);
 }
-.feed__activity-text { font: var(--weight-body) 13px/1.5 var(--font); color: var(--text-body); }
-.feed__activity-item { color: var(--accent-text); font-weight: var(--weight-label); }
-.feed__activity-time { font: var(--weight-body) 11.5px var(--font); color: var(--text-dim); margin-top: 4px; }
 .feed__empty { color: var(--text-dim); font-size: 13px; }
 
 .feed__section {
