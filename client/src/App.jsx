@@ -3,9 +3,12 @@ import { useEffect } from 'react';
 import useAuthStore from './store/authStore';
 import Layout from './components/layout/Layout';
 import RequireAuth from './components/layout/RequireAuth';
+import ExploreRedirect from './components/layout/ExploreRedirect';
 import ToastContainer from './components/layout/ToastContainer';
 import HomePage from './pages/HomePage';
-import ExplorePage from './pages/ExplorePage';
+import CatalogPage from './pages/CatalogPage';
+import ShelfPage from './pages/ShelfPage';
+import CommunityPage from './pages/CommunityPage';
 import PerfumeDetailPage from './pages/PerfumeDetailPage';
 import BrandsOverviewPage from './pages/BrandsOverviewPage';
 import BrandPage from './pages/BrandPage';
@@ -27,15 +30,15 @@ export default function App() {
   if (isMaintenanceMode()) {
     return (
       <MaintenanceGate>
-        <AppRoutes />
+        <AppRouter />
       </MaintenanceGate>
     );
   }
 
-  return <AppRoutes />;
+  return <AppRouter />;
 }
 
-function AppRoutes() {
+function AppRouter() {
   const initialize = useAuthStore((s) => s.initialize);
 
   useEffect(() => {
@@ -45,24 +48,49 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <ToastContainer />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/perfume/:id" element={<PerfumeDetailPage />} />
-          <Route path="/brands" element={<BrandsOverviewPage />} />
-          <Route path="/brand/:id" element={<BrandPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/profile/:username" element={<RequireAuth><ProfilePage /></RequireAuth>} />
-          <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
-          <Route path="/account" element={<RequireAuth><AccountPage /></RequireAuth>} />
-          <Route path="/list/:id" element={<ListDetailPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
+  );
+}
+
+// Ohne eigenen Router, damit Tests einen MemoryRouter drumherum legen können.
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/explore" element={<ExploreRedirect />} />
+        <Route
+          path="/favorites"
+          element={
+            <RequireAuth prompt={{ title: 'Your favorites', text: 'Sign in to see the fragrances you marked with a heart.' }}>
+              <ShelfPage status="favorite" />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/collection"
+          element={
+            <RequireAuth prompt={{ title: 'Your collection', text: 'Sign in to keep track of the bottles you own.' }}>
+              <ShelfPage status="owned" />
+            </RequireAuth>
+          }
+        />
+        <Route path="/community" element={<CommunityPage />} />
+        <Route path="/perfume/:id" element={<PerfumeDetailPage />} />
+        <Route path="/brands" element={<BrandsOverviewPage />} />
+        <Route path="/brand/:id" element={<BrandPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/profile/:username" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+        <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
+        <Route path="/account" element={<RequireAuth><AccountPage /></RequireAuth>} />
+        <Route path="/list/:id" element={<ListDetailPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }

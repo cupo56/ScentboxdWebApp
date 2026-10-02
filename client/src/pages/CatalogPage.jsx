@@ -8,11 +8,11 @@ import PerfumeRow from '../components/perfume/PerfumeRow';
 import FilterPanel from '../components/perfume/FilterPanel';
 import FilterSheet from '../components/perfume/FilterSheet';
 import SkeletonRow from '../components/layout/SkeletonRow';
-import './ExplorePage.css';
+import './CatalogPage.css';
 
 const PAGE_SIZE = 24;
 
-export default function ExplorePage() {
+export default function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [perfumes, setPerfumes] = useState([]);
   const [total, setTotal] = useState(0);
@@ -95,7 +95,7 @@ export default function ExplorePage() {
         <div className="explore__main">
           <div className="explore__toolbar">
             <div>
-              <h1 className="explore__title">Index</h1>
+              <h1 className="explore__title">Catalog</h1>
               <div className="explore__meta">{total} entries{concentration ? ` · ${concentration}` : ''} · sorted by {sortBy}</div>
             </div>
             <div className="explore__right">

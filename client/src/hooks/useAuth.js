@@ -5,7 +5,10 @@ export function useAuth() {
     useAuthStore();
 
   const isAuthenticated = !!session;
-  const shelfPath = isAuthenticated ? `/profile/${profile?.username || 'me'}` : '/login';
+  // Eigene Profilseite (Listen, Reviews). Nicht eingeloggt → Login.
+  const profilePath = isAuthenticated ? `/profile/${profile?.username || 'me'}` : '/login';
+  const collectionPath = '/collection';
+  const favoritesPath = '/favorites';
 
   return {
     user,
@@ -14,7 +17,12 @@ export function useAuth() {
     loading,
     error,
     isAuthenticated,
-    shelfPath,
+    profilePath,
+    collectionPath,
+    favoritesPath,
+    // Übergangsalias, bis Navbar, TabBar, AccountMenu und AccountPage in
+    // Task 5 umgestellt sind. Danach entfernen.
+    shelfPath: profilePath,
     login,
     register,
     logout,
