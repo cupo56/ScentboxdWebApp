@@ -167,6 +167,75 @@
   box-shadow: 0 8px 24px rgba(194, 10, 102, 0.35);
 }
 
+/* ── Admin-Zugang ────────────────────────────────────── */
+
+.maintenance__admin-toggle {
+  display: block;
+  margin: clamp(32px, 8vw, 48px) auto 0;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: var(--wl-text-secondary);
+  font: inherit;
+  font-size: 13px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.maintenance__admin-toggle:hover,
+.maintenance__admin-toggle:focus-visible {
+  opacity: 1;
+}
+
+.maintenance__admin {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  margin: clamp(32px, 8vw, 48px) auto 0;
+}
+
+.maintenance__admin-input {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(242, 238, 240, 0.15);
+  border-radius: 10px;
+  background: rgba(242, 238, 240, 0.05);
+  color: var(--wl-text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.maintenance__admin-input:focus {
+  outline: none;
+  border-color: var(--wl-primary);
+}
+
+.maintenance__admin-submit {
+  min-height: 44px;
+  border: 1px solid rgba(242, 238, 240, 0.25);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--wl-text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.maintenance__admin-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.maintenance__admin-error {
+  margin: 0;
+  color: var(--wl-pink);
+  font-size: 14px;
+}
+
 @keyframes maintenance-rise {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }

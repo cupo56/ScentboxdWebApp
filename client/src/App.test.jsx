@@ -1,13 +1,20 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-vi.mock('./lib/supabaseClient', () => ({ supabase: {} }));
+vi.mock('./lib/supabaseClient', () => ({
+  supabase: {
+    auth: {
+      getSession: () => Promise.resolve({ data: { session: null } }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+    },
+  },
+}));
 vi.mock('./config/maintenance', () => ({ isMaintenanceMode: () => true }));
 
 import App from './App';
 
 describe('App maintenance gate', () => {
-  it('renders only the maintenance screen on a locked host', () => {
+  it('renders only the maintenance screen on a locked host without an admin session', () => {
     const { container } = render(<App />);
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
