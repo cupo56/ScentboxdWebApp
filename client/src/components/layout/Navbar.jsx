@@ -8,18 +8,19 @@ import AccountMenu from './AccountMenu';
 import Wordmark from './Wordmark';
 import './Navbar.css';
 
-function Logo() {
-  return (
-    <Link to="/" className="navbar__logo">
-      <Wordmark className="navbar__logo-text" />
-    </Link>
-  );
-}
+const LINKS = [
+  { to: '/', label: 'Today', end: true },
+  { to: '/catalog', label: 'Catalog' },
+  { to: '/favorites', label: 'Favorites' },
+  { to: '/collection', label: 'Collection' },
+  { to: '/community', label: 'Community' },
+];
 
 export default function Navbar() {
-  const { isAuthenticated, shelfPath } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -27,6 +28,14 @@ export default function Navbar() {
   const searchRef = useRef(null);
   const inputRef = useRef(null);
   const debouncedSearch = useDebounce(searchQuery, 300);
+
+  // Leiste wird nach dem ersten Scrollen dunkler, wie auf der Waitlist.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (!debouncedSearch.trim()) {
@@ -70,7 +79,7 @@ export default function Navbar() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/explore?q=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/catalog?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
     }
   };
@@ -81,15 +90,16 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__inner">
-        <Logo />
+        <Link to="/" className="navbar__logo" aria-label="Scentboxd home">
+          <Wordmark className="navbar__logo-text" />
+        </Link>
 
-        <div className="navbar__segment">
-          <NavLink to="/" end className="navbar__segment-item">Feed</NavLink>
-          <NavLink to="/explore" className="navbar__segment-item">Index</NavLink>
-          <NavLink to="/brands" className="navbar__segment-item">Houses</NavLink>
-          <NavLink to={shelfPath} className="navbar__segment-item">Shelf</NavLink>
+        <div className="navbar__links">
+          {LINKS.map(({ to, label, end }) => (
+            <NavLink key={to} to={to} end={end} className="navbar__link">{label}</NavLink>
+          ))}
         </div>
 
         <div className="navbar__right">
@@ -139,7 +149,7 @@ export default function Navbar() {
                           </Link>
                         ))}
                         <Link
-                          to={`/explore?q=${encodeURIComponent(searchQuery)}`}
+                          to={`/catalog?q=${encodeURIComponent(searchQuery)}`}
                           className="navbar__search-item navbar__search-item--all"
                           onClick={handleSelectResult}
                         >

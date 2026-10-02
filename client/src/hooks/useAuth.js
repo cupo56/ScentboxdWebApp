@@ -20,9 +20,6 @@ export function useAuth() {
     profilePath,
     collectionPath,
     favoritesPath,
-    // Übergangsalias, bis Navbar, TabBar, AccountMenu und AccountPage in
-    // Task 5 umgestellt sind. Danach entfernen.
-    shelfPath: profilePath,
     login,
     register,
     logout,

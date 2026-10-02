@@ -6,7 +6,7 @@
   border-radius: 50%;
   background: var(--accent-tint);
   border: 1px solid var(--accent-line);
-  color: var(--accent-text);
+  color: var(--accent-soft);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,10 +23,10 @@
   top: calc(100% + var(--space-6));
   right: 0;
   width: 272px;
-  background: var(--surface);
+  background: var(--surface-solid);
   border: 1px solid var(--hairline-strong);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--inset-highlight), var(--shadow-lg);
   overflow: hidden;
   z-index: 200;
 }
@@ -45,7 +45,7 @@
   border-radius: 50%;
   background: var(--accent-tint);
   border: 1px solid var(--accent-line);
-  color: var(--accent-text);
+  color: var(--accent-soft);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -8,10 +8,10 @@ import { getFollowCounts } from '../../services/followService';
 import './AccountMenu.css';
 
 export default function AccountMenu() {
-  const { profile, user, logout, shelfPath } = useAuth();
+  const { profile, user, logout, profilePath } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [counts, setCounts] = useState({ owned: 0, lists: 0, verdicts: 0, want: 0, followers: 0, following: 0 });
+  const [counts, setCounts] = useState({ owned: 0, lists: 0, reviews: 0, want: 0, followers: 0, following: 0 });
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -22,8 +22,8 @@ export default function AccountMenu() {
       getUserLists(user.id),
       getReviewCountByUser(user.id),
       getFollowCounts(user.id),
-    ]).then(([owned, want, lists, verdicts, follows]) => {
-      setCounts({ owned: owned.length, want: want.length, lists: (lists || []).length, verdicts, followers: follows.followers, following: follows.following });
+    ]).then(([owned, want, lists, reviews, follows]) => {
+      setCounts({ owned: owned.length, want: want.length, lists: (lists || []).length, reviews, followers: follows.followers, following: follows.following });
     }).catch(() => {});
   }, [open, user]);
 
@@ -70,23 +70,29 @@ export default function AccountMenu() {
             </span>
             <div>
               <div className="account-menu__handle">{profile?.username}</div>
-              <div className="account-menu__meta">{counts.owned} owned · {counts.verdicts} verdicts</div>
+              <div className="account-menu__meta">{counts.owned} in collection · {counts.reviews} reviews</div>
               <div className="account-menu__meta">{counts.followers} followers · {counts.following} following</div>
             </div>
           </div>
 
           <div className="account-menu__group">
-            <NavLink to={shelfPath} className="account-menu__item" onClick={() => setOpen(false)}>
-              Your shelf
+            <NavLink to={profilePath} className="account-menu__item" onClick={() => setOpen(false)}>
+              Profile
             </NavLink>
-            <NavLink to={shelfPath} className="account-menu__item" onClick={() => setOpen(false)}>
+            <NavLink to="/collection" className="account-menu__item" onClick={() => setOpen(false)}>
+              Collection <span>{counts.owned}</span>
+            </NavLink>
+            <NavLink to="/favorites" className="account-menu__item" onClick={() => setOpen(false)}>
+              Favorites
+            </NavLink>
+            <NavLink to={`${profilePath}?tab=want_to_try`} className="account-menu__item" onClick={() => setOpen(false)}>
+              Want to try <span>{counts.want}</span>
+            </NavLink>
+            <NavLink to={profilePath} className="account-menu__item" onClick={() => setOpen(false)}>
               Your lists <span>{counts.lists}</span>
             </NavLink>
-            <NavLink to={shelfPath} className="account-menu__item" onClick={() => setOpen(false)}>
-              Your verdicts <span>{counts.verdicts}</span>
-            </NavLink>
-            <NavLink to={`${shelfPath}?tab=want_to_try`} className="account-menu__item" onClick={() => setOpen(false)}>
-              Want to try <span>{counts.want}</span>
+            <NavLink to={`${profilePath}?tab=reviews`} className="account-menu__item" onClick={() => setOpen(false)}>
+              Your reviews <span>{counts.reviews}</span>
             </NavLink>
           </div>
 
@@ -94,9 +100,6 @@ export default function AccountMenu() {
             <NavLink to="/settings" className="account-menu__item" onClick={() => setOpen(false)}>
               Settings
             </NavLink>
-            <span className="account-menu__item account-menu__item--static">
-              Appearance <span>Dark</span>
-            </span>
           </div>
 
           <div className="account-menu__group">

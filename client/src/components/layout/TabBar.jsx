@@ -1,34 +1,32 @@
 import { NavLink } from 'react-router-dom';
-import { Compass, Plus, Rows, SquaresFour } from '@phosphor-icons/react';
-import { useAuth } from '../../hooks/useAuth';
+import { Book, Heart, Star, SunHorizon, Users } from '@phosphor-icons/react';
 import './TabBar.css';
 
-export default function TabBar() {
-  const { shelfPath, profile } = useAuth();
+// Mobile Tab-Leiste mit denselben fünf Tabs wie die iOS-App.
+const TABS = [
+  { to: '/', label: 'Today', Icon: SunHorizon, end: true },
+  { to: '/catalog', label: 'Catalog', Icon: Book },
+  { to: '/favorites', label: 'Favorites', Icon: Heart },
+  { to: '/collection', label: 'Collection', Icon: Star },
+  { to: '/community', label: 'Community', Icon: Users },
+];
 
+export default function TabBar() {
   return (
     <nav className="tabbar" aria-label="Main navigation">
-      <NavLink to="/" end className="tabbar__item">
-        <Rows size={18} aria-hidden="true" />
-        <span>Feed</span>
-      </NavLink>
-      <NavLink to="/explore" className="tabbar__item">
-        <Compass size={18} aria-hidden="true" />
-        <span>Index</span>
-      </NavLink>
-      <NavLink to="/explore" className="tabbar__compose" aria-label="Write a verdict">
-        <Plus size={20} weight="bold" aria-hidden="true" />
-      </NavLink>
-      <NavLink to={shelfPath} className="tabbar__item">
-        <SquaresFour size={18} aria-hidden="true" />
-        <span>Shelf</span>
-      </NavLink>
-      <NavLink to="/account" className="tabbar__item tabbar__item--you">
-        <span className="tabbar__you-avatar">
-          {profile?.avatar_url ? <img src={profile.avatar_url} alt="" /> : (profile?.username || 'U')[0].toUpperCase()}
-        </span>
-        <span>You</span>
-      </NavLink>
+      {TABS.map((tab) => {
+        const { to, label, Icon, end } = tab;
+        return (
+          <NavLink key={to} to={to} end={end} className="tabbar__item">
+            {({ isActive }) => (
+              <>
+                <Icon size={20} weight={isActive ? 'fill' : 'regular'} aria-hidden="true" />
+                <span>{label}</span>
+              </>
+            )}
+          </NavLink>
+        );
+      })}
     </nav>
   );
 }
