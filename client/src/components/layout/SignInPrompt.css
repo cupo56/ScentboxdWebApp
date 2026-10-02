@@ -1,0 +1,9 @@
+.signin-prompt {
+  max-width: 460px;
+  margin: var(--space-14) auto;
+  padding: var(--space-10);
+  text-align: center;
+}
+.signin-prompt__title { font-size: 28px; margin-bottom: var(--space-3); }
+.signin-prompt__text { color: var(--text-body); margin-bottom: var(--space-8); }
+.signin-prompt__actions { display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; }
