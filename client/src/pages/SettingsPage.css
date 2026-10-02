@@ -8,7 +8,7 @@
   border-bottom: 1px solid var(--hairline);
 }
 .settings__crumb { font: var(--weight-body) 13px var(--font); color: var(--text-dim); margin-bottom: var(--space-2); }
-.settings__title { font: var(--weight-heading) 30px var(--font); letter-spacing: -0.02em; color: var(--text); }
+.settings__title { font: var(--weight-heading) 30px var(--font-display); letter-spacing: -0.02em; color: var(--text); }
 .settings__save--disabled {
   margin-left: auto;
   display: inline-flex;

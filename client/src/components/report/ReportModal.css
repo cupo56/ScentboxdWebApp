@@ -11,7 +11,7 @@
 }
 
 .report-modal__header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--hairline); padding: var(--space-5) var(--space-6); }
-.report-modal__header h2 { font: var(--weight-heading) 16px var(--font); color: var(--text); }
+.report-modal__header h2 { font: var(--weight-heading) 16px var(--font-display); color: var(--text); }
 .report-modal__close { border: none; background: transparent; color: var(--text-dim); cursor: pointer; font-size: 14px; padding: var(--space-2); }
 
 .report-modal__body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }

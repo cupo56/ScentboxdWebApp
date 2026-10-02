@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const css = readFileSync(fileURLToPath(new URL('./index.css', import.meta.url)), 'utf8');
@@ -58,7 +59,35 @@ describe('design tokens', () => {
   });
 
   it('drops the old palette and Inter', () => {
-    expect(css).not.toMatch(/Inter/);
+    expect(css).not.toMatch(/\bInter\b/);
     expect(css).not.toMatch(/#161826|#9184d9|#a78bfa|167, 139, 250/i);
+  });
+});
+
+describe('custom properties used by component CSS', () => {
+  it('are all defined somewhere in src', () => {
+    const srcDir = fileURLToPath(new URL('.', import.meta.url));
+    const files = [];
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (/\.(css|jsx|js)$/.test(entry.name) && !entry.name.includes('.test.')) files.push(full);
+      }
+    };
+    walk(srcDir);
+
+    const defined = new Set();
+    const used = new Map();
+    for (const file of files) {
+      const text = readFileSync(file, 'utf8');
+      for (const [, name] of text.matchAll(/(--[a-z0-9-]+)\s*:/gi)) defined.add(name);
+      for (const [, name] of text.matchAll(/var\((--[a-z0-9-]+)/gi)) {
+        if (!used.has(name)) used.set(name, relative(srcDir, file));
+      }
+    }
+
+    const missing = [...used].filter(([name]) => !defined.has(name)).map(([name, file]) => `${name} (first used in ${file})`);
+    expect(missing).toEqual([]);
   });
 });

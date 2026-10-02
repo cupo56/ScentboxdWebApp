@@ -1,6 +1,6 @@
 .composer { border: 1px solid var(--hairline); border-radius: var(--radius-lg); background: var(--surface); padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-6); margin-bottom: var(--space-8); }
 
-.composer__title { font: var(--weight-heading) 17px var(--font); color: var(--text); }
+.composer__title { font: var(--weight-heading) 17px var(--font-display); color: var(--text); }
 .composer__error { color: var(--accent-text); font-size: 13px; }
 
 .composer__rating label { display: block; font: var(--weight-label) 11.5px var(--font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: var(--space-3); }

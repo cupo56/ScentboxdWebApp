@@ -57,7 +57,7 @@
 }
 
 .footer__column a:hover {
-  color: var(--accent);
+  color: var(--accent-soft);
 }
 
 .footer__bottom {

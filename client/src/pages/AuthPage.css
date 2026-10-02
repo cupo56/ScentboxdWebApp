@@ -2,7 +2,7 @@
 .auth { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - var(--nav-height)); padding: var(--space-10); }
 
 .auth__card { max-width: 420px; width: 100%; }
-.auth__headline { font: var(--weight-heading) 30px/1.15 var(--font); letter-spacing: -0.02em; color: var(--text); margin-bottom: var(--space-4); }
+.auth__headline { font: var(--weight-heading) 30px/1.15 var(--font-display); letter-spacing: -0.02em; color: var(--text); margin-bottom: var(--space-4); }
 .auth__sub { font: var(--weight-body) 14.5px/1.6 var(--font); color: var(--text-muted); margin-bottom: var(--space-8); }
 
 .auth__segment { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--hairline); border-radius: var(--radius-md); margin-bottom: var(--space-8); }

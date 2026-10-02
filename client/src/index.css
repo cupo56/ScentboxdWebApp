@@ -61,6 +61,7 @@
   --space-2: 4px;
   --space-3: 8px;
   --space-4: 12px;
+  --space-5: 20px;
   --space-6: 16px;
   --space-8: 24px;
   --space-10: 32px;
@@ -95,7 +96,7 @@
   --bg-elevated: var(--surface-2);
   --text-primary: var(--text);
   --text-secondary: var(--text-body);
-  --text-dim: var(--text-muted);
+  --text-dim: rgba(242, 238, 240, 0.45); /* dimmste Stufe, dunkler als --text-muted */
   --accent-text: var(--accent-soft);
   --accent-bright: var(--accent-soft);
   --accent-hover: var(--accent-soft);
@@ -118,7 +119,6 @@ html { background: var(--bg); }
 
 body {
   font-family: var(--font);
-  background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -325,6 +325,8 @@ button, input, select, textarea { font-family: inherit; }
 
 .btn-secondary {
   background: var(--glass);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
   border-color: var(--hairline);
   color: var(--text);
   box-shadow: var(--inset-highlight);
