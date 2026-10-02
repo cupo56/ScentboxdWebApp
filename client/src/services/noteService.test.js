@@ -16,10 +16,7 @@ beforeEach(() => {
 describe('getNoteDisplayNames', () => {
   it('maps the German note name to the English display name', async () => {
     mock.mockRpc('get_note_names', {
-      data: [
-        { name: 'Mokka', display_name: 'Mocha' },
-        { name: 'Acacia', display_name: 'Acacia' },
-      ],
+      data: { Mokka: 'Mocha', Acacia: 'Acacia' },
       error: null,
     });
 
