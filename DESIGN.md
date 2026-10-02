@@ -1,138 +1,146 @@
 ---
-version: 1.1.0
+version: 2.0.0
 theme:
   mode: "dark"
 colors:
-  background:
-    primary: "#0a0a0f"
-    secondary: "#12121a"
-    card: "#16161f"
-    cardHover: "#1c1c28"
-    elevated: "#1e1e2a"
+  background: "#130A10"
+  surface: "#1C1017"
+  surfaceElevated: "#2E1A24"
+  glass: "rgba(46, 26, 36, 0.5)"
   text:
-    primary: "#f0f0f5"
-    secondary: "#8888a0"
-    muted: "#55556a"
+    primary: "#F2EEF0"
+    body: "#A9A2A6"
+    muted: "#94A3B8"
+    dim: "rgba(242, 238, 240, 0.45)"
   accent:
-    base: "#a78bfa"
-    hover: "#c4b5fd"
-    dim: "rgba(167, 139, 250, 0.15)"
-    gold: "#f5c842"
-    goldDim: "rgba(245, 200, 66, 0.15)"
+    base: "#C20A66"
+    soft: "#E75A9C"
+    tint: "rgba(194, 10, 102, 0.15)"
+    line: "rgba(194, 10, 102, 0.3)"
+  champagne: "#F7E7CE"
+  rank:
+    gold: "#FFD700"
+    silver: "#C0C0C0"
+    bronze: "#CD7F32"
   status:
-    success: "#34d399"
-    danger: "#f87171"
-    warning: "#fbbf24"
+    success: "#4ADE80"
+    danger: "#FF6B6B"
+    warning: "#F59E0B"
   border:
-    default: "rgba(255, 255, 255, 0.06)"
-    hover: "rgba(255, 255, 255, 0.12)"
+    default: "rgba(255, 255, 255, 0.08)"
+    strong: "rgba(255, 255, 255, 0.14)"
 typography:
-  fontFamilies:
-    primary: "'Inter', system-ui, -apple-system, sans-serif"
-  weights:
-    light: 300
-    regular: 400
-    medium: 500
-    semibold: 600
-    bold: 700
-    extrabold: 800
-spacing:
-  container:
-    maxWidth: "1280px"
-    padding: "24px"
-  page:
-    paddingY: "32px"
-    navHeight: "64px"
+  display: "'Fraunces', Georgia, serif — weight 600–800, optical size axis"
+  ui: "'Manrope', system-ui, sans-serif — weights 400–700"
+  eyebrow: "700 11px, uppercase, letter-spacing 0.16em"
 radii:
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "24px"
-  pill: "99px"
-  circle: "50%"
+  sm: "4px"
+  md: "10px"
+  lg: "14px"
+  xl: "20px"
+  pill: "999px"
 shadows:
-  card: "0 2px 12px rgba(0, 0, 0, 0.3)"
-  elevated: "0 8px 32px rgba(0, 0, 0, 0.5)"
-  glow: "0 0 20px rgba(167, 139, 250, 0.4)"
-  glow3d: "0 0 0 1px rgba(167, 139, 250, 0.18), 0 18px 48px -12px rgba(124, 92, 255, 0.55)"
+  glow: "0 6px 20px rgba(194, 10, 102, 0.4)"
+  glowCard: "0 14px 36px rgba(194, 10, 102, 0.14)"
+  insetHighlight: "inset 0 1px 0 rgba(255, 255, 255, 0.1)"
 gradients:
-  accent: "linear-gradient(135deg, #a78bfa 0%, #7c5cff 45%, #f5c842 120%)"
+  text: "linear-gradient(105deg, #E85D9F, #F7E7CE)"
 motion:
   durations:
-    fast: "0.2s"
+    fast: "0.15s"
     medium: "0.25s"
-    slow: "0.4s"
-    spin: "0.6s"
+    rise: "0.6s"
     shimmer: "1.5s"
-    float: "14s"
-    aurora: "16s–24s"
-  easings:
-    default: "ease"
-    out: "ease-out"
-    spring: "cubic-bezier(0.34, 1.56, 0.64, 1)"
-  reducedMotion: "honoured — all decorative motion is disabled under prefers-reduced-motion"
-effects:
-  tilt3d:
-    hook: "src/hooks/useTilt.js"
-    cssVars: ["--tilt-rx", "--tilt-ry", "--glare-x", "--glare-y"]
-    maxRotation: "7°–10°"
-  countUp:
-    hook: "src/hooks/useCountUp.js"
-    easing: "easeOutCubic"
-    duration: "1200ms"
+    aurora: "20s"
+  reducedMotion: "honoured — aurora, shimmer and transitions stop; spinners keep running"
 ---
 
 # Scentboxd Design System
 
-## Core Identity & Aesthetics
-Scentboxd is a social platform for perfume enthusiasts, inspired by Letterboxd. The design language is decidedly **premium, moody, and luxurious**, matching the high-end nature of the fragrance world. It is built strictly as a dark-mode first experience, drawing users into a deep, immersive environment that lets the colorful perfume bottles and brand imagery stand out.
+Die Webapp teilt ihre visuelle Sprache mit der iOS-App und der
+Waitlist-Landingpage. Quelle der Wahrheit für Werte ist `client/src/index.css`;
+dieses Dokument erklärt, wie sie gemeint sind. Entscheidungen und Herleitung:
+`docs/superpowers/specs/2026-10-02-webapp-redesign-design.md`.
 
-## Backgrounds & Depth
-The application builds depth using a carefully stepped scale of deep, almost-black violet-tinted grays:
-- The absolute base (`#0a0a0f`) acts as an infinite canvas.
-- Structural elements sit slightly above (`#12121a`).
-- Interactive surfaces like cards and inputs rest higher (`#16161f`), rising further (`#1c1c28`) on hover to create physical depth.
-- Floating elements like dropdowns, modals, and toasts sit at the highest elevation (`#1e1e2a`) and are supported by heavy, soft drop shadows (`shadow-elevated`).
+## Identität
 
-## Color & Accents
-The primary accent is a soft, elegant lavender/purple (`#a78bfa`), reflecting creativity and luxury. 
-- **Interactive Accents:** Buttons and links use the purple accent. Hover states lighten the color slightly while emitting a subtle, glowing box-shadow to feel tactile.
-- **Gold for Prestige:** Gold (`#f5c842`) is used sparingly but purposefully for badges, ratings, and highlights to indicate premium status or top-rated items.
-- **Dimmed Backgrounds:** Badges and active states frequently pair the solid accent text color with a 15% opacity background of the same hue (e.g., `accent-dim`), creating a soft, glass-like chip effect without overwhelming the dark theme.
+Scentboxd ist eine Community-Plattform für Parfum-Fans. Der Look ist dunkel,
+warm und edel: ein fast schwarzes Pflaume als Grund, ein kräftiges Magenta
+als einziger Akzent, Champagner für alles, was Wert oder Bewertung bedeutet.
+Dark-only, wie App und Landingpage.
 
-## Borders & Glassmorphism
-Hard, solid borders are avoided. Instead, boundaries are defined by ultra-sheer white strokes (`rgba(255, 255, 255, 0.06)`). On interactive elements (cards, buttons), hovering increases the border opacity slightly (`0.12`), simulating a light catching the edge of a glass pane.
+## Flächen und Tiefe
 
-True frosted-glass surfaces are available via the `.glass` utility: a faint diagonal white gradient layered over a `backdrop-filter: blur(14px) saturate(140%)`. It is used for elevated, "floating" containers — the hero search bar and the call-to-action card — so they read as panes of tinted glass resting above the content behind them.
+- `--bg` `#130A10` ist der Grund. Er liegt auf `html`, nicht auf `body`,
+  damit die Aurora dahinter durchscheint.
+- Dahinter liegt die **Aurora**: zwei weichgezeichnete Farbflecken (Magenta
+  oben links, Gold unten rechts), die langsam driften. Sie gibt der Seite
+  Bewegung, ohne Inhalt zu stören. Komponente: `Aurora.jsx` in `Layout`.
+- **Glas** (`.glass`, `.card`, `.btn-secondary`) ist die Standardfläche für
+  Karten und Panels: halbtransparentes Pflaume (`--glass`) mit
+  `backdrop-filter: blur(20px)`, einer Hairline und einem hellen
+  Innen-Highlight an der Oberkante.
+- `--surface` und `--surface-2` sind deckende Flächen für Dropdowns, Modals,
+  Toasts und die Tab-Leiste. Dort muss nichts durchscheinen.
 
-## Typography
-The UI relies entirely on the **Inter** typeface. It is utilized across a wide range of weights (300 to 800) to establish strong hierarchy:
-- Primary text is a crisp, cool off-white (`#f0f0f5`).
-- Secondary details, meta-information, and captions use muted grays (`#8888a0` and `#55556a`) to recede into the background.
-- Section titles are bold (`700`) and slightly larger, often paired with an accent-colored icon to anchor the content.
+## Farbe
 
-## Animated Gradients & Accent Treatment
-The brand accent is increasingly expressed as a living gradient rather than a flat color. The signature `gradients.accent` (lavender → violet → gold) is reused across the identity:
-- **Gradient text** (`.gradient-text`) slowly pans its background position, giving headline accents and the navbar wordmark a gentle shimmer.
-- **Stat counters** render their numbers in the same clipped gradient and animate from `0` to their target with an ease-out curve (`useCountUp`), so the homepage figures count up on load.
-- **Primary buttons** carry the gradient with a light sheen that wipes across on hover.
-- **Brand initials** sit in gradient-filled circles that lift toward the viewer on hover.
+- **Magenta** `#C20A66` ist der einzige Akzent: Primär-Buttons, aktive Chips
+  und Tabs, Marke auf Karten, Links, Herz und Stern. Als kleiner Text auf
+  dunklem Grund ist `--accent-soft` `#E75A9C` besser lesbar.
+- **Champagner** `#F7E7CE` steht für Wert: Sterne, Bewertungen, Eyebrows über
+  Überschriften, Kicker.
+- **Text** in vier Stufen: `--text` für Inhalt, `--text-body` für Fließtext,
+  `--text-muted` für Meta und Labels, `--text-dim` für die leiseste Stufe.
+- **Rang-Badges** in Gold, Silber, Bronze für die Plätze 1 bis 3, danach
+  Magenta.
+- Schatten sind **Glows in Magenta**, nicht schwarz. Primär-Buttons tragen
+  immer einen Glow, Hero-Karten einen weichen, großen.
+- Duftfamilien haben feste Farben (`--family-*`), übernommen aus der App.
 
-## Decorative SVG & Aurora Layer
-Hero and CTA areas are no longer flat. A non-interactive decorative layer adds atmosphere without competing with content:
-- **Aurora blobs** — large, heavily-blurred radial gradients (purple + gold) that drift and scale slowly behind the hero, creating a soft, moving light field.
-- **Floating SVG geometry** — thin-stroked molecule rings, diamonds, and dashed orbits scattered across the hero/CTA, gently bobbing and rotating (`float-slow`). They evoke the "notes & molecules" theme of fragrance.
-- All decoration is `pointer-events: none`, trimmed back on small screens, and fully disabled under reduced-motion.
+## Typografie
 
-## 3D Depth & Tilt
-Beyond the flat `-2px` hover lift, key cards now respond physically to the pointer:
-- **Interactive tilt** (`.tilt-3d` + `useTilt`) — cards rotate on the X/Y axes following the cursor within a `perspective(900px)` space (max 7°–10°), settling back on a spring easing. A radial **glare highlight** tracks the pointer across the surface, and inner `.tilt-layer` elements translate forward on the Z-axis to "pop" out of the card.
-- Tilt is restricted to fine pointers (mouse) and disabled for touch and reduced-motion users.
+- **Fraunces** (`--font-display`, 600 bis 800) für Überschriften,
+  Parfum-Namen, große Zahlen und das Wortzeichen. `h1` bis `h3` sind global
+  darauf gesetzt; Klassen, die `font:` als Kurzform nutzen, müssen
+  `var(--font-display)` selbst angeben.
+- **Manrope** (`--font`) für UI und Fließtext, 400 bis 700. Kleine, enge
+  Texte wie in der App: Meta bei 11 bis 13px.
+- **Eyebrows** (`.eyebrow`): 11px, Großbuchstaben, weiter Buchstabenabstand,
+  Champagner oder Magenta (`.eyebrow--accent`). Sie stehen über
+  Überschriften und Abschnitten.
+- **Gradient-Text** (`.gradient-text`): Pink nach Champagner, für Zahlen in
+  Statistiken und einzelne Wörter in Headlines.
 
-## Motion & Interaction
-Animations are subtle but crucial for a high-end feel:
-- **Loading:** Instead of jarring spinners for main content areas, a continuous, smoothly sweeping shimmer gradient travels across skeleton loaders.
-- **Hover States:** Cards translate upward (`-4px`) and gain the deeper `glow3d` shadow; product imagery zooms with a spring easing while a diagonal sheen sweeps across it. Primary buttons lift and emit a soft glow with a sheen wipe.
-- **Entrance:** Toast notifications and new list items slide up and fade in (`fadeIn`), and hero content rises in on a spring curve (`rise-in` / `.reveal`), so the UI feels responsive and fluid rather than instantaneous and harsh.
-- **Easing:** Expressive interactions use the springy `motion.easings.spring` curve for a tactile, slightly overshooting settle; functional transitions stay on plain `ease`.
-- **Accessibility:** Every decorative animation, gradient pan, tilt, and float respects `prefers-reduced-motion: reduce` and is switched off when requested.
+## Wortzeichen
+
+`scentboxd`, klein geschrieben, in Fraunces 600. `scent` in `--text`, `boxd`
+in Magenta. Komponente: `client/src/components/layout/Wordmark.jsx`. Es gibt
+kein Logo-Symbol.
+
+## Komponenten
+
+- **Buttons:** `.btn-primary` Magenta mit Glow, hebt sich beim Hover um 1px
+  und drückt sich beim Klick auf 0.98. `.btn-secondary` Glas mit Hairline.
+  `.btn-ghost` nur Text.
+- **Chips:** `.chip` Magenta-Tint mit Magenta-Text. Aktiv (`aria-pressed` oder
+  `.chip--active`) Magenta-Füllung mit Glow. `.chip--glass` für neutrale Chips.
+- **Inputs:** dunkles Feld, Hairline, im Fokus Magenta-Rand mit zartem Ring.
+- **Karten:** `.card` ist Glas, hebt sich beim Hover und bekommt den
+  Karten-Glow. Bilder tragen einen Verlauf von unten, damit Text darauf
+  lesbar bleibt.
+- **Badges:** `.badge-rank` mit `.badge-rank-1/2/3` für Gold, Silber, Bronze.
+- **Skeleton:** Shimmer mit weißem Verlauf, 1.5s linear, wie in der App.
+
+## Motion
+
+Kurz und weich. Hover 0.15 bis 0.25s mit `ease`. Einblenden mit `.rise-in`
+(0.6s, 14px von unten). Aurora driftet in 20s. Unter
+`prefers-reduced-motion` stehen Aurora, Shimmer und alle Übergänge still;
+Spinner laufen weiter, weil sie einen Zustand anzeigen.
+
+## Tests
+
+`client/src/index.css.test.js` prüft den Token-Vertrag: Pflichttokens und
+Aliase sind definiert, alte Palette und Inter sind weg, und jede
+`var(--x)`, die irgendwo in `src` benutzt wird, ist auch definiert.
