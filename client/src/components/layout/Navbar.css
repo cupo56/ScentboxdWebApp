@@ -20,12 +20,11 @@
 .navbar__logo {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  font: var(--weight-heading) 15px var(--font);
-  color: var(--text);
   text-decoration: none;
   flex: none;
 }
+
+.navbar__logo-text { font-size: 20px; }
 
 .navbar__segment {
   display: flex;

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Wordmark from './Wordmark';
 import './Footer.css';
 
 export default function Footer() {
@@ -6,7 +7,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__inner">
         <div className="footer__brand">
-          <span className="footer__logo">◆ Scentboxd</span>
+          <Wordmark className="footer__logo" />
           <p className="footer__tagline">Discover, rate, and collect fragrances.</p>
         </div>
 
