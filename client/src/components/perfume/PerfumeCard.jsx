@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNoteName } from '../../hooks/useNoteName';
 import './PerfumeCard.css';
 
 export default function PerfumeCard({ perfume }) {
   const brandName = perfume.brands?.name || 'Unknown';
-  const topNote = perfume.perfume_notes?.[0]?.notes?.name;
+  const noteName = useNoteName();
+  const topNote = noteName(perfume.perfume_notes?.[0]?.notes?.name);
   const [imgError, setImgError] = useState(false);
 
   return (

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNoteName } from '../../hooks/useNoteName';
 import './PerfumeRow.css';
 
 export default function PerfumeRow({ perfume }) {
   const brandName = perfume.brands?.name || 'Unknown';
-  const notes = (perfume.perfume_notes || []).slice(0, 2).map((pn) => pn.notes?.name).filter(Boolean);
+  const noteName = useNoteName();
+  const notes = (perfume.perfume_notes || []).slice(0, 2).map((pn) => noteName(pn.notes?.name)).filter(Boolean);
   const [imgError, setImgError] = useState(false);
 
   return (
