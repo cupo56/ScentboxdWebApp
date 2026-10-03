@@ -4,9 +4,8 @@ import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
 import { getReviewsByPerfume, getPerfumeRatingSummary, deleteReview } from '../services/reviewService';
 import { getBlockedIds } from '../services/blockService';
 import FragrancePyramid from '../components/perfume/FragrancePyramid';
-import PerformanceBar from '../components/perfume/PerformanceBar';
-import UserPerfumeActions from '../components/perfume/UserPerfumeActions';
-import AddToListButton from '../components/perfume/AddToListButton';
+import PerformancePanel from '../components/perfume/PerformancePanel';
+import ActionTiles from '../components/perfume/ActionTiles';
 import ReviewCard from '../components/review/ReviewCard';
 import ReviewForm from '../components/review/ReviewForm';
 import PerfumeCard from '../components/perfume/PerfumeCard';
@@ -120,8 +119,6 @@ export default function PerfumeDetailPage() {
   const brandName = perfume.brands?.name || 'Unknown';
   const reviewCount = ratingSummary?.review_count ?? reviewsTotal;
   const avgRating = ratingSummary?.avg_rating != null ? Number(ratingSummary.avg_rating) : null;
-  const avgLongevity = ratingSummary?.avg_longevity != null ? Number(ratingSummary.avg_longevity) : null;
-  const avgSillage = ratingSummary?.avg_sillage != null ? Number(ratingSummary.avg_sillage) : null;
 
   return (
     <div className="entry">
@@ -130,8 +127,7 @@ export default function PerfumeDetailPage() {
           <div className="bottle entry__image">
             {perfume.image_url ? <img src={perfume.image_url} alt={perfume.name} /> : <span>◆</span>}
           </div>
-          <UserPerfumeActions perfumeId={perfume.id} />
-          <AddToListButton perfumeId={perfume.id} />
+          <ActionTiles perfumeId={perfume.id} />
           <div className="entry__fade" />
           <div className="entry__facts">
             {perfume.release_year && <div><span>Released</span><span>{perfume.release_year}</span></div>}
@@ -149,14 +145,7 @@ export default function PerfumeDetailPage() {
           </div>
           {perfume.desc && <p className="entry__desc">{perfume.desc}</p>}
 
-          <div className="entry__perf">
-            <div className="pyramid__label-row">Performance · community average</div>
-            {avgLongevity != null && <PerformanceBar label="Longevity" value={avgLongevity} maxValue={100} suffix="%" />}
-            {avgSillage != null && <PerformanceBar label="Sillage" value={avgSillage} maxValue={100} suffix="%" />}
-            {avgLongevity == null && avgSillage == null && (
-              <p className="entry__no-performance">No verdicts yet — performance data appears once someone rates this one.</p>
-            )}
-          </div>
+          <PerformancePanel perfume={perfume} summary={ratingSummary} />
 
           <FragrancePyramid notes={perfume.perfume_notes} />
 
