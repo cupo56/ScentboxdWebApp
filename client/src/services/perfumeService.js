@@ -237,3 +237,17 @@ export async function getPerfumeCount() {
   if (error) throw error;
   return count;
 }
+
+/**
+ * Trending perfumes of the week from the `trending_perfumes` materialized
+ * view (rank, id, name, brand_name, image_url, avg_rating, week_review_count, score).
+ */
+export async function getTrendingPerfumes() {
+  const { data, error } = await supabase
+    .from('trending_perfumes')
+    .select('*')
+    .order('rank', { ascending: true });
+
+  if (error) throw error;
+  return data || [];
+}
