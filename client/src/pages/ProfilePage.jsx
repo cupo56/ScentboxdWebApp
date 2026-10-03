@@ -18,7 +18,7 @@ import { useAuth } from '../hooks/useAuth';
 import './ProfilePage.css';
 
 const TABS = [
-  { key: 'owned', field: 'is_owned', label: 'Owned' },
+  { key: 'owned', field: 'is_owned', label: 'Collection' },
   { key: 'want_to_try', field: 'is_want_to_try', label: 'Want to try' },
   { key: 'favorites', field: 'is_favorite', label: 'Favorites' },
   { key: 'reviews', label: 'Reviews' },
@@ -197,8 +197,8 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="shelf__head-stats">
-            <div><span>{counts.owned}</span><label>Owned</label></div>
-            <div><span>{counts.want_to_try}</span><label>Wishlist</label></div>
+            <div><span>{counts.owned}</span><label>Collection</label></div>
+            <div><span>{counts.want_to_try}</span><label>Want to try</label></div>
             <div><span>{counts.reviews}</span><label>Reviews</label></div>
           </div>
           {isOwn ? (
@@ -241,7 +241,7 @@ export default function ProfilePage() {
                     <span /><span /><span />
                   </div>
                   <div>
-                    <div>No verdicts yet</div>
+                    <div>No reviews yet</div>
                     {isOwn && <p>Write one from any fragrance's page.</p>}
                   </div>
                 </div>
@@ -259,8 +259,8 @@ export default function ProfilePage() {
                     <span /><span /><span />
                   </div>
                   <div>
-                    <div>No liked verdicts yet</div>
-                    {isOwn && <p>Verdicts you like show up here.</p>}
+                    <div>No liked reviews yet</div>
+                    {isOwn && <p>Reviews you like show up here.</p>}
                   </div>
                 </div>
               )

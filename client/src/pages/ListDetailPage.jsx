@@ -46,7 +46,9 @@ export default function ListDetailPage() {
   return (
     <>
       <div className="list-detail">
-        <div className="list-detail__crumb">Shelf › Lists</div>
+        <div className="list-detail__crumb">
+          {authorProfile?.username && <><Link to={`/profile/${authorProfile.username}`}>Profile</Link> › </>}Lists
+        </div>
         <header className="list-detail__header">
           <div>
             <h1>{list.name}</h1>
