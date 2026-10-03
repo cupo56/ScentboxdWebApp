@@ -158,7 +158,7 @@ export default function SettingsPage() {
     <div className="settings">
       <div className="settings__header">
         <div>
-          <div className="settings__crumb">Shelf › {profile.username}</div>
+          <div className="settings__crumb">Profile › {profile.username}</div>
           <h1 className="settings__title">Settings</h1>
         </div>
         <button
