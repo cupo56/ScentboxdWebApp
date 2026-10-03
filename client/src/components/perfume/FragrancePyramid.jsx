@@ -29,11 +29,11 @@ export default function FragrancePyramid({ notes }) {
           const { key, label, names } = row;
           const Icon = row.Icon;
           return (
-          <div key={key} className="pyramid__row glass">
-            <span className="pyramid__icon" aria-hidden="true"><Icon size={18} /></span>
-            <span className="pyramid__label">{label}</span>
-            <span className="pyramid__notes">{names.join(', ')}</span>
-          </div>
+            <div key={key} className="pyramid__row glass">
+              <span className="pyramid__icon" aria-hidden="true"><Icon size={18} /></span>
+              <span className="pyramid__label">{label}</span>
+              <span className="pyramid__notes">{names.join(', ')}</span>
+            </div>
           );
         })}
       </div>
