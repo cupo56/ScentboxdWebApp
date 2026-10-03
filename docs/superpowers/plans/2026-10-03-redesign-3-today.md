@@ -697,7 +697,7 @@ const trending = [
   { rank: 2, id: 't2', name: 'Oud Wood', brand_name: 'Tom Ford', image_url: null },
 ];
 const detail = (id, name) => ({
-  id, name, concentration: 'EDP', longevity: 'Long', brands: { name: 'Brand' },
+  id, name, concentration: 'EDP', longevity_code: 'long', brands: { name: 'Brand' },
   perfume_notes: [{ note_type: 'top', notes: { name: 'Mocha', family: 'Gourmand' } }],
 });
 const review = (id, text, user_id = 'u9') => ({
@@ -725,7 +725,7 @@ describe('TodayPage', () => {
 
     expect(await screen.findByRole('heading', { name: 'Layton' })).toBeInTheDocument();
     expect(screen.getByText('Trending #1')).toBeInTheDocument();
-    expect(screen.getByText(/Gourmand with Mocha up top/)).toBeInTheDocument();
+    expect(screen.getByText(/Gourmand, opening with Mocha/)).toBeInTheDocument();
     expect(screen.queryByText('Collection')).toBeNull();
     expect(getUserPerfumesByStatus).not.toHaveBeenCalled();
   });
