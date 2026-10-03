@@ -136,12 +136,12 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         <div className="verdict-row__metrics">
           {review.longevity !== null && (
             <span className="verdict-row__metric">
-              ⏱ Longevity: {review.longevity}%
+              Longevity {review.longevity}%
             </span>
           )}
           {review.sillage !== null && (
             <span className="verdict-row__metric">
-              💨 Sillage: {review.sillage}%
+              Sillage {review.sillage}%
             </span>
           )}
         </div>
@@ -168,7 +168,7 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
             <span key={`occ-${i}`} className="badge badge-accent">{occ}</span>
           ))}
           {review.seasons?.map((season, i) => (
-            <span key={`season-${i}`} className="badge">{season}</span>
+            <span key={`season-${i}`} className="badge badge-season">{season}</span>
           ))}
         </div>
       )}

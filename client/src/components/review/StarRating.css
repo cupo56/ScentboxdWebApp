@@ -4,12 +4,12 @@
 }
 
 .star-rating__star {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.2);
   transition: color 0.15s;
 }
 
 .star-rating__star.filled {
-  color: var(--accent-text);
+  color: var(--champagne);
 }
 
 .star-rating--interactive .star-rating__star {
@@ -17,7 +17,7 @@
 }
 
 .star-rating--interactive .star-rating__star:hover {
-  color: var(--accent-text);
+  color: var(--champagne);
 }
 
 .star-rating--sm { font-size: 0.8rem; }

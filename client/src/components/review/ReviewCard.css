@@ -1,10 +1,10 @@
-.verdict-row { border-top: 1px solid var(--hairline); padding-top: var(--space-6); }
+.verdict-row { background: var(--glass); border: 1px solid var(--hairline); border-radius: 12px; box-shadow: var(--inset-highlight); padding: var(--space-6); }
 
 .verdict-row__header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-4); }
 .verdict-row__author { display: flex; align-items: center; gap: var(--space-3); }
 .verdict-row__avatar {
   width: 30px; height: 30px; border-radius: 50%;
-  background: var(--accent-tint); color: var(--accent-text);
+  background: var(--accent-tint); color: var(--accent-soft);
   display: flex; align-items: center; justify-content: center;
   font: var(--weight-label) 12.5px var(--font); overflow: hidden;
 }
@@ -26,21 +26,25 @@
 .verdict-row__text { font: var(--weight-body) 15px/1.7 var(--font); color: var(--text-body); margin-bottom: var(--space-4); }
 
 .verdict-row__metrics { display: flex; gap: var(--space-6); font: var(--weight-body) 12px var(--font); color: var(--text-dim); margin-bottom: var(--space-4); }
+.verdict-row__metric { padding: 3px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); color: var(--text-body); }
 
 .verdict-row__sub-ratings { display: flex; gap: var(--space-6); margin-bottom: var(--space-4); }
 .verdict-row__sub-rating { display: flex; align-items: center; gap: var(--space-2); font: var(--weight-body) 12px var(--font); color: var(--text-dim); }
 .verdict-row__occasions { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-4); }
+.verdict-row__occasions .badge { font-size: 10px; font-weight: 600; border-radius: 4px; padding: 2px 6px; }
+.verdict-row__occasions .badge-accent { background: var(--accent-tint); color: var(--accent-soft); border: 1px solid var(--accent-line); }
+.verdict-row__occasions .badge-season { background: rgba(247, 231, 206, 0.1); color: var(--champagne); border: 1px solid rgba(247, 231, 206, 0.25); }
 
 .verdict-row__footer { display: flex; align-items: center; gap: var(--space-6); }
 .verdict-row__like-btn { display: flex; align-items: center; gap: var(--space-2); border: none; background: none; color: var(--text-dim); cursor: pointer; font-size: 12px; }
-.verdict-row__like-btn--liked { color: var(--accent-text); }
+.verdict-row__like-btn--liked { color: var(--accent-soft); }
 .verdict-row__like-btn:disabled { opacity: 0.6; cursor: default; }
 .verdict-row__like-icon { flex-shrink: 0; transition: transform 0.15s ease; }
 .verdict-row__like-count { font-variant-numeric: tabular-nums; min-width: 1ch; }
 .verdict-row__like-btn--pop .verdict-row__like-icon { animation: verdict-like-pop 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
 
 .verdict-row__comment-btn { display: flex; align-items: center; gap: var(--space-2); border: none; background: none; color: var(--text-dim); cursor: pointer; font-size: 12px; }
-.verdict-row__comment-btn--active, .verdict-row__comment-btn:hover { color: var(--accent-text); }
+.verdict-row__comment-btn--active, .verdict-row__comment-btn:hover { color: var(--accent-soft); }
 .verdict-row__comment-count { font-variant-numeric: tabular-nums; min-width: 1ch; }
 @keyframes verdict-like-pop {
   0%   { transform: scale(1); }
