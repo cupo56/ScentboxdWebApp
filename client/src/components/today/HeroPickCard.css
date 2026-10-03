@@ -1,0 +1,72 @@
+.hero-pick {
+  display: block;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--accent-line);
+  box-shadow: var(--glow-card);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+a.hero-pick:hover, a.hero-pick:focus-visible { transform: translateY(-2px); box-shadow: var(--glow-card), var(--glow); }
+
+.hero-pick__image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-height: 520px;
+  background: radial-gradient(ellipse at 50% 40%, #3A1428, var(--surface) 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-pick__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--space-10);
+  filter: drop-shadow(0 20px 40px rgba(194, 10, 102, 0.35));
+}
+.hero-pick__placeholder { font-size: 48px; color: var(--text-dim); }
+
+.hero-pick__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(19, 10, 16, 0.95) 0%, rgba(19, 10, 16, 0.6) 25%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-pick__tag {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #fff;
+  font: 700 11px var(--font);
+  letter-spacing: 0.04em;
+  box-shadow: var(--glow);
+}
+
+.hero-pick__caption {
+  position: absolute;
+  left: var(--space-6);
+  right: var(--space-6);
+  bottom: var(--space-6);
+}
+.hero-pick__name { font-size: clamp(24px, 3vw, 30px); color: var(--text); margin: 0 0 4px; }
+.hero-pick__meta { font: 600 12px var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-soft); }
+
+.hero-pick__why {
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-top: 1px solid var(--hairline);
+  background: var(--glass);
+}
+.hero-pick__why p { margin: var(--space-2) 0 0; font-size: 14px; line-height: 1.5; color: var(--text-body); }
+
+.hero-pick__image-skeleton { position: absolute; inset: 0; border-radius: 0; }
+
+@media (max-width: 960px) {
+  .hero-pick__image { aspect-ratio: 4 / 5; }
+}

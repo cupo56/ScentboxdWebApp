@@ -12,6 +12,7 @@ import {
   getLongevityLevels,
   getSimilarPerfumes,
   getPerfumeCount,
+  getTrendingPerfumes,
 } from './perfumeService';
 
 let mock;
@@ -159,5 +160,22 @@ describe('getPerfumeCount', () => {
     mock.mockFrom('perfumes', { data: null, error: null, count: 2960 });
 
     await expect(getPerfumeCount()).resolves.toBe(2960);
+  });
+});
+
+describe('getTrendingPerfumes', () => {
+  it('reads the trending view ordered by rank', async () => {
+    const rows = [{ rank: 1, id: 'a', name: 'Layton' }, { rank: 2, id: 'b', name: 'Oud Wood' }];
+    const builder = mock.mockFrom('trending_perfumes', { data: rows, error: null });
+
+    await expect(getTrendingPerfumes()).resolves.toEqual(rows);
+    expect(supabase.from).toHaveBeenCalledWith('trending_perfumes');
+    expect(builder.order).toHaveBeenCalledWith('rank', { ascending: true });
+  });
+
+  it('throws when the query errors', async () => {
+    mock.mockFrom('trending_perfumes', { data: null, error: new Error('boom') });
+
+    await expect(getTrendingPerfumes()).rejects.toThrow('boom');
   });
 });
