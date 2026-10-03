@@ -8,7 +8,7 @@ import PerfumeGrid from '../components/perfume/PerfumeGrid';
 import PerfumeRow from '../components/perfume/PerfumeRow';
 import FilterPanel from '../components/perfume/FilterPanel';
 import FilterSheet from '../components/perfume/FilterSheet';
-import TrendingCarousel from '../components/today/TrendingCarousel';
+import PerfumeCarousel from '../components/perfume/PerfumeCarousel';
 import SkeletonRow from '../components/layout/SkeletonRow';
 import './CatalogPage.css';
 
@@ -128,7 +128,7 @@ export default function CatalogPage() {
                   {trendingHidden ? 'Show trending' : 'Hide trending'}
                 </button>
               </div>
-              {!trendingHidden && <TrendingCarousel items={trending} />}
+              {!trendingHidden && <PerfumeCarousel items={trending} />}
             </section>
           )}
 

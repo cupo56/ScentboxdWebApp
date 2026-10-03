@@ -31,3 +31,6 @@ coverage/
 
 # Brainstorming mockups
 .superpowers/
+
+# macOS/Finder duplicate copies
+* 2.*

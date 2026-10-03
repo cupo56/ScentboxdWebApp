@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ListPlus } from '@phosphor-icons/react';
 import { useAuth } from '../../hooks/useAuth';
 import { getUserLists, addToList } from '../../services/listService';
 import './AddToListButton.css';
@@ -21,8 +22,17 @@ export default function AddToListButton({ perfumeId }) {
         setOpen(false);
       }
     };
-    if (open) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKey);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKey);
+    };
   }, [open]);
 
   if (!isAuthenticated) return null;
@@ -43,16 +53,18 @@ export default function AddToListButton({ perfumeId }) {
   return (
     <div className="add-to-list" ref={dropdownRef}>
       <button
-        className="user-actions__btn"
+        type="button"
+        className={`action-tile ${open ? 'action-tile--open' : ''}`}
         onClick={() => setOpen((o) => !o)}
-        title="Add to List"
+        aria-expanded={open}
+        aria-haspopup="menu"
       >
-        <span className="user-actions__icon">📋</span>
-        <span className="user-actions__label">Add to List</span>
+        <ListPlus size={16} aria-hidden="true" />
+        <span>Add to list</span>
       </button>
 
       {open && (
-        <div className="add-to-list__dropdown">
+        <div className="add-to-list__dropdown" role="menu">
           {lists.length === 0 ? (
             <p className="add-to-list__empty">No lists yet. Create one on your profile.</p>
           ) : (
@@ -61,6 +73,7 @@ export default function AddToListButton({ perfumeId }) {
               return (
                 <button
                   key={list.id}
+                  role="menuitem"
                   className={`add-to-list__item ${state ? `add-to-list__item--${state}` : ''}`}
                   onClick={() => handleAdd(list.id)}
                   disabled={!!state}

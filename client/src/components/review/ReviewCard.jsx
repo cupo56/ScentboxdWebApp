@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ChatCircle, Flag } from '@phosphor-icons/react';
 import StarRating from './StarRating';
+import { ratingToStars } from '../../lib/performance';
 import ReviewForm from './ReviewForm';
 import CommentSection from './CommentSection';
 import ReportModal from '../report/ReportModal';
@@ -136,12 +137,12 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         <div className="verdict-row__metrics">
           {review.longevity !== null && (
             <span className="verdict-row__metric">
-              ⏱ Longevity: {review.longevity}%
+              Longevity {review.longevity}%
             </span>
           )}
           {review.sillage !== null && (
             <span className="verdict-row__metric">
-              💨 Sillage: {review.sillage}%
+              Sillage {review.sillage}%
             </span>
           )}
         </div>
@@ -151,12 +152,12 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         <div className="verdict-row__sub-ratings">
           {review.bottle_rating > 0 && (
             <span className="verdict-row__sub-rating">
-              Bottle <StarRating rating={review.bottle_rating} size="sm" />
+              Bottle <StarRating rating={ratingToStars(review.bottle_rating)} size="sm" />
             </span>
           )}
           {review.value_rating > 0 && (
             <span className="verdict-row__sub-rating">
-              Value <StarRating rating={review.value_rating} size="sm" />
+              Value <StarRating rating={ratingToStars(review.value_rating)} size="sm" />
             </span>
           )}
         </div>
@@ -168,7 +169,7 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
             <span key={`occ-${i}`} className="badge badge-accent">{occ}</span>
           ))}
           {review.seasons?.map((season, i) => (
-            <span key={`season-${i}`} className="badge">{season}</span>
+            <span key={`season-${i}`} className="badge badge-season">{season}</span>
           ))}
         </div>
       )}

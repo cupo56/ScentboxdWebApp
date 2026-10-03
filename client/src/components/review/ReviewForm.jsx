@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import StarRating from './StarRating';
+import { ratingToStars, starsToPercent } from '../../lib/performance';
 import { createReview, updateReview } from '../../services/reviewService';
 import './ReviewForm.css';
 
@@ -12,8 +13,11 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
   const [longevity, setLongevity] = useState(initialData?.longevity ?? '');
   const [sillage, setSillage] = useState(initialData?.sillage ?? '');
   const [occasions, setOccasions] = useState(initialData?.occasions || []);
-  const [bottleRating, setBottleRating] = useState(initialData?.bottle_rating || 0);
-  const [valueRating, setValueRating] = useState(initialData?.value_rating || 0);
+  // Bottle/Value liegen in der DB als 0–100; das Formular arbeitet mit 1–5 Sternen.
+  const initialBottleStars = Math.round(ratingToStars(initialData?.bottle_rating) ?? 0);
+  const initialValueStars = Math.round(ratingToStars(initialData?.value_rating) ?? 0);
+  const [bottleRating, setBottleRating] = useState(initialBottleStars);
+  const [valueRating, setValueRating] = useState(initialValueStars);
   const [seasons, setSeasons] = useState(initialData?.seasons || []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -49,8 +53,10 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         longevity: longevity !== '' ? parseInt(longevity) : null,
         sillage: sillage !== '' ? parseInt(sillage) : null,
         occasions,
-        bottle_rating: bottleRating || null,
-        value_rating: valueRating || null,
+        // Unveränderte Sterne behalten den gespeicherten Prozentwert, sonst würde
+        // z. B. eine iOS-Bewertung von 72 beim reinen Text-Edit auf 80 gerundet.
+        bottle_rating: bottleRating === initialBottleStars && initialData ? initialData.bottle_rating ?? null : starsToPercent(bottleRating),
+        value_rating: valueRating === initialValueStars && initialData ? initialData.value_rating ?? null : starsToPercent(valueRating),
         seasons,
       };
 

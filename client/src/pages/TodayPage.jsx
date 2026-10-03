@@ -10,7 +10,7 @@ import { getBlockedIds } from '../services/blockService';
 import { pickOfTheDay, buildWhyText } from '../lib/today';
 import StatsStrip from '../components/today/StatsStrip';
 import HeroPickCard from '../components/today/HeroPickCard';
-import TrendingCarousel from '../components/today/TrendingCarousel';
+import PerfumeCarousel from '../components/perfume/PerfumeCarousel';
 import ReviewTeaser from '../components/today/ReviewTeaser';
 import ActivityRow from '../components/community/ActivityRow';
 import './TodayPage.css';
@@ -109,7 +109,7 @@ export default function TodayPage() {
           {data.trending.length > 0 && (
             <section className="today__section">
               <span className="eyebrow eyebrow--accent">Trending this week</span>
-              <TrendingCarousel items={data.trending} />
+              <PerfumeCarousel items={data.trending} />
             </section>
           )}
         </div>
