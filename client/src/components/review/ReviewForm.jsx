@@ -178,7 +178,7 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
 
       <div className="composer__actions" style={{ display: 'flex', gap: '12px' }}>
         <button className="btn btn-primary btn-lg" type="submit" disabled={submitting}>
-          {submitting ? 'Submitting…' : (initialData ? 'Save changes' : 'Post verdict')}
+          {submitting ? 'Submitting…' : (initialData ? 'Save changes' : 'Post review')}
         </button>
         {onCancel && (
           <button type="button" className="btn btn-ghost btn-lg" onClick={onCancel} disabled={submitting}>

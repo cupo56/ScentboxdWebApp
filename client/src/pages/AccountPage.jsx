@@ -11,7 +11,7 @@ import './AccountPage.css';
 export default function AccountPage() {
   const { user, profile, logout, profilePath, setProfile } = useAuth();
   const navigate = useNavigate();
-  const [counts, setCounts] = useState({ owned: 0, want: 0, lists: 0, verdicts: 0 });
+  const [counts, setCounts] = useState({ owned: 0, want: 0, lists: 0, reviews: 0 });
   const [togglingPublic, setTogglingPublic] = useState(false);
 
   useEffect(() => {
@@ -21,8 +21,8 @@ export default function AccountPage() {
       getUserPerfumesByStatus(user.id, 'is_want_to_try'),
       getUserLists(user.id),
       getReviewCountByUser(user.id),
-    ]).then(([owned, want, lists, verdicts]) => {
-      setCounts({ owned: owned.length, want: want.length, lists: (lists || []).length, verdicts });
+    ]).then(([owned, want, lists, reviews]) => {
+      setCounts({ owned: owned.length, want: want.length, lists: (lists || []).length, reviews });
     }).catch(() => {});
   }, [user]);
 
@@ -64,15 +64,15 @@ export default function AccountPage() {
 
       <div className="account-page__stats">
         <div><span>{counts.owned}</span><label>Collection</label></div>
-        <div><span>{counts.want}</span><label>Wishlist</label></div>
-        <div><span>{counts.verdicts}</span><label>Reviews</label></div>
+        <div><span>{counts.want}</span><label>Want to try</label></div>
+        <div><span>{counts.reviews}</span><label>Reviews</label></div>
       </div>
 
       <div className="account-page__list">
         <Link to="/collection" className="account-page__row">Collection <span>{counts.owned} ›</span></Link>
         <Link to="/favorites" className="account-page__row">Favorites <span>›</span></Link>
         <Link to={profilePath} className="account-page__row">Your lists <span>{counts.lists} ›</span></Link>
-        <Link to={`${profilePath}?tab=reviews`} className="account-page__row">Your reviews <span>{counts.verdicts} ›</span></Link>
+        <Link to={`${profilePath}?tab=reviews`} className="account-page__row">Your reviews <span>{counts.reviews} ›</span></Link>
         <Link to={`${profilePath}?tab=want_to_try`} className="account-page__row">Want to try <span>{counts.want} ›</span></Link>
       </div>
 

@@ -33,7 +33,7 @@ export default function AuthPage({ initialMode = 'signin' }) {
   return (
     <div className="auth">
       <div className="auth__card">
-        <h1 className="auth__headline">Keep a shelf, not a browser tab full of names.</h1>
+        <h1 className="auth__headline">Keep a collection, not a browser tab full of names.</h1>
         <p className="auth__sub">Free. Rate what you wear, follow the notes you like, and never blind-buy the same mistake twice.</p>
 
         <div className="auth__segment">

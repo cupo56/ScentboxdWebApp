@@ -23,10 +23,10 @@ export default function BrandsOverviewPage() {
 
   return (
     <div className="houses">
-      <h1 className="houses__title">Houses</h1>
-      <div className="houses__meta">{brands.length} houses · {brands.reduce((s, b) => s + b.perfume_count, 0)} entries</div>
+      <h1 className="houses__title">Brands</h1>
+      <div className="houses__meta">{brands.length} brands · {brands.reduce((s, b) => s + b.perfume_count, 0)} fragrances</div>
 
-      <input className="input houses__search" placeholder="Search houses…" value={search} onChange={(e) => setSearch(e.target.value)} />
+      <input className="input houses__search" placeholder="Search brands…" value={search} onChange={(e) => setSearch(e.target.value)} />
 
       <div className="houses__letters">
         {letters.map((l) => <a key={l} href={`#letter-${l}`}>{l}</a>)}
@@ -38,13 +38,13 @@ export default function BrandsOverviewPage() {
             <Link key={brand.id} to={`/brand/${brand.id}`} className="houses__row">
               <span className="houses__row-name">{brand.name}</span>
               <span className="houses__row-country">{brand.country}</span>
-              <span className="houses__row-count">{brand.perfume_count} entries</span>
+              <span className="houses__row-count">{brand.perfume_count} fragrances</span>
             </Link>
           ))}
         </div>
       ))}
 
-      {filtered.length === 0 && <div className="empty-state"><h3>No houses found</h3></div>}
+      {filtered.length === 0 && <div className="empty-state"><h3>No brands found</h3></div>}
     </div>
   );
 }

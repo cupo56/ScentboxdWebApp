@@ -75,5 +75,5 @@
   width: 100%;
 }
 .account-menu__item span { margin-left: auto; font-size: 12px; color: var(--text-dim); }
-.account-menu__item.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
+.account-menu__item.active { background: var(--accent-tint); color: var(--accent-soft); font-weight: var(--weight-label); }
 .account-menu__item--danger { color: var(--text-muted); }

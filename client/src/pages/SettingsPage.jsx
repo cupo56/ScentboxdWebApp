@@ -10,8 +10,8 @@ import './SettingsPage.css';
 
 const NOTIF_FIELDS = [
   { key: 'new_reviews', label: 'New reviews', hint: 'On fragrances you own or want.' },
-  { key: 'review_likes', label: 'Review likes', hint: 'When someone likes one of your verdicts.' },
-  { key: 'new_comments', label: 'Replies to your verdicts', hint: null },
+  { key: 'review_likes', label: 'Review likes', hint: 'When someone likes one of your reviews.' },
+  { key: 'new_comments', label: 'Replies to your reviews', hint: null },
   { key: 'new_followers', label: 'New followers', hint: null },
   { key: 'similar_added', label: 'Similar added', hint: 'New entries close to what you own.' },
   { key: 'community_updates', label: 'Community updates', hint: null },
@@ -19,7 +19,7 @@ const NOTIF_FIELDS = [
 
 const SECTIONS = [
   { id: 'profile', label: 'Profile' },
-  { id: 'privacy', label: 'Shelf & privacy' },
+  { id: 'privacy', label: 'Collection & privacy' },
   { id: 'notifications', label: 'Notifications' },
   { id: 'account', label: 'Account' },
 ];
@@ -138,7 +138,7 @@ export default function SettingsPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm("This permanently deletes your account, your shelf, your lists, and your verdicts. This can't be undone. Continue?")) return;
+    if (!window.confirm("This permanently deletes your account, your collection, your lists, and your reviews. This can't be undone. Continue?")) return;
     setDeleting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -158,7 +158,7 @@ export default function SettingsPage() {
     <div className="settings">
       <div className="settings__header">
         <div>
-          <div className="settings__crumb">Shelf › {profile.username}</div>
+          <div className="settings__crumb">Profile › {profile.username}</div>
           <h1 className="settings__title">Settings</h1>
         </div>
         <button
@@ -221,10 +221,10 @@ export default function SettingsPage() {
           </section>
 
           <section id="privacy" className="settings__section">
-            <div className="settings__section-label">Shelf &amp; privacy</div>
+            <div className="settings__section-label">Collection &amp; privacy</div>
             <div className="settings__toggle-row">
               <div>
-                <div className="settings__field-title">Public shelf</div>
+                <div className="settings__field-title">Public collection</div>
                 <div className="settings__field-hint">Anyone can see what you own and how often you wear it.</div>
               </div>
               <button
@@ -232,7 +232,7 @@ export default function SettingsPage() {
                 className={`settings__switch ${isPublic ? 'on' : ''}`}
                 role="switch"
                 aria-checked={isPublic}
-                aria-label="Public shelf"
+                aria-label="Public collection"
                 onClick={() => setIsPublic((v) => !v)}
               >
                 <span />
@@ -291,7 +291,7 @@ export default function SettingsPage() {
             <div className="settings__toggle-row settings__toggle-row--danger">
               <div>
                 <div className="settings__field-title settings__field-title--accent">Delete account</div>
-                <div className="settings__field-hint">This permanently deletes your account, your shelf, your lists, and your verdicts.</div>
+                <div className="settings__field-hint">This permanently deletes your account, your collection, your lists, and your reviews.</div>
               </div>
               <button type="button" className="btn settings__delete-btn" onClick={handleDeleteAccount} disabled={deleting}>
                 {deleting ? 'Deleting…' : 'Delete'}

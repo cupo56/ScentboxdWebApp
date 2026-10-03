@@ -7,9 +7,9 @@
 
 .auth__segment { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--hairline); border-radius: var(--radius-md); margin-bottom: var(--space-8); }
 .auth__segment button { flex: 1; min-height: 40px; border: none; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font: var(--weight-body) 13.5px var(--font); cursor: pointer; }
-.auth__segment button.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
+.auth__segment button.active { background: var(--accent-tint); color: var(--accent-soft); font-weight: var(--weight-label); }
 
-.auth__error { color: var(--accent-text); font-size: 13px; margin-bottom: var(--space-4); }
+.auth__error { color: var(--accent-soft); font-size: 13px; margin-bottom: var(--space-4); }
 
 .auth__form { display: flex; flex-direction: column; gap: var(--space-6); }
 .auth__field label { display: block; font: var(--weight-body) 11.5px var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: var(--space-2); }
@@ -22,7 +22,7 @@
 .auth__success-icon { font-size: 2.5rem; text-align: center; margin-bottom: var(--space-4); }
 .auth__hint { font: var(--weight-body) 12.5px var(--font); color: var(--text-dim); margin-top: var(--space-2); }
 .auth__footer { margin-top: var(--space-6); text-align: center; font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
-.auth__footer a { color: var(--accent-text); }
+.auth__footer a { color: var(--accent-soft); }
 .auth__match { font: var(--weight-body) 12.5px var(--font); }
 .auth__match--ok { color: var(--success); }
 .auth__match--mismatch { color: var(--danger); }

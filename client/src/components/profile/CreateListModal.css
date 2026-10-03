@@ -13,7 +13,7 @@
 .form-group label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text);
 }
 
 .checkbox-group {

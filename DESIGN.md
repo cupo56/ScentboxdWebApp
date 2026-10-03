@@ -111,6 +111,8 @@ Dark-only, wie App und Landingpage.
   Überschriften und Abschnitten.
 - **Gradient-Text** (`.gradient-text`): Pink nach Champagner, für Zahlen in
   Statistiken und einzelne Wörter in Headlines.
+- `--text-dim` ist die vierte Textstufe, die leiseste (nach `--text`,
+  `--text-body`, `--text-muted`).
 
 ## Wortzeichen
 
@@ -130,6 +132,14 @@ kein Logo-Symbol.
   Karten-Glow. Bilder tragen einen Verlauf von unten, damit Text darauf
   lesbar bleibt.
 - **Badges:** `.badge-rank` mit `.badge-rank-1/2/3` für Gold, Silber, Bronze.
+- **Aktionskacheln:** `.action-tile`, Glaskachel mit Icon und Titel für
+  Einstiege wie auf der Today-Seite.
+- **Glas-Pyramide:** Duftpyramide aus Glasflächen (Kopf, Herz, Basis).
+- **Performance-Panel:** Glas-Panel mit Longevity, Sillage und Bewertungen
+  (Flaschen- und Preis-Leistungs-Rating).
+- **Parfum-Karten:** `.pcard`, die Karte für Parfums in Grids und Karussells.
+- **`PerfumeCarousel`:** horizontal scrollende Reihe aus `.pcard`.
+- **`.sr-only`:** nur für Screenreader sichtbar, für Labels ohne sichtbaren Text.
 - **Skeleton:** Shimmer mit weißem Verlauf, 1.5s linear, wie in der App.
 
 ## Motion
@@ -141,6 +151,6 @@ Spinner laufen weiter, weil sie einen Zustand anzeigen.
 
 ## Tests
 
-`client/src/index.css.test.js` prüft den Token-Vertrag: Pflichttokens und
-Aliase sind definiert, alte Palette und Inter sind weg, und jede
+`client/src/index.css.test.js` prüft den Token-Vertrag: Pflichttokens sind
+definiert, alte Palette und Inter sind weg, und jede
 `var(--x)`, die irgendwo in `src` benutzt wird, ist auch definiert.

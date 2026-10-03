@@ -68,7 +68,7 @@
   font-size: 7rem;
   font-weight: 800;
   line-height: 1;
-  color: var(--text-primary);
+  color: var(--text);
   opacity: 0.12;
   letter-spacing: -4px;
 }
@@ -96,13 +96,13 @@
 .not-found__title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text);
   margin-bottom: 12px;
 }
 
 .not-found__subtitle {
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--text-body);
   line-height: 1.7;
   margin-bottom: 40px;
 }

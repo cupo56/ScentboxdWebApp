@@ -3,7 +3,7 @@
 .account-page__head { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-6); border-bottom: 1px solid var(--hairline); }
 .account-page__avatar {
   width: 56px; height: 56px; flex: none; border-radius: 50%;
-  background: var(--accent-tint); border: 1px solid var(--accent-line); color: var(--accent-text);
+  background: var(--accent-tint); border: 1px solid var(--accent-line); color: var(--accent-soft);
   display: flex; align-items: center; justify-content: center; font: var(--weight-heading) 20px var(--font); overflow: hidden;
 }
 .account-page__avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -35,5 +35,5 @@
   cursor: pointer;
 }
 .account-page__row span { margin-left: auto; font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
-.account-page__row--toggle span { color: var(--accent-text); }
+.account-page__row--toggle span { color: var(--accent-soft); }
 .account-page__row--muted { color: var(--text-muted); }

@@ -7,7 +7,7 @@
 .comment-section__item { display: flex; align-items: flex-start; gap: var(--space-3); }
 .comment-section__avatar {
   width: 24px; height: 24px; border-radius: 50%; flex: none; overflow: hidden;
-  background: var(--accent-tint); color: var(--accent-text);
+  background: var(--accent-tint); color: var(--accent-soft);
   display: flex; align-items: center; justify-content: center; font: var(--weight-label) 11px var(--font);
 }
 .comment-section__avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -24,4 +24,4 @@
 .comment-section__form { display: flex; gap: var(--space-2); }
 .comment-section__form .input { flex: 1; min-height: 34px; padding: 0 var(--space-3); font-size: 13px; }
 
-.comment-section__signin { border: none; background: none; color: var(--accent-text); font: var(--weight-body) 12.5px var(--font); cursor: pointer; padding: 0; }
+.comment-section__signin { border: none; background: none; color: var(--accent-soft); font: var(--weight-body) 12.5px var(--font); cursor: pointer; padding: 0; }

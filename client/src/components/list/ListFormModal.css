@@ -4,7 +4,7 @@
   gap: 10px;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: var(--text-body);
   user-select: none;
 }
 

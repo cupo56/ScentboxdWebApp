@@ -18,6 +18,7 @@
   --text: #F2EEF0;
   --text-body: #A9A2A6;
   --text-muted: #94A3B8;
+  --text-dim: rgba(242, 238, 240, 0.45); /* leiseste Stufe, für Meta und Zeitstempel */
 
   /* Akzent */
   --accent: #C20A66;
@@ -86,25 +87,6 @@
   /* Layout */
   --max-width: 1200px;
   --nav-height: 60px;
-
-  /* Aliases — alte Variablennamen, damit noch nicht umgebautes Komponenten-CSS weiter funktioniert */
-  --bg-primary: var(--bg);
-  --bg-secondary: var(--surface);
-  --bg-card: var(--surface);
-  --bg-card-hover: var(--surface-2);
-  --bg-elevated: var(--surface-2);
-  --text-primary: var(--text);
-  --text-secondary: var(--text-body);
-  --text-dim: rgba(242, 238, 240, 0.45); /* dimmste Stufe, dunkler als --text-muted */
-  --accent-text: var(--accent-soft);
-  --accent-bright: var(--accent-soft);
-  --accent-hover: var(--accent-soft);
-  --accent-dim: var(--accent-tint);
-  --section: var(--surface-2);
-  --border: var(--hairline);
-  --border-hover: var(--hairline-strong);
-  --shadow-card: var(--shadow-sm);
-  --shadow-elevated: var(--shadow-md);
 }
 
 /* ===== Global ===== */

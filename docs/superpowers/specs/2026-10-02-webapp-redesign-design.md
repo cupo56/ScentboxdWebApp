@@ -323,3 +323,22 @@ im Browser mit den Mockups verglichen.
 - Anlass-Chips und echtes Matching mit Prozentwert.
 - Geteiltes Token-Paket mit Waitlist und App.
 - Partikel-Canvas und Scroll-Reveal der Waitlist.
+
+## Erkenntnisse aus der Umsetzung
+
+- `perfumes.longevity` und `perfumes.sillage` sind deutscher Text; die Codes
+  (`longevity_code`, `sillage_code`) sind das stabile Vokabular. Web filtert und
+  beschriftet über die Codes. Die RPC `get_perfumes_by_notes` filtert noch über
+  den Text; der Client mappt dafür Code → Label (Follow-up: RPC umstellen).
+- `reviews.bottle_rating`/`value_rating` und `perfumes.avg_bottle_rating`/
+  `avg_value_rating` sind 0–100 (iOS schreibt Prozent). Web liest ≤ 5 als Sterne
+  (Altbestand), zeigt 0–5 an und schreibt Prozent.
+- Review-Anlässe (`occasions`) liegen gemischt deutsch/englisch vor; Anzeige
+  unverändert.
+- `--surface` blieb deckend (Dropdowns, Tab-Leiste); Glas ist `--glass` +
+  `.glass`/`.card`. Die Aliase der alten Tokens wurden in Schritt 6 entfernt.
+- Der Catalog-Erstaufruf dauert durch `count: 'exact'` über 31k Zeilen mehrere
+  Sekunden; die Brands-Übersicht zählt je Marke. Beides Follow-ups (DB-View /
+  geschätzter Count).
+- Node 26 bringt ein unvollständiges `localStorage` mit; die Tests laufen mit
+  `--no-experimental-webstorage`.
