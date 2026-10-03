@@ -21,5 +21,6 @@ describe('HeroPickCard', () => {
     const { container } = render(<MemoryRouter><HeroPickCard perfume={null} /></MemoryRouter>);
 
     expect(container.querySelector('.hero-pick--skeleton')).toBeInTheDocument();
+    expect(container.querySelector('.hero-pick__image .skeleton')).toBeInTheDocument();
   });
 });

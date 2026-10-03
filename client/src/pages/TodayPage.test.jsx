@@ -46,7 +46,7 @@ const renderPage = () => render(<MemoryRouter><TodayPage /></MemoryRouter>);
 
 describe('TodayPage', () => {
   it('shows the top trending perfume as the pick for visitors, without a stats strip', async () => {
-    useAuth.mockReturnValue({ isAuthenticated: false, user: null, profilePath: '/login' });
+    useAuth.mockReturnValue({ isAuthenticated: false, user: null, profilePath: '/login', loading: false });
     renderPage();
 
     expect(await screen.findByRole('heading', { name: 'Layton' })).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe('TodayPage', () => {
   });
 
   it('shows reviews with text, skipping blocked users', async () => {
-    useAuth.mockReturnValue({ isAuthenticated: true, user: { id: 'me' }, profilePath: '/profile/me' });
+    useAuth.mockReturnValue({ isAuthenticated: true, user: { id: 'me' }, profilePath: '/profile/me', loading: false });
     renderPage();
 
     expect(await screen.findByText('Great stuff')).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe('TodayPage', () => {
   });
 
   it('prefers a want-to-try perfume and shows the stats strip when signed in', async () => {
-    useAuth.mockReturnValue({ isAuthenticated: true, user: { id: 'me' }, profilePath: '/profile/me' });
+    useAuth.mockReturnValue({ isAuthenticated: true, user: { id: 'me' }, profilePath: '/profile/me', loading: false });
     getUserPerfumesByStatus.mockImplementation((_, field) =>
       Promise.resolve(field === 'is_want_to_try' ? [{ perfumes: { id: 'w1', name: 'Wanted' } }] : [{ perfumes: { id: 'o1' } }, { perfumes: { id: 'o2' } }])
     );
@@ -82,11 +82,28 @@ describe('TodayPage', () => {
   });
 
   it('renders the trending carousel and the community feed', async () => {
-    useAuth.mockReturnValue({ isAuthenticated: false, user: null, profilePath: '/login' });
+    useAuth.mockReturnValue({ isAuthenticated: false, user: null, profilePath: '/login', loading: false });
     renderPage();
 
     expect(await screen.findByRole('link', { name: /Oud Wood/ })).toHaveAttribute('href', '/perfume/t2');
     expect(screen.getByRole('link', { name: 'usera' })).toHaveAttribute('href', '/profile/usera');
     expect(screen.getByRole('link', { name: 'All reviews →' })).toHaveAttribute('href', '/community');
+  });
+
+  it('falls back to the trending row when the perfume detail fails to load', async () => {
+    useAuth.mockReturnValue({ isAuthenticated: false, user: null, profilePath: '/login', loading: false });
+    getPerfumeById.mockRejectedValue(new Error('boom'));
+    renderPage();
+
+    expect(await screen.findByRole('heading', { name: 'Layton' })).toBeInTheDocument();
+    expect(screen.getByText('Trending #1')).toBeInTheDocument();
+    expect(screen.queryByText(/Nothing to recommend yet/)).toBeNull();
+  });
+
+  it('waits for the session before loading', () => {
+    useAuth.mockReturnValue({ isAuthenticated: false, user: null, profilePath: '/login', loading: true });
+    renderPage();
+
+    expect(getTrendingPerfumes).not.toHaveBeenCalled();
   });
 });

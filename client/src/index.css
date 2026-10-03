@@ -205,7 +205,8 @@ button, input, select, textarea { font-family: inherit; }
 
 .page {
   min-height: calc(100vh - var(--nav-height) - 200px);
-  padding: var(--space-10) 0;
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-10);
 }
 
 .section-title {

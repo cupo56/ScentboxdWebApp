@@ -10,7 +10,7 @@ export default function HeroPickCard({ perfume, tag, why }) {
   if (!perfume) {
     return (
       <div className="hero-pick hero-pick--skeleton">
-        <div className="hero-pick__image skeleton" />
+        <div className="hero-pick__image"><div className="skeleton hero-pick__image-skeleton" /></div>
         <div className="hero-pick__why"><div className="skeleton" style={{ height: 14, width: '70%' }} /></div>
       </div>
     );

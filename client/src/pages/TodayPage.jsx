@@ -36,10 +36,18 @@ async function loadToday(userId) {
   const pick = pickOfTheDay({ trending, wantToTry });
   const pickDetail = pick ? await getPerfumeById(pick.id).catch(() => null) : null;
 
+  let pickFallback = null;
+  if (pick?.source === 'want_to_try') pickFallback = wantToTry.find((p) => p.id === pick.id) || null;
+  else if (pick) {
+    const row = trending.find((p) => p.id === pick.id);
+    if (row) pickFallback = { id: row.id, name: row.name, image_url: row.image_url, brands: { name: row.brand_name } };
+  }
+
   return {
     trending,
     pick,
     pickDetail,
+    pickFallback,
     stats: {
       owned: value(ownedR, []).length,
       wantToTry: wantToTry.length,
@@ -52,47 +60,48 @@ async function loadToday(userId) {
 }
 
 export default function TodayPage() {
-  const { isAuthenticated, user, profilePath } = useAuth();
+  const { isAuthenticated, user, profilePath, loading: authLoading } = useAuth();
   const userId = isAuthenticated && user ? user.id : null;
   const noteName = useNoteName();
   const { items: activity, personalized, loading: activityLoading } = useActivityFeed({ limit: 4 });
   // key: userId der geladenen Daten. `undefined` = noch nichts geladen (userId
   // ist für Besucher null, deshalb nicht null als Startwert).
-  const [data, setData] = useState({ key: undefined, trending: [], pick: null, pickDetail: null, stats: EMPTY_STATS, reviews: [] });
+  const [data, setData] = useState({ key: undefined, trending: [], pick: null, pickDetail: null, pickFallback: null, stats: EMPTY_STATS, reviews: [] });
 
   useEffect(() => {
+    if (authLoading) return undefined;
     let active = true;
     loadToday(userId)
       .then((next) => {
         if (active) setData({ key: userId, ...next });
       })
       .catch(() => {
-        if (active) setData({ key: userId, trending: [], pick: null, pickDetail: null, stats: EMPTY_STATS, reviews: [] });
+        if (active) setData({ key: userId, trending: [], pick: null, pickDetail: null, pickFallback: null, stats: EMPTY_STATS, reviews: [] });
       });
     return () => {
       active = false;
     };
-  }, [userId]);
+  }, [userId, authLoading]);
 
-  const loading = data.key !== userId;
-  const trendingRank = data.pick ? data.trending.findIndex((p) => p.id === data.pick.id) + 1 : 0;
+  const loading = authLoading || data.key !== userId;
+  const heroPerfume = data.pickDetail ?? data.pickFallback;
   let tag = null;
   if (data.pick?.source === 'want_to_try') tag = 'From your list';
-  else if (data.pick) tag = `Trending #${trendingRank || 1}`;
+  else if (data.pick) tag = 'Trending #1';
   const why = data.pickDetail ? buildWhyText(data.pickDetail, noteName) : null;
 
   return (
     <div className="container page today" aria-busy={loading}>
       {isAuthenticated && (
-        <StatsStrip owned={data.stats.owned} wantToTry={data.stats.wantToTry} reviews={data.stats.reviews} profilePath={profilePath} />
+        <StatsStrip owned={data.stats.owned} wantToTry={data.stats.wantToTry} reviews={data.stats.reviews} profilePath={profilePath} loading={loading} />
       )}
 
       <div className="today__grid">
         <div className="today__main">
           <section className="today__section">
             <span className="eyebrow">✦ Your pick today</span>
-            <HeroPickCard perfume={loading ? null : data.pickDetail} tag={tag} why={why} />
-            {!loading && !data.pickDetail && (
+            <HeroPickCard perfume={loading ? null : heroPerfume} tag={tag} why={why} />
+            {!loading && !heroPerfume && (
               <p className="today__empty">Nothing to recommend yet. <Link to="/catalog">Browse the catalog</Link>.</p>
             )}
           </section>

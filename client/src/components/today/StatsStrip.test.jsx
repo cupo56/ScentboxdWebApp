@@ -11,4 +11,11 @@ describe('StatsStrip', () => {
     expect(screen.getByRole('link', { name: /5\s*Want to try/ })).toHaveAttribute('href', '/profile/me?tab=want_to_try');
     expect(screen.getByRole('link', { name: /8\s*Reviews/ })).toHaveAttribute('href', '/profile/me?tab=reviews');
   });
+
+  it('shows placeholders while loading', () => {
+    render(<MemoryRouter><StatsStrip owned={0} wantToTry={0} reviews={0} profilePath="/profile/me" loading /></MemoryRouter>);
+
+    expect(screen.getAllByText('–')).toHaveLength(3);
+    expect(screen.getByRole('link', { name: 'Collection loading' })).toBeInTheDocument();
+  });
 });

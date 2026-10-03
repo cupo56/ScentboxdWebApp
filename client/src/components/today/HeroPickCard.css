@@ -65,7 +65,7 @@ a.hero-pick:hover, a.hero-pick:focus-visible { transform: translateY(-2px); box-
 }
 .hero-pick__why p { margin: var(--space-2) 0 0; font-size: 14px; line-height: 1.5; color: var(--text-body); }
 
-.hero-pick--skeleton .hero-pick__image { background: none; }
+.hero-pick__image-skeleton { position: absolute; inset: 0; border-radius: 0; }
 
 @media (max-width: 960px) {
   .hero-pick__image { aspect-ratio: 4 / 5; }
