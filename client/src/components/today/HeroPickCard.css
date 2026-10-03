@@ -9,11 +9,11 @@
   color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-a.hero-pick:hover { transform: translateY(-2px); box-shadow: var(--glow-card), var(--glow); }
+a.hero-pick:hover, a.hero-pick:focus-visible { transform: translateY(-2px); box-shadow: var(--glow-card), var(--glow); }
 
 .hero-pick__image {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   max-height: 520px;
   background: radial-gradient(ellipse at 50% 40%, #3A1428, var(--surface) 70%);
   display: flex;
@@ -65,4 +65,8 @@ a.hero-pick:hover { transform: translateY(-2px); box-shadow: var(--glow-card), v
 }
 .hero-pick__why p { margin: var(--space-2) 0 0; font-size: 14px; line-height: 1.5; color: var(--text-body); }
 
-.hero-pick--skeleton .hero-pick__image { aspect-ratio: 4 / 5; }
+.hero-pick--skeleton .hero-pick__image { background: none; }
+
+@media (max-width: 960px) {
+  .hero-pick__image { aspect-ratio: 4 / 5; }
+}

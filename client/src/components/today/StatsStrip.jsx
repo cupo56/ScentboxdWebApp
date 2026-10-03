@@ -12,7 +12,7 @@ export default function StatsStrip({ owned, wantToTry, reviews, profilePath }) {
   return (
     <div className="stats-strip glass">
       {stats.map(({ value, label, to }) => (
-        <Link key={label} to={to} className="stats-strip__item">
+        <Link key={label} to={to} className="stats-strip__item" aria-label={`${value ?? 0} ${label}`}>
           <span className="stats-strip__value gradient-text">{value}</span>
           <span className="stats-strip__label">{label}</span>
         </Link>

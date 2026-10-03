@@ -16,6 +16,7 @@
   transition: background-color 0.2s ease;
 }
 .stats-strip__item:hover { background: rgba(255, 255, 255, 0.04); }
+.stats-strip__item:focus-visible { background: rgba(255, 255, 255, 0.04); }
 .stats-strip__item + .stats-strip__item { border-left: 1px solid var(--hairline); border-radius: 0; }
 
 .stats-strip__value {
