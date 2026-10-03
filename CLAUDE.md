@@ -12,7 +12,7 @@ npm install       # Install dependencies
 npm run dev       # Start dev server (http://localhost:5173)
 npm run build     # Production build
 npm run preview   # Preview production build
-npm run lint      # Run ESLint
+npm run lint      # Run ESLint (must be clean)
 npm test          # Run the Vitest test suite once
 npm run test:watch # Run Vitest in watch mode
 ```
@@ -33,6 +33,8 @@ Pages → Services → supabaseClient → Supabase (cloud)
 - **`src/services/`** — one file per domain (`perfumeService`, `brandService`, `reviewService`, `userPerfumeService`, `listService`, `profileService`); each exports async functions that call the Supabase client directly
 - **`src/pages/`** — full-page route components; they call services and manage local state
 - **`src/components/`** — reusable UI split into `layout/`, `perfume/`, and `review/` subdirectories
+- **`src/store/userPerfumeStore.js`** — favorite/collection state for all perfume cards
+- **`src/lib/`** — pure functions (`today.js`, `catalog.js`, `performance.js`) besides `supabaseClient.js`
 - **`src/store/authStore.js`** — Zustand store holding the authenticated user; all auth state flows through this
 - **`src/hooks/useAuth.js`** — convenience hook wrapping the auth store
 
@@ -42,14 +44,16 @@ React Router v7 in `App.jsx`. All routes share the `<Layout />` wrapper (Navbar 
 
 | Path | Page |
 |------|------|
-| `/` | HomePage |
-| `/explore` | ExplorePage |
+| `/` | TodayPage |
+| `/catalog` | CatalogPage (`/explore` redirects here) |
 | `/perfume/:id` | PerfumeDetailPage |
 | `/brands` | BrandsOverviewPage |
 | `/brand/:id` | BrandPage |
-| `/login` | LoginPage |
-| `/register` | RegisterPage |
+| `/favorites`, `/collection` | ShelfPage (sign-in card when logged out) |
+| `/community` | CommunityPage |
+| `/login`, `/register`, `/forgot-password`, `/reset-password` | Auth pages |
 | `/profile/:username` | ProfilePage |
+| `/settings`, `/account` | SettingsPage, AccountPage |
 | `/list/:id` | ListDetailPage |
 
 ### Database tables (inferred from services)
@@ -58,11 +62,7 @@ React Router v7 in `App.jsx`. All routes share the `<Layout />` wrapper (Navbar 
 
 ### Styling
 
-TailwindCSS v4 with a custom theme. Custom colors extend the default palette:
-- **Primary:** `primary-{400..800}` — purple scale
-- **Dark backgrounds:** `dark-{600..900}` — near-black purples
-
-Tailwind classes and component-scoped CSS files coexist. The overall look is a dark-theme app. The full visual language (colors, type, motion, effects) is documented in **`DESIGN.md`** — treat that as the source of truth when touching UI.
+Vanilla CSS with design tokens in `client/src/index.css`; the visual language (colors, type, motion, effects) is documented in `DESIGN.md` — treat that as the source of truth when touching UI.
 
 ## Environment
 
