@@ -1,33 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getPerfumes } from '../services/perfumeService';
-import { getLatestReviews, getReviewsByUserIds, getReviewCountByUser } from '../services/reviewService';
+import { getLatestReviews, getReviewCountByUser } from '../services/reviewService';
 import { getUserPerfumesByStatus } from '../services/userPerfumeService';
-import { getFollowingIds } from '../services/followService';
 import { getBlockedIds } from '../services/blockService';
 import { useAuth } from '../hooks/useAuth';
+import { useActivityFeed } from '../hooks/useActivityFeed';
+import ActivityRow from '../components/community/ActivityRow';
 import './HomePage.css';
-
-function ActivityRow({ review }) {
-  const username = review.profiles?.username || 'Someone';
-  return (
-    <div className="feed__activity-row">
-      <span className="feed__avatar">{username[0].toUpperCase()}</span>
-      <div>
-        <div className="feed__activity-text">
-          <strong>{username}</strong> reviewed <strong className="feed__activity-item">{review.perfumes?.name}</strong>
-        </div>
-        <div className="feed__activity-time">{new Date(review.created_at).toLocaleDateString()}</div>
-      </div>
-    </div>
-  );
-}
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth();
+  const { items: activity, personalized, loading: activityLoading } = useActivityFeed({ limit: 4 });
   const [bottleOfDay, setBottleOfDay] = useState(null);
-  const [activity, setActivity] = useState([]);
-  const [personalized, setPersonalized] = useState(false);
   const [verdicts, setVerdicts] = useState([]);
   const [ownedCount, setOwnedCount] = useState(0);
   const [wantCount, setWantCount] = useState(0);
@@ -37,9 +22,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const load = async () => {
-      const [followingIds, blockedIds] = isAuthenticated && user
-        ? await Promise.all([getFollowingIds(user.id).catch(() => []), getBlockedIds().catch(() => [])])
-        : [[], []];
+      const blockedIds = isAuthenticated && user ? await getBlockedIds().catch(() => []) : [];
       const notBlocked = (r) => !blockedIds.includes(r.user_id);
 
       const [bottleResult, topResult] = await Promise.allSettled([
@@ -50,21 +33,6 @@ export default function HomePage() {
       if (topResult.status === 'fulfilled') {
         setVerdicts((blockedIds.length ? topResult.value.filter(notBlocked) : topResult.value).slice(0, 2));
       }
-
-      // Prefer activity from people the user follows; fall back to the global
-      // feed if they don't follow anyone yet, or nobody they follow has posted.
-      let feedItems = followingIds.length > 0
-        ? await getReviewsByUserIds(followingIds, 4).catch(() => [])
-        : [];
-      if (blockedIds.length) feedItems = feedItems.filter(notBlocked);
-      const usePersonalized = feedItems.length > 0;
-      if (!usePersonalized) {
-        feedItems = await getLatestReviews(4).catch(() => []);
-        if (blockedIds.length) feedItems = feedItems.filter(notBlocked);
-      }
-
-      setActivity(feedItems);
-      setPersonalized(usePersonalized);
       setLoading(false);
     };
     load();
@@ -72,7 +40,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isAuthenticated || !user) {
-      // Clear shelf state on sign-out — otherwise stale values from the last
+      // Clear collection state on sign-out — otherwise stale values from the last
       // authenticated render (including the nudge banner) linger in this tab.
       setOwnedCount(0);
       setWantCount(0);
@@ -96,18 +64,18 @@ export default function HomePage() {
   return (
     <div className="feed">
       <div className="feed__columns">
-        <div className="feed__col feed__col--shelf">
-          <span className="feed__label">Your shelf</span>
+        <div className="feed__col feed__col--collection">
+          <span className="feed__label">Your collection</span>
           {isAuthenticated ? (
             <div className="feed__stats">
-              <div className="feed__stat-row"><span>Owned</span><span>{ownedCount}</span></div>
+              <div className="feed__stat-row"><span>In collection</span><span>{ownedCount}</span></div>
               <div className="feed__hr" />
               <div className="feed__stat-row"><span>Want to try</span><span>{wantCount}</span></div>
               <div className="feed__hr" />
-              <div className="feed__stat-row"><span>Verdicts written</span><span>{reviewCount}</span></div>
+              <div className="feed__stat-row"><span>Reviews written</span><span>{reviewCount}</span></div>
             </div>
           ) : (
-            <Link to="/login" className="btn btn-secondary">Sign in to track your shelf</Link>
+            <Link to="/login" className="btn btn-secondary">Sign in to track your collection</Link>
           )}
         </div>
 
@@ -136,7 +104,7 @@ export default function HomePage() {
           <span className="feed__label">{personalized ? 'From people you follow' : 'Right now'}</span>
           <div className="feed__activity">
             {activity.map((r) => <ActivityRow key={r.id} review={r} />)}
-            {!loading && activity.length === 0 && <p className="feed__empty">No activity yet.</p>}
+            {!activityLoading && activity.length === 0 && <p className="feed__empty">No activity yet.</p>}
           </div>
         </div>
       </div>
@@ -144,8 +112,8 @@ export default function HomePage() {
       {nudgePerfume && (
         <div className="feed__section">
           <div>
-            <div className="feed__section-title">You added {nudgePerfume.name} to your shelf.</div>
-            <div className="feed__section-sub">Got a verdict for it yet?</div>
+            <div className="feed__section-title">You added {nudgePerfume.name} to your collection.</div>
+            <div className="feed__section-sub">Written a review yet?</div>
           </div>
           <Link to={`/perfume/${nudgePerfume.id}`} className="btn feed__section-btn">Write it</Link>
         </div>
@@ -153,8 +121,8 @@ export default function HomePage() {
 
       <div className="feed__verdicts">
         <div className="feed__verdicts-head">
-          <h2>Verdicts worth reading</h2>
-          <Link to="/explore">All verdicts →</Link>
+          <h2>Reviews worth reading</h2>
+          <Link to="/community">All reviews →</Link>
         </div>
         <div className="feed__verdicts-grid">
           {verdicts.map((v) => (
@@ -170,7 +138,7 @@ export default function HomePage() {
               <p className="feed__verdict-text">{v.text}</p>
             </div>
           ))}
-          {!loading && verdicts.length === 0 && <p className="feed__empty">No verdicts yet.</p>}
+          {!loading && verdicts.length === 0 && <p className="feed__empty">No reviews yet.</p>}
         </div>
       </div>
     </div>

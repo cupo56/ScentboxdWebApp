@@ -1,11 +1,13 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import SignInPrompt from './SignInPrompt';
 
 /**
- * Route guard — redirects unauthenticated users to /login.
- * Wrap any <Route> element that requires a logged-in user.
+ * Route guard. Ohne Login: Redirect nach /login, oder — wenn `prompt`
+ * gesetzt ist — eine Sign-in-Karte an Ort und Stelle (für Tabs wie
+ * Favorites und Collection, die auch ohne Login einen Sinn ergeben sollen).
  */
-export default function RequireAuth({ children }) {
+export default function RequireAuth({ children, prompt }) {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
@@ -17,7 +19,7 @@ export default function RequireAuth({ children }) {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return prompt ? <SignInPrompt {...prompt} /> : <Navigate to="/login" replace />;
   }
 
   return children;

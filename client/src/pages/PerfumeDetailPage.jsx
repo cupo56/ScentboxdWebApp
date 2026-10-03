@@ -112,7 +112,7 @@ export default function PerfumeDetailPage() {
       <div className="entry__error">
         <div className="entry__error-title">Couldn't reach the database</div>
         <p>{error || 'Fragrance not found.'}</p>
-        <Link to="/explore" className="btn btn-primary">Back to Index</Link>
+        <Link to="/catalog" className="btn btn-primary">Back to Catalog</Link>
       </div>
     );
   }

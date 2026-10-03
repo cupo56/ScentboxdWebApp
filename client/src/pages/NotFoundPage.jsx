@@ -84,8 +84,8 @@ export default function NotFoundPage() {
           >
             Go Back
           </button>
-          <Link to="/explore" className="btn btn-ghost btn-lg" id="not-found-explore-btn">
-            Explore Fragrances →
+          <Link to="/catalog" className="btn btn-ghost btn-lg" id="not-found-explore-btn">
+            Browse the catalog →
           </Link>
         </div>
       </div>

@@ -14,11 +14,12 @@ export default function Footer() {
         <div className="footer__links">
           <div className="footer__column">
             <h4>Discover</h4>
-            <Link to="/explore">All Fragrances</Link>
+            <Link to="/catalog">Catalog</Link>
             <Link to="/brands">Brands</Link>
+            <Link to="/community">Community</Link>
           </div>
           <div className="footer__column">
-            <h4>Community</h4>
+            <h4>Account</h4>
             <Link to="/login">Sign In</Link>
             <Link to="/register">Create Account</Link>
           </div>
