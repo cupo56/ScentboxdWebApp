@@ -47,8 +47,8 @@ export default function NotFoundPage() {
             <svg viewBox="0 0 120 120" width="120" height="120" className="not-found__bottle">
               <defs>
                 <linearGradient id="bottle-grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.6" />
+                  <stop offset="0%" stopColor="#E85D9F" />
+                  <stop offset="100%" stopColor="#C20A66" stopOpacity="0.8" />
                 </linearGradient>
               </defs>
               {/* Bottle cap */}
@@ -60,7 +60,7 @@ export default function NotFoundPage() {
               {/* Label */}
               <rect x="42" y="58" width="36" height="30" rx="4" fill="rgba(255,255,255,0.1)" />
               {/* Question mark */}
-              <text x="60" y="80" textAnchor="middle" fontSize="22" fontWeight="700" fill="var(--text-primary)" fontFamily="Inter, sans-serif">?</text>
+              <text x="60" y="80" textAnchor="middle" fontSize="22" fontWeight="700" fill="var(--text-primary)" fontFamily="var(--font-display)">?</text>
               {/* Shine */}
               <rect x="38" y="42" width="6" height="30" rx="3" fill="rgba(255,255,255,0.15)" />
             </svg>
