@@ -82,3 +82,17 @@ export async function getUserPerfumesByStatus(userId, field) {
   if (error) throw error;
   return data;
 }
+
+/**
+ * All status rows of a user, for the catalog cards (one query instead of
+ * one per card). Returns [{ perfume_id, is_favorite, is_owned, is_want_to_try }].
+ */
+export async function getUserPerfumeStatuses(userId) {
+  const { data, error } = await supabase
+    .from('user_perfumes')
+    .select('perfume_id, is_favorite, is_owned, is_want_to_try')
+    .eq('user_id', userId);
+
+  if (error) throw error;
+  return data || [];
+}

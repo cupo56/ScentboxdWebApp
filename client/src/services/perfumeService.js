@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { LONGEVITY_OPTIONS, longevityRpcLabel } from '../lib/catalog';
 
 function sortToRpcParams(sortBy) {
   switch (sortBy) {
@@ -36,7 +37,7 @@ async function getPerfumesByNoteFamily({ search, brand, concentration, noteFamil
     p_notes: noteNames,
     p_brand_id: brand || null,
     p_concentration: concentration || null,
-    p_longevity: longevity || null,
+    p_longevity: longevityRpcLabel(longevity),
     p_search_query: search || null,
     p_sort_column: column,
     p_sort_ascending: ascending,
@@ -115,7 +116,7 @@ export async function getPerfumes({
   }
 
   if (longevity) {
-    query = query.eq('longevity', longevity);
+    query = query.eq('longevity_code', longevity);
   }
 
   // Sort
@@ -182,18 +183,19 @@ export async function getConcentrations() {
 }
 
 /**
- * Get all unique longevity levels for filter dropdown.
+ * Distinct longevity codes present in the catalog, in vocabulary order
+ * (see lib/catalog.js). The UI maps them to English labels.
  */
 export async function getLongevityLevels() {
   const { data, error } = await supabase
     .from('perfumes')
-    .select('longevity')
-    .not('longevity', 'is', null);
+    .select('longevity_code')
+    .not('longevity_code', 'is', null);
 
   if (error) throw error;
 
-  const unique = [...new Set(data.map((d) => d.longevity).filter(Boolean))];
-  return unique.sort();
+  const present = new Set(data.map((d) => d.longevity_code).filter(Boolean));
+  return LONGEVITY_OPTIONS.map((o) => o.code).filter((code) => present.has(code));
 }
 
 /**

@@ -97,6 +97,23 @@ describe('getPerfumes', () => {
     expect(result).toEqual({ perfumes: [], total: 0 });
     expect(supabase.rpc).not.toHaveBeenCalled();
   });
+
+  it('filters by longevity_code', async () => {
+    const builder = mock.mockFrom('perfumes', { data: [], error: null, count: 0 });
+
+    await getPerfumes({ longevity: 'long' });
+
+    expect(builder.calls.eq).toEqual([['longevity_code', 'long']]);
+  });
+
+  it('passes the German label to the notes RPC when a family and longevity are set', async () => {
+    mock.mockFrom('notes', { data: [{ name: 'Oud' }], error: null });
+    mock.mockRpc('get_perfumes_by_notes', { data: [], error: null });
+
+    await getPerfumes({ noteFamily: 'Woody', longevity: 'long' });
+
+    expect(supabase.rpc).toHaveBeenCalledWith('get_perfumes_by_notes', expect.objectContaining({ p_longevity: 'Langhaltend' }));
+  });
 });
 
 describe('getPerfumeById', () => {
@@ -133,13 +150,13 @@ describe('filter option helpers', () => {
     await expect(getNoteFamilies()).resolves.toEqual(['Citrus', 'Woody']);
   });
 
-  it('getLongevityLevels returns unique, sorted, non-null values', async () => {
+  it('getLongevityLevels returns the distinct codes in vocabulary order', async () => {
     mock.mockFrom('perfumes', {
-      data: [{ longevity: 'Lang' }, { longevity: 'Kurz' }],
+      data: [{ longevity_code: 'long' }, { longevity_code: 'moderate' }, { longevity_code: 'long' }, { longevity_code: null }],
       error: null,
     });
 
-    await expect(getLongevityLevels()).resolves.toEqual(['Kurz', 'Lang']);
+    await expect(getLongevityLevels()).resolves.toEqual(['moderate', 'long']);
   });
 });
 
