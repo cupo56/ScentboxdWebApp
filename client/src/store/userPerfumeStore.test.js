@@ -66,4 +66,39 @@ describe('userPerfumeStore', () => {
 
     expect(useUserPerfumeStore.getState()).toMatchObject({ statuses: {}, loadedFor: null });
   });
+
+  it('ignores a load that finishes after a reset', async () => {
+    let resolveRows;
+    getUserPerfumeStatuses.mockReturnValue(new Promise((resolve) => { resolveRows = resolve; }));
+
+    const pending = useUserPerfumeStore.getState().load('u1');
+    useUserPerfumeStore.getState().reset();
+    resolveRows([{ perfume_id: 'p1', is_favorite: true }]);
+    await pending;
+
+    expect(useUserPerfumeStore.getState()).toMatchObject({ statuses: {}, loadedFor: null });
+  });
+
+  it('retries a load after a failure', async () => {
+    getUserPerfumeStatuses.mockRejectedValueOnce(new Error('boom')).mockResolvedValueOnce([]);
+
+    await useUserPerfumeStore.getState().load('u1');
+    await useUserPerfumeStore.getState().load('u1');
+
+    expect(getUserPerfumeStatuses).toHaveBeenCalledTimes(2);
+    expect(useUserPerfumeStore.getState().loadedFor).toBe('u1');
+  });
+
+  it('ignores a second toggle while the first is in flight', async () => {
+    let resolveToggle;
+    togglePerfumeStatus.mockReturnValue(new Promise((resolve) => { resolveToggle = resolve; }));
+
+    const first = useUserPerfumeStore.getState().toggle('p1', 'is_favorite');
+    await useUserPerfumeStore.getState().toggle('p1', 'is_favorite');
+    expect(togglePerfumeStatus).toHaveBeenCalledTimes(1);
+
+    resolveToggle({ perfume_id: 'p1', is_favorite: true, is_owned: false, is_want_to_try: false });
+    await first;
+    expect(useUserPerfumeStore.getState().statuses.p1.is_favorite).toBe(true);
+  });
 });

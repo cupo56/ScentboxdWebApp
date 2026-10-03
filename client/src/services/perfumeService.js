@@ -71,11 +71,12 @@ export async function getPerfumes({
   page = 1,
   pageSize = 24,
 } = {}) {
+  const longevityCode = LONGEVITY_OPTIONS.some((o) => o.code === longevity) ? longevity : '';
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
   if (noteFamily) {
-    return getPerfumesByNoteFamily({ search, brand, concentration, noteFamily, longevity, sortBy, from, pageSize });
+    return getPerfumesByNoteFamily({ search, brand, concentration, noteFamily, longevity: longevityCode, sortBy, from, pageSize });
   }
 
   let query = supabase
@@ -115,8 +116,8 @@ export async function getPerfumes({
     query = query.eq('concentration', concentration);
   }
 
-  if (longevity) {
-    query = query.eq('longevity_code', longevity);
+  if (longevityCode) {
+    query = query.eq('longevity_code', longevityCode);
   }
 
   // Sort

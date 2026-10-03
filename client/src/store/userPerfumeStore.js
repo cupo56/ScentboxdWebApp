@@ -10,24 +10,32 @@ const useUserPerfumeStore = create((set, get) => ({
   statuses: {},
   loadedFor: null,
   _loading: null,
+  _pending: {},
 
   load: (userId) => {
     const { loadedFor, _loading } = get();
     if (loadedFor === userId) return Promise.resolve();
     if (_loading?.userId === userId) return _loading.promise;
 
-    const promise = getUserPerfumeStatuses(userId)
+    let promise;
+    promise = getUserPerfumeStatuses(userId)
       .then((rows) => {
+        if (get()._loading?.promise !== promise) return;
         const statuses = {};
         for (const row of rows) statuses[row.perfume_id] = { ...EMPTY_STATUS, ...row };
         set({ statuses, loadedFor: userId, _loading: null });
       })
-      .catch(() => set({ _loading: null }));
+      .catch(() => {
+        if (get()._loading?.promise !== promise) return;
+        set({ _loading: null });
+      });
     set({ _loading: { userId, promise } });
     return promise;
   },
 
   toggle: async (perfumeId, field) => {
+    if (get()._pending[perfumeId]) return;
+    set((s) => ({ _pending: { ...s._pending, [perfumeId]: true } }));
     const before = get().statuses[perfumeId] || EMPTY_STATUS;
     set((s) => ({ statuses: { ...s.statuses, [perfumeId]: { ...before, [field]: !before[field] } } }));
     try {
@@ -36,10 +44,16 @@ const useUserPerfumeStore = create((set, get) => ({
     } catch (err) {
       set((s) => ({ statuses: { ...s.statuses, [perfumeId]: before } }));
       toast.error('Failed to update status: ' + err.message);
+    } finally {
+      set((s) => {
+        const next = { ...s._pending };
+        delete next[perfumeId];
+        return { _pending: next };
+      });
     }
   },
 
-  reset: () => set({ statuses: {}, loadedFor: null, _loading: null }),
+  reset: () => set({ statuses: {}, loadedFor: null, _loading: null, _pending: {} }),
 }));
 
 export default useUserPerfumeStore;

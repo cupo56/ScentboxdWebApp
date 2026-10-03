@@ -114,6 +114,14 @@ describe('getPerfumes', () => {
 
     expect(supabase.rpc).toHaveBeenCalledWith('get_perfumes_by_notes', expect.objectContaining({ p_longevity: 'Langhaltend' }));
   });
+
+  it('drops a longevity value that is not a known code', async () => {
+    const builder = mock.mockFrom('perfumes', { data: [], error: null, count: 0 });
+
+    await getPerfumes({ longevity: 'Langhaltend' });
+
+    expect(builder.calls.eq ?? []).toEqual([]);
+  });
 });
 
 describe('getPerfumeById', () => {
