@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabaseClient';
+import useUserPerfumeStore from './userPerfumeStore';
 
 const useAuthStore = create((set, get) => ({
   user: null,
@@ -43,6 +44,7 @@ const useAuthStore = create((set, get) => ({
           set({ user: session.user, session, profile });
         } else {
           set({ user: null, session: null, profile: null });
+          useUserPerfumeStore.getState().reset();
         }
       });
 
@@ -121,6 +123,7 @@ const useAuthStore = create((set, get) => ({
 
   logout: async () => {
     await supabase.auth.signOut();
+    useUserPerfumeStore.getState().reset();
     set({ user: null, session: null, profile: null });
   },
 
