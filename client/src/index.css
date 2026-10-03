@@ -86,7 +86,6 @@
   /* Layout */
   --max-width: 1200px;
   --nav-height: 60px;
-  --tabbar-height: 87px;
 
   /* Aliases — alte Variablennamen, damit noch nicht umgebautes Komponenten-CSS weiter funktioniert */
   --bg-primary: var(--bg);

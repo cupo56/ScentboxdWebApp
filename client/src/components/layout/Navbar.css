@@ -1,7 +1,7 @@
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 101;
   height: var(--nav-height);
   background: rgba(19, 10, 16, 0.55);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
@@ -136,5 +136,6 @@
   .navbar__inner { padding: 0 var(--space-6); gap: var(--space-4); }
   .navbar__search-pill span, .navbar__search-pill kbd { display: none; }
   .navbar__search-pill { padding: 0 10px; }
+  /* backdrop-filter auf .navbar macht sie zum Containing Block, auch für fixed. Das Panel ist also relativ zur Navbar positioniert; passt, solange die Navbar oben über die volle Breite geht. */
   .navbar__search-panel { position: fixed; top: var(--nav-height); left: 0; right: 0; width: auto; border-radius: 0; }
 }

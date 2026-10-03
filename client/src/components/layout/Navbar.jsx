@@ -90,7 +90,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
+    <nav className={scrolled ? 'navbar navbar--scrolled' : 'navbar'} aria-label="Primary">
       <div className="navbar__inner">
         <Link to="/" className="navbar__logo" aria-label="Scentboxd home">
           <Wordmark className="navbar__logo-text" />
@@ -107,6 +107,7 @@ export default function Navbar() {
             <button
               type="button"
               className="navbar__search-pill"
+              aria-label="Search"
               onClick={() => { setSearchOpen(true); requestAnimationFrame(() => inputRef.current?.focus()); }}
             >
               <MagnifyingGlass size={14} weight="regular" aria-hidden="true" />

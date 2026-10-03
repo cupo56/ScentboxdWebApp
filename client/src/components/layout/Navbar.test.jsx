@@ -35,4 +35,12 @@ describe('Navbar', () => {
     renderNav();
     expect(screen.getByTestId('account-menu')).toBeInTheDocument();
   });
+
+  it('names the search button and the landmark', () => {
+    useAuth.mockReturnValue({ isAuthenticated: false });
+    renderNav();
+
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
+  });
 });
