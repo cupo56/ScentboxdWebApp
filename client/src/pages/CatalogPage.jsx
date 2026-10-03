@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { List as ListIcon, MagnifyingGlass, SlidersHorizontal, SquaresFour } from '@phosphor-icons/react';
 import { getPerfumes, getConcentrations, getNoteFamilies, getLongevityLevels, getTrendingPerfumes } from '../services/perfumeService';
@@ -25,11 +25,8 @@ const writeStorage = (key, value) => {
 
 export default function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [perfumes, setPerfumes] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState({ key: undefined, perfumes: [], total: 0, page: 1 });
   const [loadingMore, setLoadingMore] = useState(false);
-  const [page, setPage] = useState(1);
   const [concentrations, setConcentrations] = useState([]);
   const [noteFamilies, setNoteFamilies] = useState([]);
   const [longevityLevels, setLongevityLevels] = useState([]);
@@ -52,23 +49,32 @@ export default function CatalogPage() {
     getTrendingPerfumes().then(setTrending).catch(() => {});
   }, []);
 
-  const loadPerfumes = useCallback(async (targetPage, append) => {
+  const filterKey = [search, concentration, noteFamily, longevity, sortBy].join('|');
+  const loading = result.key !== filterKey;
+  const { perfumes, total } = result;
+
+  useEffect(() => {
+    let active = true;
     const id = ++requestId.current;
-    (append ? setLoadingMore : setLoading)(true);
+    getPerfumes({ search, concentration, noteFamily, longevity, sortBy, page: 1, pageSize: PAGE_SIZE })
+      .then((r) => { if (active && id === requestId.current) setResult({ key: filterKey, perfumes: r.perfumes, total: r.total, page: 1 }); })
+      .catch((err) => { if (active && id === requestId.current) { toast.error('Failed to load perfumes: ' + err.message); setResult({ key: filterKey, perfumes: [], total: 0, page: 1 }); } });
+    return () => { active = false; };
+  }, [filterKey, search, concentration, noteFamily, longevity, sortBy]);
+
+  const loadMore = async () => {
+    const id = ++requestId.current;
+    setLoadingMore(true);
     try {
-      const result = await getPerfumes({ search, concentration, noteFamily, longevity, sortBy, page: targetPage, pageSize: PAGE_SIZE });
+      const next = await getPerfumes({ search, concentration, noteFamily, longevity, sortBy, page: result.page + 1, pageSize: PAGE_SIZE });
       if (id !== requestId.current) return;
-      setPerfumes((prev) => (append ? [...prev, ...result.perfumes] : result.perfumes));
-      setTotal(result.total);
-      setPage(targetPage);
+      setResult((r) => ({ ...r, perfumes: [...r.perfumes, ...next.perfumes], total: next.total, page: r.page + 1 }));
     } catch (err) {
       if (id !== requestId.current) return;
       toast.error('Failed to load perfumes: ' + err.message);
     }
-    (append ? setLoadingMore : setLoading)(false);
-  }, [search, concentration, noteFamily, longevity, sortBy]);
-
-  useEffect(() => { loadPerfumes(1, false); }, [loadPerfumes]);
+    setLoadingMore(false);
+  };
 
   const updateFilter = (key, value) => {
     const params = new URLSearchParams(searchParams);
@@ -176,7 +182,7 @@ export default function CatalogPage() {
 
           {!loading && perfumes.length < total && (
             <div className="catalog__more">
-              <button type="button" className="btn btn-secondary" onClick={() => loadPerfumes(page + 1, true)} disabled={loadingMore}>
+              <button type="button" className="btn btn-secondary" onClick={loadMore} disabled={loadingMore}>
                 {loadingMore ? 'Loading…' : `Load ${PAGE_SIZE} more`}
               </button>
               <span>Showing {perfumes.length} of {total}</span>

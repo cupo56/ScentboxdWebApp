@@ -23,8 +23,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState({ term: '', items: [] });
   const searchRef = useRef(null);
   const inputRef = useRef(null);
   const debouncedSearch = useDebounce(searchQuery, 300);
@@ -38,17 +37,18 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (!debouncedSearch.trim()) {
-      setSearchResults([]);
-      setIsSearching(false);
-      return;
-    }
-    setIsSearching(true);
-    getPerfumes({ search: debouncedSearch, pageSize: 5 })
-      .then((res) => setSearchResults(res.perfumes || []))
-      .catch(() => {})
-      .finally(() => setIsSearching(false));
+    const term = debouncedSearch.trim();
+    if (!term) return undefined;
+    let active = true;
+    getPerfumes({ search: term, pageSize: 5 })
+      .then((res) => { if (active) setSearchResults({ term, items: res.perfumes || [] }); })
+      .catch(() => { if (active) setSearchResults({ term, items: [] }); });
+    return () => { active = false; };
   }, [debouncedSearch]);
+
+  const searchTerm = debouncedSearch.trim();
+  const isSearching = !!searchTerm && searchResults.term !== searchTerm;
+  const results = searchResults.term === searchTerm ? searchResults.items : [];
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -131,9 +131,9 @@ export default function Navbar() {
                   <div className="navbar__search-results">
                     {isSearching ? (
                       <div className="navbar__search-item">Searching…</div>
-                    ) : searchResults.length > 0 ? (
+                    ) : results.length > 0 ? (
                       <>
-                        {searchResults.map((p) => (
+                        {results.map((p) => (
                           <Link
                             key={p.id}
                             to={`/perfume/${p.id}`}

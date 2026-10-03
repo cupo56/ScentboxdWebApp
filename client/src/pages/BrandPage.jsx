@@ -7,20 +7,21 @@ import './BrandPage.css';
 
 export default function BrandPage() {
   const { id } = useParams();
-  const [brand, setBrand] = useState(null);
-  const [perfumes, setPerfumes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({ key: undefined, brand: null, perfumes: [] });
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
     Promise.all([getBrandById(id), getPerfumesByBrand(id)])
-      .then(([b, p]) => {
-        setBrand(b);
-        setPerfumes(p);
-      })
-      .catch((err) => toast.error('Failed to load brand data: ' + err.message))
-      .finally(() => setLoading(false));
+      .then(([brand, perfumes]) => { if (active) setData({ key: id, brand, perfumes }); })
+      .catch((err) => {
+        toast.error('Failed to load brand data: ' + err.message);
+        if (active) setData({ key: id, brand: null, perfumes: [] });
+      });
+    return () => { active = false; };
   }, [id]);
+
+  const loading = data.key !== id;
+  const { brand, perfumes } = data;
 
   if (loading) {
     return (
