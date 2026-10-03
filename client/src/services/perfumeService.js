@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { LONGEVITY_OPTIONS, longevityRpcLabel } from '../lib/catalog';
 
 function sortToRpcParams(sortBy) {
   switch (sortBy) {
@@ -36,7 +37,7 @@ async function getPerfumesByNoteFamily({ search, brand, concentration, noteFamil
     p_notes: noteNames,
     p_brand_id: brand || null,
     p_concentration: concentration || null,
-    p_longevity: longevity || null,
+    p_longevity: longevityRpcLabel(longevity),
     p_search_query: search || null,
     p_sort_column: column,
     p_sort_ascending: ascending,
@@ -70,11 +71,12 @@ export async function getPerfumes({
   page = 1,
   pageSize = 24,
 } = {}) {
+  const longevityCode = LONGEVITY_OPTIONS.some((o) => o.code === longevity) ? longevity : '';
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
   if (noteFamily) {
-    return getPerfumesByNoteFamily({ search, brand, concentration, noteFamily, longevity, sortBy, from, pageSize });
+    return getPerfumesByNoteFamily({ search, brand, concentration, noteFamily, longevity: longevityCode, sortBy, from, pageSize });
   }
 
   let query = supabase
@@ -114,8 +116,8 @@ export async function getPerfumes({
     query = query.eq('concentration', concentration);
   }
 
-  if (longevity) {
-    query = query.eq('longevity', longevity);
+  if (longevityCode) {
+    query = query.eq('longevity_code', longevityCode);
   }
 
   // Sort
@@ -182,18 +184,19 @@ export async function getConcentrations() {
 }
 
 /**
- * Get all unique longevity levels for filter dropdown.
+ * Distinct longevity codes present in the catalog, in vocabulary order
+ * (see lib/catalog.js). The UI maps them to English labels.
  */
 export async function getLongevityLevels() {
   const { data, error } = await supabase
     .from('perfumes')
-    .select('longevity')
-    .not('longevity', 'is', null);
+    .select('longevity_code')
+    .not('longevity_code', 'is', null);
 
   if (error) throw error;
 
-  const unique = [...new Set(data.map((d) => d.longevity).filter(Boolean))];
-  return unique.sort();
+  const present = new Set(data.map((d) => d.longevity_code).filter(Boolean));
+  return LONGEVITY_OPTIONS.map((o) => o.code).filter((code) => present.has(code));
 }
 
 /**

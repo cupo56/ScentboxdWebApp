@@ -1,7 +1,7 @@
 .filter-sheet__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(22, 24, 38, 0.72);
+  background: rgba(19, 10, 16, 0.72);
   z-index: 300;
   display: flex;
   align-items: flex-end;
@@ -10,7 +10,7 @@
 .filter-sheet {
   width: 100%;
   max-height: 76vh;
-  background: var(--surface);
+  background: var(--surface-solid);
   border-top: 1px solid var(--hairline-strong);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: var(--space-4) var(--space-6) calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
@@ -37,7 +37,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  font: var(--weight-heading) 20px var(--font);
+  font: 600 20px var(--font-display);
   color: var(--text);
 }
 .filter-sheet__header button {
