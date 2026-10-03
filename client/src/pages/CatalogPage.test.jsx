@@ -126,4 +126,23 @@ describe('CatalogPage', () => {
     expect(screen.queryByText('Layton')).toBeNull();
     expect(screen.getByText('Newest', card)).toBeInTheDocument();
   });
+
+  it('re-enables "Load more" when a filter changes while it is loading', async () => {
+    let resolveMore;
+    getPerfumes
+      .mockResolvedValueOnce({ perfumes, total: 3 })
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveMore = resolve; }))
+      .mockResolvedValueOnce({ perfumes: [{ id: 'z', name: 'Newest' }], total: 1 });
+    const user = userEvent.setup();
+    renderAt();
+    await screen.findAllByTestId('card');
+
+    await user.click(screen.getByRole('button', { name: 'Load 24 more' }));
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Sort' }), 'newest');
+    await screen.findByText('Newest', { selector: '[data-testid="card"]' });
+
+    await act(async () => { resolveMore({ perfumes: [{ id: 'c', name: 'Society' }], total: 3 }); });
+    expect(screen.queryByText('Society')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Loading…' })).toBeNull();
+  });
 });

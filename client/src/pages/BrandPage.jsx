@@ -14,8 +14,9 @@ export default function BrandPage() {
     Promise.all([getBrandById(id), getPerfumesByBrand(id)])
       .then(([brand, perfumes]) => { if (active) setData({ key: id, brand, perfumes }); })
       .catch((err) => {
+        if (!active) return;
         toast.error('Failed to load brand data: ' + err.message);
-        if (active) setData({ key: id, brand: null, perfumes: [] });
+        setData({ key: id, brand: null, perfumes: [] });
       });
     return () => { active = false; };
   }, [id]);

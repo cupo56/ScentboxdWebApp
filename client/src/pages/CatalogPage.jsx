@@ -70,10 +70,10 @@ export default function CatalogPage() {
       if (id !== requestId.current) return;
       setResult((r) => ({ ...r, perfumes: [...r.perfumes, ...next.perfumes], total: next.total, page: r.page + 1 }));
     } catch (err) {
-      if (id !== requestId.current) return;
-      toast.error('Failed to load perfumes: ' + err.message);
+      if (id === requestId.current) toast.error('Failed to load perfumes: ' + err.message);
+    } finally {
+      setLoadingMore(false);
     }
-    setLoadingMore(false);
   };
 
   const updateFilter = (key, value) => {
