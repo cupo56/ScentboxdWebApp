@@ -8,8 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "NODE_OPTIONS=--no-experimental-webstorage vitest run",
+    "test:watch": "NODE_OPTIONS=--no-experimental-webstorage vitest"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

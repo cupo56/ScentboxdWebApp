@@ -101,4 +101,18 @@ describe('userPerfumeStore', () => {
     await first;
     expect(useUserPerfumeStore.getState().statuses.p1.is_favorite).toBe(true);
   });
+
+  it('does not write a toggle result after the user signed out', async () => {
+    getUserPerfumeStatuses.mockResolvedValue([]);
+    await useUserPerfumeStore.getState().load('u1');
+    let resolveToggle;
+    togglePerfumeStatus.mockReturnValue(new Promise((resolve) => { resolveToggle = resolve; }));
+
+    const pending = useUserPerfumeStore.getState().toggle('p1', 'is_favorite');
+    useUserPerfumeStore.getState().reset();
+    resolveToggle({ perfume_id: 'p1', is_favorite: true });
+    await pending;
+
+    expect(useUserPerfumeStore.getState().statuses).toEqual({});
+  });
 });

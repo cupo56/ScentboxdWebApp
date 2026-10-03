@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { List as ListIcon, MagnifyingGlass, SlidersHorizontal, SquaresFour } from '@phosphor-icons/react';
 import { getPerfumes, getConcentrations, getNoteFamilies, getLongevityLevels, getTrendingPerfumes } from '../services/perfumeService';
@@ -37,6 +37,7 @@ export default function CatalogPage() {
   const [view, setView] = useState(() => readStorage(VIEW_KEY, 'grid'));
   const [trendingHidden, setTrendingHidden] = useState(() => readStorage(TRENDING_KEY, 'shown') === 'hidden');
   const [sheetOpen, setSheetOpen] = useState(false);
+  const requestId = useRef(0);
 
   const search = searchParams.get('q') || '';
   const concentration = searchParams.get('concentration') || '';
@@ -52,13 +53,16 @@ export default function CatalogPage() {
   }, []);
 
   const loadPerfumes = useCallback(async (targetPage, append) => {
+    const id = ++requestId.current;
     (append ? setLoadingMore : setLoading)(true);
     try {
       const result = await getPerfumes({ search, concentration, noteFamily, longevity, sortBy, page: targetPage, pageSize: PAGE_SIZE });
+      if (id !== requestId.current) return;
       setPerfumes((prev) => (append ? [...prev, ...result.perfumes] : result.perfumes));
       setTotal(result.total);
       setPage(targetPage);
     } catch (err) {
+      if (id !== requestId.current) return;
       toast.error('Failed to load perfumes: ' + err.message);
     }
     (append ? setLoadingMore : setLoading)(false);
@@ -69,7 +73,7 @@ export default function CatalogPage() {
   const updateFilter = (key, value) => {
     const params = new URLSearchParams(searchParams);
     if (value) params.set(key, value); else params.delete(key);
-    setSearchParams(params);
+    setSearchParams(params, { replace: key === 'q' });
   };
   const resetAll = () => setSearchParams(new URLSearchParams());
 
@@ -120,7 +124,7 @@ export default function CatalogPage() {
             <section className="catalog__trending">
               <div className="catalog__trending-head">
                 <span className="eyebrow eyebrow--accent">Trending this week</span>
-                <button type="button" className="catalog__trending-toggle" onClick={toggleTrending}>
+                <button type="button" className="catalog__trending-toggle" onClick={toggleTrending} aria-expanded={!trendingHidden}>
                   {trendingHidden ? 'Show trending' : 'Hide trending'}
                 </button>
               </div>

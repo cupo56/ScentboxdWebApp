@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -87,5 +87,43 @@ describe('CatalogPage', () => {
     await user.click(screen.getByRole('button', { name: 'Hide trending' }));
     expect(screen.queryByTestId('trending')).toBeNull();
     expect(localStorage.getItem('scentboxd:catalogTrending')).toBe('hidden');
+  });
+
+  it('appends the next page on "Load more"', async () => {
+    getPerfumes.mockResolvedValueOnce({ perfumes, total: 3 }).mockResolvedValueOnce({ perfumes: [{ id: 'c', name: 'Society' }], total: 3 });
+    const user = userEvent.setup();
+    renderAt();
+    await screen.findAllByTestId('card');
+
+    await user.click(screen.getByRole('button', { name: 'Load 24 more' }));
+
+    expect(await screen.findByText('Society')).toBeInTheDocument();
+    expect(screen.getAllByTestId('card')).toHaveLength(3);
+    expect(getPerfumes).toHaveBeenLastCalledWith(expect.objectContaining({ page: 2 }));
+  });
+
+  it('shows the empty state with a reset button', async () => {
+    getPerfumes.mockResolvedValue({ perfumes: [], total: 0 });
+    renderAt('/catalog?concentration=EDC');
+
+    expect(await screen.findByText('Nothing matches these filters.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset all' })).toBeInTheDocument();
+  });
+
+  it('ignores a slower, older response', async () => {
+    let resolveFirst;
+    getPerfumes
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveFirst = resolve; }))
+      .mockResolvedValueOnce({ perfumes: [{ id: 'z', name: 'Newest' }], total: 1 });
+    const user = userEvent.setup();
+    renderAt();
+
+    await user.selectOptions(await screen.findByRole('combobox', { name: 'Sort' }), 'newest');
+    const card = { selector: '[data-testid="card"]' };
+    expect(await screen.findByText('Newest', card)).toBeInTheDocument();
+
+    await act(async () => { resolveFirst({ perfumes, total: 2 }); });
+    expect(screen.queryByText('Layton')).toBeNull();
+    expect(screen.getByText('Newest', card)).toBeInTheDocument();
   });
 });
