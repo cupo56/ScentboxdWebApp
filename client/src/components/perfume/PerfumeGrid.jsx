@@ -6,9 +6,9 @@ export default function PerfumeGrid({ perfumes, loading }) {
     return (
       <div className="perfume-grid">
         {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="perfume-card-skeleton card">
+          <div key={i} className="perfume-card-skeleton">
             <div className="skeleton" style={{ aspectRatio: '3/4' }} />
-            <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div className="skeleton" style={{ height: '12px', width: '40%' }} />
               <div className="skeleton" style={{ height: '16px', width: '80%' }} />
             </div>
