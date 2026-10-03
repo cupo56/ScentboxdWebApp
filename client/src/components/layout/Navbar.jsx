@@ -5,15 +5,13 @@ import { useAuth } from '../../hooks/useAuth';
 import useDebounce from '../../hooks/useDebounce';
 import { getPerfumes } from '../../services/perfumeService';
 import AccountMenu from './AccountMenu';
+import Wordmark from './Wordmark';
 import './Navbar.css';
 
 function Logo() {
   return (
     <Link to="/" className="navbar__logo">
-      <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-        <path d="M13 1.5 L24.5 13 L13 24.5 L1.5 13 Z" stroke="#9184d9" strokeWidth="1.6" />
-      </svg>
-      <span className="navbar__logo-text">Scentboxd</span>
+      <Wordmark className="navbar__logo-text" />
     </Link>
   );
 }

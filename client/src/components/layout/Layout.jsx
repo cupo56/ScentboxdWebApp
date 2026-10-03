@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import Aurora from './Aurora';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import TabBar from './TabBar';
@@ -6,6 +7,7 @@ import TabBar from './TabBar';
 export default function Layout() {
   return (
     <div className="layout">
+      <Aurora />
       <Navbar />
       <main>
         <Outlet />

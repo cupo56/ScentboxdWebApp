@@ -1,5 +1,5 @@
 .houses { max-width: var(--max-width); margin: 0 auto; padding: var(--space-10) var(--space-14) var(--space-14); }
-.houses__title { font: var(--weight-heading) 30px var(--font); color: var(--text); letter-spacing: -0.02em; }
+.houses__title { font: var(--weight-heading) 30px var(--font-display); color: var(--text); letter-spacing: -0.02em; }
 .houses__meta { font: var(--weight-body) 13px var(--font); color: var(--text-dim); margin: var(--space-2) 0 var(--space-8); }
 .houses__search { max-width: 340px; margin-bottom: var(--space-8); }
 

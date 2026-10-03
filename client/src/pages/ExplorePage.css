@@ -16,7 +16,7 @@
 .explore__main { padding: var(--space-10) var(--space-10) var(--space-14); grid-column: 1 / -1; }
 
 .explore__toolbar { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4); }
-.explore__title { font: var(--weight-heading) 30px var(--font); color: var(--text); letter-spacing: -0.02em; }
+.explore__title { font: var(--weight-heading) 30px var(--font-display); color: var(--text); letter-spacing: -0.02em; }
 .explore__meta { font: var(--weight-body) 13px var(--font); color: var(--text-dim); margin-top: var(--space-2); }
 
 .explore__right { display: flex; align-items: center; gap: var(--space-4); }

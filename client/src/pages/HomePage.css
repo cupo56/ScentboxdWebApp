@@ -20,7 +20,7 @@
 .feed__bottle { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-10); align-items: start; }
 .feed__bottle-img img { padding: var(--space-6); }
 .feed__bottle-brand { font: var(--weight-body) 12px var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
-.feed__bottle-name { font: var(--weight-heading) 34px/1.1 var(--font); letter-spacing: -0.02em; color: var(--text); margin: var(--space-2) 0 var(--space-4); }
+.feed__bottle-name { font: var(--weight-heading) 34px/1.1 var(--font-display); letter-spacing: -0.02em; color: var(--text); margin: var(--space-2) 0 var(--space-4); }
 .feed__bottle-desc { font: var(--weight-body) 14.5px/1.6 var(--font); color: var(--text-body); margin-bottom: var(--space-6); }
 .feed__bottle-actions { display: flex; gap: var(--space-3); }
 .feed__bottle-skeleton { height: 260px; }
@@ -51,7 +51,7 @@
 
 .feed__verdicts { padding: var(--space-10) var(--space-14) var(--space-14); }
 .feed__verdicts-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-8); }
-.feed__verdicts-head h2 { font: var(--weight-heading) 22px var(--font); color: var(--text); }
+.feed__verdicts-head h2 { font: var(--weight-heading) 22px var(--font-display); color: var(--text); }
 .feed__verdicts-head a { font: var(--weight-body) 13px var(--font); color: var(--text-dim); }
 
 .feed__verdicts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
