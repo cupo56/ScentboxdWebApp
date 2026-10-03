@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Star } from '@phosphor-icons/react';
 import { useNoteName } from '../../hooks/useNoteName';
@@ -15,6 +15,7 @@ export default function PerfumeCard({ perfume }) {
   const noteName = useNoteName();
   const { isAuthenticated, status, toggle } = usePerfumeStatus(perfume.id);
   const [imgError, setImgError] = useState(false);
+  const nameId = useId();
 
   const notes = [...(perfume.perfume_notes || [])]
     .filter((pn) => pn.notes?.name)
@@ -24,7 +25,7 @@ export default function PerfumeCard({ perfume }) {
 
   return (
     <article className="pcard">
-      <Link to={`/perfume/${perfume.id}`} className="pcard__link">
+      <Link to={`/perfume/${perfume.id}`} className="pcard__link" aria-labelledby={nameId}>
         <div className="pcard__image">
           {perfume.image_url && !imgError ? (
             <img src={perfume.image_url} alt="" loading="lazy" onError={() => setImgError(true)} />
@@ -37,7 +38,7 @@ export default function PerfumeCard({ perfume }) {
           {perfume.performance != null && (
             <div className="pcard__rating">★ {Number(perfume.performance).toFixed(1)}</div>
           )}
-          <h3 className="pcard__name">{perfume.name}</h3>
+          <h3 className="pcard__name" id={nameId}>{perfume.name}</h3>
           <div className="pcard__brand">{brandName}</div>
           {notes.length > 0 && <div className="pcard__notes">{notes.join(' · ')}</div>}
           {perfume.concentration && <span className="pcard__tag">{perfume.concentration}</span>}

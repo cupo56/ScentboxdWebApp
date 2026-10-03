@@ -5,8 +5,6 @@
   border-radius: 12px;
   overflow: hidden;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid rgba(194, 10, 102, 0.1);
   box-shadow: var(--inset-highlight);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;

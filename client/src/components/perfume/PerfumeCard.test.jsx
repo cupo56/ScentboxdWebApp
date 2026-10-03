@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -57,5 +57,13 @@ describe('PerfumeCard', () => {
 
     expect(screen.getByText('Unknown')).toBeInTheDocument();
     expect(screen.queryByText(/★/)).toBeNull();
+  });
+
+  it('shows a placeholder when the image fails', () => {
+    usePerfumeStatus.mockReturnValue({ isAuthenticated: false, status: {}, toggle: vi.fn() });
+    const { container } = renderCard();
+
+    fireEvent.error(container.querySelector('img'));
+    expect(container.querySelector('.pcard__placeholder')).toBeInTheDocument();
   });
 });

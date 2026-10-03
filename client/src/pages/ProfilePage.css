@@ -30,7 +30,7 @@
 .shelf__tabs button { padding: var(--space-2) var(--space-6); border: none; border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font: var(--weight-body) 13px var(--font); cursor: pointer; }
 .shelf__tabs button.active { background: var(--accent-tint); color: var(--accent-text); font-weight: var(--weight-label); }
 
-.shelf__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-6); }
+.shelf__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--space-6); }
 
 .shelf__reviews { display: flex; flex-direction: column; gap: var(--space-6); }
 

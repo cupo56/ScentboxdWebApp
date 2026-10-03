@@ -35,14 +35,19 @@ const useUserPerfumeStore = create((set, get) => ({
 
   toggle: async (perfumeId, field) => {
     if (get()._pending[perfumeId]) return;
+    const owner = get().loadedFor;
     set((s) => ({ _pending: { ...s._pending, [perfumeId]: true } }));
     const before = get().statuses[perfumeId] || EMPTY_STATUS;
     set((s) => ({ statuses: { ...s.statuses, [perfumeId]: { ...before, [field]: !before[field] } } }));
     try {
       const row = await togglePerfumeStatus(perfumeId, field);
-      set((s) => ({ statuses: { ...s.statuses, [perfumeId]: { ...EMPTY_STATUS, ...row } } }));
+      if (get().loadedFor === owner) {
+        set((s) => ({ statuses: { ...s.statuses, [perfumeId]: { ...EMPTY_STATUS, ...row } } }));
+      }
     } catch (err) {
-      set((s) => ({ statuses: { ...s.statuses, [perfumeId]: before } }));
+      if (get().loadedFor === owner) {
+        set((s) => ({ statuses: { ...s.statuses, [perfumeId]: before } }));
+      }
       toast.error('Failed to update status: ' + err.message);
     } finally {
       set((s) => {
