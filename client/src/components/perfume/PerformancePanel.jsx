@@ -45,5 +45,5 @@ function pick(avgPercent, fromCode) {
 
 function stars(rating) {
   const percent = ratingToPercent(rating);
-  return percent == null ? { text: '—', percent: 0 } : { text: Number(rating).toFixed(1), percent };
+  return percent == null ? { text: '—', percent: 0 } : { text: (percent / 20).toFixed(1), percent };
 }

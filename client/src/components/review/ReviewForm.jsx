@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import StarRating from './StarRating';
+import { ratingToStars, starsToPercent } from '../../lib/performance';
 import { createReview, updateReview } from '../../services/reviewService';
 import './ReviewForm.css';
 
@@ -12,8 +13,8 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
   const [longevity, setLongevity] = useState(initialData?.longevity ?? '');
   const [sillage, setSillage] = useState(initialData?.sillage ?? '');
   const [occasions, setOccasions] = useState(initialData?.occasions || []);
-  const [bottleRating, setBottleRating] = useState(initialData?.bottle_rating || 0);
-  const [valueRating, setValueRating] = useState(initialData?.value_rating || 0);
+  const [bottleRating, setBottleRating] = useState(Math.round(ratingToStars(initialData?.bottle_rating) ?? 0));
+  const [valueRating, setValueRating] = useState(Math.round(ratingToStars(initialData?.value_rating) ?? 0));
   const [seasons, setSeasons] = useState(initialData?.seasons || []);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -49,8 +50,8 @@ export default function ReviewForm({ perfumeId, initialData, onReviewAdded, onCa
         longevity: longevity !== '' ? parseInt(longevity) : null,
         sillage: sillage !== '' ? parseInt(sillage) : null,
         occasions,
-        bottle_rating: bottleRating || null,
-        value_rating: valueRating || null,
+        bottle_rating: starsToPercent(bottleRating),
+        value_rating: starsToPercent(valueRating),
         seasons,
       };
 

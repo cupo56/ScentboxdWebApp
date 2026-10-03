@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { longevityFromCode, sillageFromCode, ratingToPercent } from './performance';
+import { longevityFromCode, sillageFromCode, ratingToPercent, ratingToStars, starsToPercent } from './performance';
 
 describe('performance vocabulary', () => {
   it('maps longevity codes to a percent and an English label', () => {
@@ -18,5 +18,15 @@ describe('performance vocabulary', () => {
     expect(ratingToPercent(4.5)).toBe(90);
     expect(ratingToPercent(null)).toBeNull();
     expect(ratingToPercent('3')).toBe(60);
+    expect(ratingToPercent(72)).toBe(72);
+    expect(ratingToPercent(140)).toBe(100);
+  });
+
+  it('converts stored percents back to stars and stars to percents', () => {
+    expect(ratingToStars(72)).toBe(3.6);
+    expect(ratingToStars(4)).toBe(4);
+    expect(ratingToStars(null)).toBeNull();
+    expect(starsToPercent(4)).toBe(80);
+    expect(starsToPercent(0)).toBeNull();
   });
 });

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ChatCircle, Flag } from '@phosphor-icons/react';
 import StarRating from './StarRating';
+import { ratingToStars } from '../../lib/performance';
 import ReviewForm from './ReviewForm';
 import CommentSection from './CommentSection';
 import ReportModal from '../report/ReportModal';
@@ -151,12 +152,12 @@ export default function ReviewCard({ review, currentUserId, onDelete, onUpdate }
         <div className="verdict-row__sub-ratings">
           {review.bottle_rating > 0 && (
             <span className="verdict-row__sub-rating">
-              Bottle <StarRating rating={review.bottle_rating} size="sm" />
+              Bottle <StarRating rating={ratingToStars(review.bottle_rating)} size="sm" />
             </span>
           )}
           {review.value_rating > 0 && (
             <span className="verdict-row__sub-rating">
-              Value <StarRating rating={review.value_rating} size="sm" />
+              Value <StarRating rating={ratingToStars(review.value_rating)} size="sm" />
             </span>
           )}
         </div>

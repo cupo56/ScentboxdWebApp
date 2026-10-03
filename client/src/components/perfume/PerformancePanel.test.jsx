@@ -22,4 +22,19 @@ describe('PerformancePanel', () => {
     expect(bars[2].style.width).toBe('90%');
     expect(bars[3].style.width).toBe('0%');
   });
+
+  it('reads bottle and value ratings stored as 0–100', () => {
+    render(
+      <PerformancePanel
+        perfume={{ avg_bottle_rating: 50, avg_value_rating: 72 }}
+        summary={null}
+      />
+    );
+
+    expect(screen.getByText('2.5')).toBeInTheDocument();
+    expect(screen.getByText('3.6')).toBeInTheDocument();
+    const bars = document.querySelectorAll('.perf__fill');
+    expect(bars[2].style.width).toBe('50%');
+    expect(bars[3].style.width).toBe('72%');
+  });
 });

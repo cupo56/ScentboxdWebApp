@@ -84,4 +84,27 @@ describe('PerfumeDetailPage', () => {
     expect(await screen.findByText('nope')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to Catalog' })).toHaveAttribute('href', '/catalog');
   });
+
+  it('drops the previous rating summary when navigating to another perfume', async () => {
+    getPerfumeRatingSummary.mockImplementation((perfumeId) => Promise.resolve(perfumeId === 'p1'
+      ? { avg_rating: 4.3, review_count: 12, avg_longevity: 70, avg_sillage: null }
+      : { avg_rating: 2.1, review_count: 1, avg_longevity: 20, avg_sillage: null }));
+    getPerfumeById.mockImplementation((perfumeId) => Promise.resolve({ ...perfume, id: perfumeId, name: perfumeId === 'p1' ? 'Layton' : 'Herod' }));
+    const { unmount } = render(
+      <MemoryRouter initialEntries={['/perfume/p1']}>
+        <Routes><Route path="/perfume/:id" element={<PerfumeDetailPage />} /></Routes>
+      </MemoryRouter>
+    );
+    expect(await screen.findByText('4.3')).toBeInTheDocument();
+    unmount();
+
+    render(
+      <MemoryRouter initialEntries={['/perfume/p2']}>
+        <Routes><Route path="/perfume/:id" element={<PerfumeDetailPage />} /></Routes>
+      </MemoryRouter>
+    );
+    expect(await screen.findByRole('heading', { level: 1, name: 'Herod' })).toBeInTheDocument();
+    expect(await screen.findByText('2.1')).toBeInTheDocument();
+    expect(screen.queryByText('4.3')).toBeNull();
+  });
 });

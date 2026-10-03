@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star } from '@phosphor-icons/react';
 import { getPerfumeById, getSimilarPerfumes } from '../services/perfumeService';
@@ -41,13 +41,19 @@ export default function PerfumeDetailPage() {
   const { isAuthenticated, user } = useAuth();
   const key = `${id}|${isAuthenticated}`;
   const [data, setData] = useState(EMPTY);
-  const [ratingSummary, setRatingSummary] = useState(null);
+  const [summary, setSummary] = useState({ key: undefined, value: null });
+  const ratingSummary = summary.key === key ? summary.value : null;
+  const keyRef = useRef(key);
   const [reviewPage, setReviewPage] = useState(1);
   const [loadingMoreReviews, setLoadingMoreReviews] = useState(false);
 
-  const refreshRatingSummary = (perfumeId) => {
-    getPerfumeRatingSummary(perfumeId).then(setRatingSummary).catch(() => {});
+  const refreshRatingSummary = (perfumeId, forKey) => {
+    getPerfumeRatingSummary(perfumeId)
+      .then((value) => setSummary((s) => (keyRef.current === forKey ? { key: forKey, value } : s)))
+      .catch(() => {});
   };
+
+  useEffect(() => { keyRef.current = key; }, [key]);
 
   useEffect(() => {
     let active = true;
@@ -56,7 +62,7 @@ export default function PerfumeDetailPage() {
         if (!active) return;
         setData({ key, ...next, similar: [], error: '' });
         setReviewPage(1);
-        refreshRatingSummary(id);
+        refreshRatingSummary(id, key);
         if (next.perfume?.brand_id) {
           getSimilarPerfumes(next.perfume.brand_id, id)
             .then((similar) => { if (active) setData((d) => (d.key === key ? { ...d, similar } : d)); })
@@ -72,7 +78,7 @@ export default function PerfumeDetailPage() {
   const loading = data.key !== key;
   const { perfume, reviews, reviewsTotal, blockedIds, similar, error } = data;
 
-  const patchReviews = (fn) => setData((d) => ({ ...d, ...fn(d) }));
+  const patchReviews = (fn) => setData((d) => (d.key === key ? { ...d, ...fn(d) } : d));
 
   const loadMoreReviews = async () => {
     setLoadingMoreReviews(true);
@@ -91,7 +97,7 @@ export default function PerfumeDetailPage() {
     try {
       await deleteReview(reviewId);
       patchReviews((d) => ({ reviews: d.reviews.filter((r) => r.id !== reviewId), reviewsTotal: Math.max(0, d.reviewsTotal - 1) }));
-      refreshRatingSummary(id);
+      refreshRatingSummary(id, key);
     } catch (err) {
       toast.error('Failed to delete review: ' + err.message);
     }
@@ -99,17 +105,18 @@ export default function PerfumeDetailPage() {
 
   const handleReviewAdded = (review) => {
     patchReviews((d) => ({ reviews: [review, ...d.reviews], reviewsTotal: d.reviewsTotal + 1 }));
-    refreshRatingSummary(id);
+    refreshRatingSummary(id, key);
   };
 
   const handleUpdateReview = (updated) => {
     patchReviews((d) => ({ reviews: d.reviews.map((r) => (r.id === updated.id ? updated : r)) }));
-    refreshRatingSummary(id);
+    refreshRatingSummary(id, key);
   };
 
   if (loading) {
     return (
       <div className="detail detail--loading" aria-busy="true">
+        <span className="sr-only">Loading…</span>
         <div className="detail__hero"><div className="skeleton detail__hero-skeleton" /></div>
         <div className="detail__body">
           <div className="skeleton" style={{ height: 11, width: '30%' }} />
@@ -122,7 +129,7 @@ export default function PerfumeDetailPage() {
 
   if (error || !perfume) {
     return (
-      <div className="container page detail__error glass">
+      <div className="container page detail__error glass" role="alert">
         <h1 className="detail__error-title">Couldn't load this fragrance</h1>
         <p>{error || 'Fragrance not found.'}</p>
         <Link to="/catalog" className="btn btn-primary">Back to Catalog</Link>
@@ -206,7 +213,7 @@ export default function PerfumeDetailPage() {
             )}
           </div>
 
-          {reviews.length < reviewsTotal && (
+          {reviewPage * REVIEWS_PAGE_SIZE < reviewsTotal && (
             <div className="detail__more">
               <button type="button" className="btn btn-secondary" onClick={loadMoreReviews} disabled={loadingMoreReviews}>
                 {loadingMoreReviews ? 'Loading…' : 'Load more reviews'}
