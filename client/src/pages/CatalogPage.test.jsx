@@ -12,7 +12,7 @@ vi.mock('../services/perfumeService', () => ({
 }));
 vi.mock('../components/perfume/PerfumeCard', () => ({ default: ({ perfume }) => <div data-testid="card">{perfume.name}</div> }));
 vi.mock('../components/perfume/PerfumeRow', () => ({ default: ({ perfume }) => <div data-testid="row">{perfume.name}</div> }));
-vi.mock('../components/today/TrendingCarousel', () => ({ default: ({ items }) => <div data-testid="trending">{items.length}</div> }));
+vi.mock('../components/perfume/PerfumeCarousel', () => ({ default: ({ items }) => <div data-testid="trending">{items.length}</div> }));
 
 import { getPerfumes, getConcentrations, getNoteFamilies, getLongevityLevels, getTrendingPerfumes } from '../services/perfumeService';
 import CatalogPage from './CatalogPage';
