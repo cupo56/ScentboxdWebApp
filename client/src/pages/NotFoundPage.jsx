@@ -60,7 +60,7 @@ export default function NotFoundPage() {
               {/* Label */}
               <rect x="42" y="58" width="36" height="30" rx="4" fill="rgba(255,255,255,0.1)" />
               {/* Question mark */}
-              <text x="60" y="80" textAnchor="middle" fontSize="22" fontWeight="700" fill="var(--text-primary)" fontFamily="var(--font-display)">?</text>
+              <text x="60" y="80" textAnchor="middle" fontSize="22" fontWeight="700" fill="var(--text)" fontFamily="var(--font-display)">?</text>
               {/* Shine */}
               <rect x="38" y="42" width="6" height="30" rx="3" fill="rgba(255,255,255,0.15)" />
             </svg>

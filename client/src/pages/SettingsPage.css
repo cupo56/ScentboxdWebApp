@@ -38,7 +38,7 @@
   color: var(--text-muted);
   cursor: pointer;
 }
-.settings__nav-item.active { border-left-color: var(--accent); color: var(--accent-text); }
+.settings__nav-item.active { border-left-color: var(--accent); color: var(--accent-soft); }
 
 .settings__content { padding: var(--space-10) var(--space-14) var(--space-14); max-width: 720px; display: flex; flex-direction: column; gap: var(--space-10); }
 
@@ -47,13 +47,13 @@
 .settings__avatar-row { display: flex; align-items: center; gap: var(--space-6); padding-bottom: var(--space-8); border-bottom: 1px solid var(--hairline); }
 .settings__avatar {
   width: 64px; height: 64px; flex: none; border-radius: 50%;
-  background: var(--accent-tint); border: 1px solid var(--accent-line); color: var(--accent-text);
+  background: var(--accent-tint); border: 1px solid var(--accent-line); color: var(--accent-soft);
   display: flex; align-items: center; justify-content: center; font: var(--weight-heading) 24px var(--font); overflow: hidden;
 }
 .settings__avatar img { width: 100%; height: 100%; object-fit: cover; }
 .settings__avatar-info { flex: 1; }
 .settings__field-title { font: var(--weight-label) 14px var(--font); color: var(--text); }
-.settings__field-title--accent { color: var(--accent-text); }
+.settings__field-title--accent { color: var(--accent-soft); }
 .settings__field-hint { font: var(--weight-body) 12.5px var(--font); color: var(--text-dim); margin-top: var(--space-1); }
 
 .settings__row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); margin-top: var(--space-8); }
@@ -88,9 +88,9 @@
   transition: left 0.2s ease, right 0.2s ease;
 }
 .settings__switch.on { background: var(--accent-tint); border-color: var(--accent); }
-.settings__switch.on span { left: auto; right: 3px; background: var(--accent-text); }
+.settings__switch.on span { left: auto; right: 3px; background: var(--accent-soft); }
 
-.settings__delete-btn { border: 1px solid var(--accent-line); color: var(--accent-text); }
+.settings__delete-btn { border: 1px solid var(--accent-line); color: var(--accent-soft); }
 
 @media (max-width: 900px) {
   .settings__header { padding: var(--space-6); flex-wrap: wrap; }

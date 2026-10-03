@@ -5,7 +5,7 @@
 
 .houses__letters { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: var(--space-8); }
 .houses__letters a { min-width: 24px; text-align: center; padding: 4px 6px; border-radius: var(--radius-sm); font: var(--weight-body) 12.5px ui-monospace, Menlo, monospace; color: var(--text-muted); text-decoration: none; }
-.houses__letters a:hover { color: var(--accent-text); }
+.houses__letters a:hover { color: var(--accent-soft); }
 
 .houses__row {
   display: grid;

@@ -1,6 +1,6 @@
 .footer {
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border);
+  background: var(--surface);
+  border-top: 1px solid var(--hairline);
   margin-top: 80px;
 }
 
@@ -39,7 +39,7 @@
 .footer__column h4 {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-body);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 4px;
@@ -56,7 +56,7 @@
 }
 
 .footer__bottom {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--hairline);
   padding: 20px 24px;
   text-align: center;
 }

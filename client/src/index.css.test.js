@@ -42,15 +42,19 @@ describe('design tokens', () => {
     expect(token(name)).toBeDefined();
   });
 
-  it('keeps the legacy aliases that untouched component CSS relies on', () => {
+  it('no longer defines the legacy aliases', () => {
     for (const alias of [
       '--bg-primary', '--bg-secondary', '--bg-card', '--bg-card-hover', '--bg-elevated',
-      '--text-primary', '--text-secondary', '--text-dim', '--accent-text', '--accent-bright',
+      '--text-primary', '--text-secondary', '--accent-text', '--accent-bright',
       '--accent-hover', '--accent-dim', '--border', '--border-hover', '--section',
-      '--radius-xl', '--shadow-card', '--shadow-elevated',
+      '--shadow-card', '--shadow-elevated',
     ]) {
-      expect(token(alias), alias).toBeDefined();
+      expect(token(alias), alias).toBeUndefined();
     }
+  });
+
+  it('keeps --text-dim as a real token', () => {
+    expect(token('--text-dim')).toBe('rgba(242, 238, 240, 0.45)');
   });
 
   it('uses the display font for headings', () => {
