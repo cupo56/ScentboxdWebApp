@@ -5,7 +5,7 @@ import Layout from './components/layout/Layout';
 import RequireAuth from './components/layout/RequireAuth';
 import ExploreRedirect from './components/layout/ExploreRedirect';
 import ToastContainer from './components/layout/ToastContainer';
-import HomePage from './pages/HomePage';
+import TodayPage from './pages/TodayPage';
 import CatalogPage from './pages/CatalogPage';
 import ShelfPage from './pages/ShelfPage';
 import CommunityPage from './pages/CommunityPage';
@@ -58,7 +58,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<TodayPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/explore" element={<ExploreRedirect />} />
         <Route
