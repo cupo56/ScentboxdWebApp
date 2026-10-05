@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import './AuthPage.css';
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const verifyStarted = useRef(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,24 @@ export default function ResetPasswordPage() {
 
   // Verify the user has a valid recovery session
   useEffect(() => {
+    // Reset emails link here with a token_hash instead of a PKCE code: resets
+    // started in the iOS app use PKCE, and their code verifier lives on the
+    // phone, so this page could never exchange the code.
+    const tokenHash = searchParams.get('token_hash');
+    if (tokenHash && searchParams.get('type') === 'recovery') {
+      // The token is single-use; StrictMode must not verify it twice.
+      if (verifyStarted.current) return undefined;
+      verifyStarted.current = true;
+      supabase.auth
+        .verifyOtp({ token_hash: tokenHash, type: 'recovery' })
+        .then(({ error }) => {
+          setValidSession(!error);
+          // Keep the spent token out of the address bar and history.
+          setSearchParams({}, { replace: true });
+        });
+      return undefined;
+    }
+
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setValidSession(!!session);
@@ -29,6 +49,8 @@ export default function ResetPasswordPage() {
     checkSession();
 
     return () => subscription.unsubscribe();
+    // Runs once on mount: the token in the URL is read a single time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (e) => {
