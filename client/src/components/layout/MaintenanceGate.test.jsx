@@ -38,7 +38,7 @@ describe('MaintenanceGate', () => {
   it('shows the maintenance screen without a session', async () => {
     renderGate();
 
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Wir bauen gerade an Scentboxd');
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(/Duftsammlung|fragrance collection/);
     expect(screen.queryByText('Die App')).toBeNull();
     expect(isCurrentUserAdmin).not.toHaveBeenCalled();
   });

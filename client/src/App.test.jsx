@@ -18,9 +18,11 @@ describe('App maintenance gate', () => {
     const { container } = render(<App />);
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Wir bauen gerade an Scentboxd'
+      /Duftsammlung|fragrance collection/
     );
-    // Kein Layout gemountet -> keine Navigation im Baum.
-    expect(container.querySelector('nav')).toBeNull();
+    // Kein Layout gemountet -> keine App-Navigation im Baum. Die Rechtslinks im
+    // Footer der Maintenance-Seite sind selbst ein <nav> und zählen nicht.
+    const navs = [...container.querySelectorAll('nav')];
+    expect(navs.every((nav) => nav.closest('#maintenance-page'))).toBe(true);
   });
 });
