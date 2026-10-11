@@ -54,6 +54,8 @@ describe('MaintenancePage', () => {
       'href',
       `${WAITLIST_URL}/datenschutz`
     );
+    // App-Datenschutz und Nutzungsbedingungen sind bis zum App-Start Entwürfe.
+    expect(within(footer).queryByRole('link', { name: /App-Datenschutz|Nutzungsbedingungen/ })).toBeNull();
   });
 
   it('adds a noindex robots tag while mounted and removes it on unmount', () => {

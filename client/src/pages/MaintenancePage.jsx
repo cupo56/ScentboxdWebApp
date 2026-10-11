@@ -551,8 +551,6 @@ export default function MaintenancePage({ onAdminLogin }) {
         <nav>
           <a href={`${WAITLIST_URL}/impressum`}>{t('imprint')}</a>
           <a href={`${WAITLIST_URL}/datenschutz`}>{t('privacy')}</a>
-          <a href={`${WAITLIST_URL}/privacy`}>{t('appPrivacy')}</a>
-          <a href={`${WAITLIST_URL}/terms`}>{t('terms')}</a>
         </nav>
         {onAdminLogin && <AdminLogin onSubmit={onAdminLogin} label={t('admin')} />}
       </footer>
