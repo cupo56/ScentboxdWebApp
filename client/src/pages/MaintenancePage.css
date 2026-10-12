@@ -292,7 +292,9 @@
   overflow-wrap: break-word;
   line-height: 1.1;
   letter-spacing: 0;
-  margin: 0 0 20px;
+  margin: 0 0 calc(20px - 0.16em);
+  /* background-clip: text endet an der Box – Platz für Unterlängen (y, g) lassen */
+  padding-block: 0.04em 0.16em;
   background: linear-gradient(105deg, var(--color-text) 45%, #E85D9F 75%, #D4A017 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
