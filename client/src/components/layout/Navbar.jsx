@@ -103,6 +103,9 @@ export default function Navbar() {
         </div>
 
         <div className="navbar__right">
+          {/* Außerhalb von .navbar__links, das unter 900 px ausgeblendet wird. */}
+          <a href="https://news.scent-boxd.com/" className="navbar__link">News</a>
+
           <div className="navbar__search" ref={searchRef}>
             <button
               type="button"

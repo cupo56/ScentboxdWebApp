@@ -17,6 +17,7 @@ export default function Footer() {
             <Link to="/catalog">Catalog</Link>
             <Link to="/brands">Brands</Link>
             <Link to="/community">Community</Link>
+            <a href="https://news.scent-boxd.com/">News</a>
           </div>
           <div className="footer__column">
             <h4>Account</h4>

@@ -36,6 +36,13 @@ describe('Navbar', () => {
     expect(screen.getByTestId('account-menu')).toBeInTheDocument();
   });
 
+  it('links to the news page on every screen size', () => {
+    useAuth.mockReturnValue({ isAuthenticated: false });
+    renderNav();
+
+    expect(screen.getByRole('link', { name: 'News' })).toHaveAttribute('href', 'https://news.scent-boxd.com/');
+  });
+
   it('names the search button and the landmark', () => {
     useAuth.mockReturnValue({ isAuthenticated: false });
     renderNav();
