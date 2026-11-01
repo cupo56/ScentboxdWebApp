@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { translations } from './maintenanceTranslations';
+import InstagramBanner from '../components/layout/InstagramBanner';
+import { INSTAGRAM_URL } from '../config/social';
 import './MaintenancePage.css';
 
 const WAITLIST_URL = 'https://waitlist.scent-boxd.com';
@@ -351,6 +353,13 @@ export default function MaintenancePage({ onAdminLogin }) {
       </div>
       <canvas id="scentCanvas" ref={canvasRef} aria-hidden="true" />
 
+      <InstagramBanner
+        label={t('instagram.label')}
+        message={t('instagram.message')}
+        cta={t('instagram.cta')}
+        closeLabel={t('instagram.close')}
+      />
+
       <header className={`site-header${scrolled ? ' scrolled' : ''}`}>
         <span className="wordmark">
           scent-<span className="wordmark-accent">boxd</span>
@@ -551,6 +560,9 @@ export default function MaintenancePage({ onAdminLogin }) {
         <nav>
           <a href={`${WAITLIST_URL}/impressum`}>{t('imprint')}</a>
           <a href={`${WAITLIST_URL}/datenschutz`}>{t('privacy')}</a>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
         </nav>
         {onAdminLogin && <AdminLogin onSubmit={onAdminLogin} label={t('admin')} />}
       </footer>
