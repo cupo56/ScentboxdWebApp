@@ -58,7 +58,11 @@ export const translations = {
     "soundOnAria": "Ton einschalten",
     "soundOffAria": "Stummschalten",
     "storyVideoLabel": "scentboxd Entstehungs-Video",
-    "admin": "Admin"
+    "admin": "Admin",
+    "instagram.label": "Neu:",
+    "instagram.message": "Wir sind jetzt auf Instagram!",
+    "instagram.cta": "Folge @scentboxd",
+    "instagram.close": "Hinweis schließen"
   },
   "en": {
     "languageLabel": "Select language",
@@ -117,6 +121,10 @@ export const translations = {
     "soundOnAria": "Turn sound on",
     "soundOffAria": "Mute sound",
     "storyVideoLabel": "scentboxd making-of video",
-    "admin": "Admin"
+    "admin": "Admin",
+    "instagram.label": "New:",
+    "instagram.message": "We're on Instagram now!",
+    "instagram.cta": "Follow @scentboxd",
+    "instagram.close": "Dismiss notice"
   }
 };

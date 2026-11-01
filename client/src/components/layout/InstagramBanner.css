@@ -1,0 +1,74 @@
+.ig-banner {
+  position: relative;
+  z-index: 102;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 48px var(--space-3) 16px;
+  padding-top: max(var(--space-3), env(safe-area-inset-top, 0px));
+  background: linear-gradient(90deg, rgba(194, 10, 102, 0.22), rgba(247, 231, 206, 0.1));
+  border-bottom: 1px solid var(--accent-line);
+  font-family: var(--font);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.ig-banner__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 28px;
+  color: inherit;
+  text-decoration: none;
+  text-align: center;
+}
+
+.ig-banner__icon {
+  flex-shrink: 0;
+  color: var(--accent-soft);
+}
+
+.ig-banner__text strong {
+  font-weight: var(--weight-label);
+  color: var(--accent-soft);
+}
+
+.ig-banner__cta {
+  font-weight: var(--weight-label);
+  white-space: nowrap;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ig-banner__link:hover .ig-banner__cta,
+.ig-banner__link:focus-visible .ig-banner__cta {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-soft);
+}
+
+.ig-banner__close {
+  position: absolute;
+  right: 4px;
+  bottom: 50%;
+  transform: translateY(50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.ig-banner__close:hover,
+.ig-banner__close:focus-visible {
+  color: var(--text);
+  background: var(--hairline);
+}

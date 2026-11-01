@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Wordmark from './Wordmark';
+import { INSTAGRAM_URL } from '../../config/social';
 import './Footer.css';
 
 export default function Footer() {
@@ -23,6 +24,12 @@ export default function Footer() {
             <h4>Account</h4>
             <Link to="/login">Sign In</Link>
             <Link to="/register">Create Account</Link>
+          </div>
+          <div className="footer__column">
+            <h4>Follow</h4>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+              Instagram
+            </a>
           </div>
         </div>
       </div>
